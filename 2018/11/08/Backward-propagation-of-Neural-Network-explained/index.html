@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Backward propagation of Neural Network explained | Hexo</title>
+  <meta name="description" content="Backpropagation is the foundation of the deep neural network. Usually, we consider it to be kind of ‘dark magic’ we are not able to understand. However, it should not be the black box which we stay aw">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Backward propagation of Neural Network explained">
+<meta property="og:url" content="http://yoursite.com/2018/11/08/Backward-propagation-of-Neural-Network-explained/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Backpropagation is the foundation of the deep neural network. Usually, we consider it to be kind of ‘dark magic’ we are not able to understand. However, it should not be the black box which we stay aw">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/bp-01.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/niuguy/niuguy.github.io/master/pic/bp-02.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/bp-03.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/bp-04.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/bp-05.png">
+<meta property="article:published_time" content="2018-11-08T11:14:28.000Z">
+<meta property="article:modified_time" content="2020-08-21T21:56:24.927Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/bp-01.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://yoursite.com/2018/11/08/Backward-propagation-of-Neural-Network-explained/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    <link href="//cdn.jsdelivr.net/npm/katex@0.9.0/dist/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/niuguy" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Feng</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">A Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> London, UK</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/niuguy" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/home" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/">Machine Learning</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Pandas/">Pandas</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/pandas/">pandas</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tensorflow/">tensorflow</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tools/">tools</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/11/08/Stochastic-gradient-descent/" class="title">Stochastic gradient descent</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-11-08T11:14:28.000Z" itemprop="datePublished">2018-11-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/11/08/Backward-propagation-of-Neural-Network-explained/" class="title">Backward propagation of Neural Network explained</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-11-08T11:14:28.000Z" itemprop="datePublished">2018-11-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/pandas/">pandas</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/22/Pandas-How-to-plot-counts-of-each-value/" class="title">[Pandas]How to plot counts of each value</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-22T19:40:47.000Z" itemprop="datePublished">2018-10-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Pandas/">Pandas</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/22/Pandas-How-to-calculate-datetime-difference-in-years/" class="title">[Pandas]How to calculate datetime difference in years</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-22T15:43:34.000Z" itemprop="datePublished">2018-10-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/pandas/">pandas</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/19/Pandas-How-to-list-all-columns/" class="title">[Pandas]How to list all columns</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-19T21:31:23.000Z" itemprop="datePublished">2018-10-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Backward-propagation-of-Neural-Network-explained" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Backward propagation of Neural Network explained
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2018/11/08/Backward-propagation-of-Neural-Network-explained/" class="article-date">
+	  <time datetime="2018-11-08T11:14:28.000Z" itemprop="datePublished">2018-11-08</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/11/08/Backward-propagation-of-Neural-Network-explained/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>Backpropagation is the foundation of the deep neural network. Usually, we consider it to be kind of ‘dark magic’ we are not able to understand. However, it should not be the black box which we stay away. In this article, I will try to explain backpropagation as well as the whole neural network step by step in the original mathematical way.</p>
+<h2 id="Outline"><a href="#Outline" class="headerlink" title="Outline"></a>Outline</h2><ul>
+<li>Overview of the architecture</li>
+<li>Initialize parameters</li>
+<li>Implement forward propagation</li>
+<li>Compute Loss</li>
+<li>Implement Backward propagation</li>
+<li>Update parameters</li>
+</ul>
+<h2 id="1-The-architecture"><a href="#1-The-architecture" class="headerlink" title="1. The architecture"></a>1. The architecture</h2><p>This neural network I’m going to explain is a 2-Layer neural network. The first layer is Linear + Sigmoid, and the second Layer is Linear + Softmax. </p>
+<p><img src="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/bp-01.png" alt="image-20181107215309162"></p>
+<p>The architecture in the math formula<br>$$<br>f(X)= Relu( Sigmoid(  X \times W_{ih} +b_{1}) \times W_{ho} + b_{2})<br>$$</p>
+<p>##2.Initialize parameters</p>
+<p>We take one example which has two features like below<br>$$<br>X= [x1, x2]= [0.1, 0.2]<br>$$<br>The parameters are taken randomly.<br>$$<br>W_{is}=</p>
+<p>\begin{bmatrix}<br>W_{i1h1} &amp; W_{i1h2}\<br>W_{i2h1} &amp; W_{i2h2}<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>0.7 &amp; 0.6\<br>0.5 &amp; 0.4<br>\end{bmatrix}<br>$$</p>
+<p>$$<br>W_{sr}=<br>\begin{bmatrix}<br>W_{h1o1}&amp;W_{h1o2}\<br>W_{h2o1}&amp;W_{h2o2}<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>0.4&amp;0.6\<br>0.9&amp;0.8<br>\end{bmatrix}<br>$$</p>
+<p>$$<br>b_{1}=[b_{11}, b_{12}] =[0.5,0.6]<br>$$</p>
+<p>$$<br>b_{2}= [b_{21}, b_{22}]<br>= [0.7, 0.9]<br>$$</p>
+<h2 id="3-Forward-Propagation"><a href="#3-Forward-Propagation" class="headerlink" title="3. Forward Propagation"></a>3. Forward Propagation</h2><h3 id="3-1-Layer1"><a href="#3-1-Layer1" class="headerlink" title="3.1 Layer1:"></a>3.1 Layer1:</h3><p><img src="https://raw.githubusercontent.com/niuguy/niuguy.github.io/master/pic/bp-02.png" alt="image-20181108110049524"></p>
+<h3 id="Linear"><a href="#Linear" class="headerlink" title="Linear"></a>Linear</h3><p>$$<br>X \times  W_{ih}  + b_{1}<br>=<br>[x1, x2]<br>\times<br>\begin{bmatrix}<br>W_{i1h1} &amp; W_{i1h2}\<br>W_{i2h1} &amp; W_{i2h2}<br>\end{bmatrix}<br>+<br>[b_{11}, b_{12}]<br>=<br>[0.1, 0.2]<br>\times<br>\begin{bmatrix}<br>0.7 &amp; 0.6\<br>0.5 &amp; 0.4<br>\end{bmatrix}<br>+<br>[0.5, 0.6]<br>=<br>[0.67, 0.74]<br>$$</p>
+<h3 id="Sigmoid"><a href="#Sigmoid" class="headerlink" title="Sigmoid"></a>Sigmoid</h3><p>$$<br>Sigmoid(x)=1/(1+e^{-x})<br>$$</p>
+<p>$$<br>[h_{out1},h_{out2}]<br>=<br>Sigmoid(X \times W_{ih} + b_{1}) =<br>[Sigmoid(0.67),Sigmoid(0.74)]<br>=<br>[0.6615,0.6770]<br>$$</p>
+<h3 id="3-2-Layer2"><a href="#3-2-Layer2" class="headerlink" title="3.2 Layer2:"></a>3.2 Layer2:</h3><p><img src="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/bp-03.png" alt="image-20181108110231696"></p>
+<h3 id="Linear-1"><a href="#Linear-1" class="headerlink" title="Linear"></a>Linear</h3><p>$$<br>[o_{in1}, o_{in2}]<br>=<br>[h_{out1}, h_{out2}] \times W_{ho}  + b_{2}<br>=<br>[h_{out1}, h_{out2}]<br>\times<br>\begin{bmatrix}<br>W_{h1o1} &amp; W_{h1o2}\<br>W_{h2o1} &amp; W_{h2o2}<br>\end{bmatrix}<br>+<br>[b_{21}, b_{22}]<br>=\<br>[0.6615, 0.6770]<br>\times<br>\begin{bmatrix}<br>0.7 &amp; 0.5\<br>0.6 &amp; 0.4<br>\end{bmatrix}<br>+<br>[0.5, 0.6]<br>=</p>
+<p>[1.3693, 1.0391]<br>$$</p>
+<h3 id="Softmax"><a href="#Softmax" class="headerlink" title="Softmax"></a>Softmax</h3><p>$$<br>Softmax(x)<em>{j}= \frac{e^{xj}}{\sum</em>{i=1}^n e^{xi}} (j=1,2…n)<br>$$</p>
+<p>$$<br>[o_{out1},o_{out2}]<br>=<br>Softmax(X\times W_{ho} + b_{2})=<br>[<br>\frac{e^{1.3693}}{e^{1.3693} +e^{1.0391}} ,<br>\frac{e^{1.0391}}{e^{1.3693} +e^{1.0391}}<br>]<br>=<br>[0.5818,0.4182]<br>$$</p>
+<p>##4. Compute Loss</p>
+<p>The Loss function here we use is cross-entropy cost<br>$$<br>Crossentropy= -\frac{1}{m} \sum\limits_{i = 1}^{m} (y^{(i)}\log\left(a^{[L] (i)}\right) + (1-y^{(i)})\log\left(1- a^{<a href="i">L</a>}\right))<br>$$<br>The actual output should be<br>$$<br>[y_{1},y_{2}]<br>=<br>[1.00, 0.00]<br>$$<br>Since we only have one example, that means  ‘m = 1’,  the total loss is computed as follows :<br>$$<br>-\frac{1}{1} \sum\limits_{i = 1}^{1} (y_{1}\log\left(o_{out1}\right) + 0 +0 + 1<em>log(1-o_{out2}))=<br>-(1</em>log(0.5818)+0+0+1*log(1-0.4182))==0.4704<br>$$</p>
+<h2 id="5-Backward-Propagation"><a href="#5-Backward-Propagation" class="headerlink" title="5. Backward Propagation"></a>5. Backward Propagation</h2><p>In this section, we will go through backward propagation stage by stage.</p>
+<h3 id="5-1-Basic-Derivatives"><a href="#5-1-Basic-Derivatives" class="headerlink" title="5.1 Basic Derivatives"></a>5.1 Basic Derivatives</h3><p>####Sigmoid:</p>
+<p>$$<br>\frac{\partial Sigmoid(x)}{\partial x}<br>=<br>\frac{\partial \frac{1}{(1+e^{-x})}}{\partial x}<br>=<br>\frac{ e^{-x}}{(1+e^{-x})^2}<br>=<br>(\frac{1+e^{-x}-1}{1+e^{-x}})\frac{1}{1+e^{-x}}<br>=<br>(1 - Sigmoid(x))\times Sigmoid(x)<br>$$</p>
+<p>####Softmax:</p>
+<p>At first we know:</p>
+<p>For<br>$$<br>f(x)=\frac{g(x)}{h(x)}<br>$$</p>
+<p>$$<br>f’(x) = \frac{g’(x)h(x)-g(x)h’(x)}{[h(x)]^2}<br>$$</p>
+<p>Then the derivation of Softmax is<br>$$<br>\frac{\partial Softmax(x)}{\partial x1}=\frac{e^{x1}(e^{x1}+e^{x2})-e^{x1}e^{x1} }{(e^{x1}+e^{x2})^2} = \frac{e^{x1+x2}}{(e^{x1}+e^{x2})^2}<br>$$</p>
+<p>###5.2 The backward Pass</p>
+<h4 id="5-2-1-Layer1-Layer2"><a href="#5-2-1-Layer1-Layer2" class="headerlink" title="5.2.1 Layer1-Layer2"></a>5.2.1 Layer1-Layer2</h4><p>####Weight derivatives with respect to the error</p>
+<p><img src="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/bp-04.png" alt="image-20181107220124773"></p>
+<p>Consider W<sub>ho</sub> , we want to know how W<sub>ho</sub> will affect the total error, aka the value of<br>$$<br>\frac{\partial E_{total}}{\partial W_{ho}}<br>$$<br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Chain_rule">Chain Rule</a> states that:<br>$$<br>\frac{\partial z}{\partial x} =<br>\frac{\partial z}{\partial y}\cdot\frac{\partial y}{\partial x}<br>$$<br>So we have<br>$$<br>\frac{\partial E_{total}}{\partial W_{h2o1}}=<br>\frac{\partial E_{total}}{\partial o_{out1}}<br>\cdot \frac{\partial o_{out1}}{\partial o_{int1}}<br>\cdot \frac{\partial o_{int1}}{\partial W_{h2o1}}<br>$$<br>Let’s break this through stage by stage</p>
+<ul>
+<li>Stage1</li>
+</ul>
+<p>$$<br>\frac{\partial E_{total}}{\partial o_{out1}} =<br>\frac{\partial (-(y_{1}*log(o_{out1})+(1-y_{1})*log(1-o_{out1})))}{\partial o_{out1}}+0<br>=-\frac{1}{o_{out1}}=-1/0.5818=-1.719<br>$$</p>
+<ul>
+<li>Stage2</li>
+</ul>
+<p>$$<br>\frac{\partial o_{1}}{\partial i_{1}}=<br>\frac{\partial Softmax(i_{1})}{\partial i_{1}}<br>=<br>\frac{e^{i_{1}} e^{i_{2}}}{(e^{i_{1}}+e^{i_{2}})^2}<br>=<br>\frac{e^{i_{1}} e^{i_{2}}}{(e^{i_{1}}+e^{i_{2}})^2}<br>=<br>\frac{e^{1.3693}\cdot e^{1.0391}}{(e^{1.3693}+e^{1.0391})^2}=0.2433<br>$$</p>
+<ul>
+<li>Stage3 </li>
+</ul>
+<p>$$<br>\frac{\partial o_{in1}}{\partial W_{h2o1}} =<br>\frac{\partial (h_{out1}*W_{h1o1} + h_{out2}*W_{h2o1}+b_{21})}{\partial W_{h2o1}}<br>= h_{out2}=0.6770<br>$$</p>
+<p>Finally we apply the chain rule:<br>$$<br>\frac{\partial E_{total}}{\partial W_{h2o1}}= -1.719 * 0.2433 * 0.677 = -0.2831<br>$$<br>Let’s go through all the weights in Layer2<br>$$<br>W_{ho}’=<br>\begin{bmatrix}<br>W_{h1o1}’ &amp; W_{h1o2}’\<br>W_{h2o1}’ &amp; W_{h2o2}’<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>\frac{\partial E_{total}}{\partial W_{h1o1}} &amp; \frac{\partial E_{total}}{\partial W_{h1o2}} \<br>\frac{\partial E_{total}}{\partial W_{h2o1}} &amp; \frac{\partial E_{total}}{\partial W_{h2o2}}<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>\frac{\partial E_{total}}{\partial o_{out1}}<br>\cdot \frac{\partial o_{out1}}{\partial o_{in1}}<br>\cdot \frac{\partial o_{in1}}{\partial W_{h1o1}}<br>&amp;<br>\frac{\partial E_{total}}{\partial o_{out2}}<br>\cdot \frac{\partial o_{out2}}{\partial o_{in2}}<br>\cdot \frac{\partial o_{in2}}{\partial W_{h1o2}}<br>\<br>\frac{\partial E_{total}}{\partial o_{out1}}<br>\cdot \frac{\partial o_{out1}}{\partial o_{in1}}<br>\cdot \frac{\partial o_{in1}}{\partial W_{h2o1}}<br>&amp;<br>\frac{\partial E_{total}}{\partial o_{out2}}<br>\cdot \frac{\partial o_{out2}}{\partial o_{in2}}<br>\cdot \frac{\partial o_{in2}}{\partial W_{h2o2}}<br>\end{bmatrix}<br>\<br>=<br>\begin{bmatrix}<br>-1.719<em>0.2433</em>0.6615 &amp; -2.3912<em>0.2433</em>0.6615 \<br>-1.719<em>0.2433</em>0.6770 &amp; -2.3912<em>0.2433</em>0.6770<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>-0.2767 &amp; -0.3733\<br>-0.2831 &amp; -0.3853<br>\end{bmatrix}<br>$$</p>
+<h4 id="Update-weights-according-to-learning-rate"><a href="#Update-weights-according-to-learning-rate" class="headerlink" title="Update weights according to learning rate"></a>Update weights according to learning rate</h4><p>Our training target is to make the prediction value approximate the correct value, while it can be transferred to minimize the error by updating weights with the help of learning rate. Suppose the learning rate is 0.02.</p>
+<p>We got the updated weight matrix as folows<br>$$<br>W_{ho}^* =<br>\begin{bmatrix}<br>W_{h1o1} - \eta W_{h1o1}’ &amp; W_{h1o2} - \eta W_{h1o2}’\<br>W_{h2o1} - \eta W_{h2o1}’ &amp; W_{h2o2} - \eta W_{h2o2}’<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>0.4 - 0.02*(-0.2767)&amp;0.6 - 0.02*(-0.3733)\<br>0.9 - 0.02*(-0.2831)&amp;0.8 - 0.02*(-0.3853)<br>\end{bmatrix}\<br>=<br>\begin{bmatrix}<br>0.4055 &amp; 0.6075\<br>0.9057 &amp; 0.8077<br>\end{bmatrix}<br>$$<br>That is the updated weight of Layer1-Layer2. The update of Input-Layer weights is the same story I will illustrate as follows.</p>
+<p>####5.2.2 Layer0(Input Layer) - Layer1 </p>
+<p><img src="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/bp-05.png" alt="image-20181107222954838"></p>
+<p>Follow the path of the previous chapter</p>
+<ul>
+<li>Stage1:</li>
+</ul>
+<p>$$<br>\frac{\partial h_{out1}}{\partial h_{in1}}<br>=<br>\frac{\partial Sigmoid(h_{in1})}{\partial h_{in1}}<br>=<br>Sigmoid(h_{in1})<em>(1-Sigmoid(h_{in1}))<br>=\<br>Sigmoid(0.67)</em>(1-Sigmoid(0.67))=0.2239<br>$$</p>
+<ul>
+<li>Stage2:</li>
+</ul>
+<p>$$<br>\frac{\partial h_{in1}}{\partial W_{i2h1}}<br>=<br>\frac{\partial(x1 * W_{i1h1} + x2 * W_{i2h1} + b11)}{\partial W_{i2h1}}<br>=<br>x2=0.2<br>$$</p>
+<p>Apply the chain rule:<br>$$<br>\frac{\partial E_{total}}{\partial W_{i2h1}}=<br>\frac{\partial E_{total}}{\partial h_{out1}}<br>\cdot \frac{\partial h_{out1}}{\partial h_{in1}}<br>\cdot \frac{\partial h_{in1}}{\partial W_{i2h1}}<br>$$<br>We already got the second and third derivations, regarding the first derivation, we apply the chain rule again, but in the opposite direction.<br>$$<br>\frac{\partial E_{total}}{\partial h_{out1}}<br>=<br>\frac{\partial E_{total}}{\partial o_{out1}}<br>\frac{\partial o_{out1}}{\partial o_{in1}}<br>\frac{\partial o_{in1}}{\partial h1_{out}}<br>$$<br>We have computed the first and second results, and the third one is merely a deviation of the linear function<br>$$<br>\frac{\partial E_{total}}{\partial h_{out1}}<br>=<br>-1.719<em>0.2433</em><br>\frac{\partial(h_{out1}<em>W_{h1o1} + h_{out2}<em>W_{h2o1})}{\partial h_{out1}}<br>=\<br>-1.719</em>0.2433</em>W_{h1o1}<br>=-1.719<em>0.2433</em>0.4<br>=-0.1673<br>$$<br>Then we got<br>$$<br>\frac{\partial E_{total}}{\partial W_{i2h1}}= -0.1673<em>0.2239 * 0.2=-0.0075<br>$$<br>Similarly , we can get the Layer0-Layer1 derivatives with respective to the total error<br>$$<br>W_{ih}’<br>=<br>\begin{bmatrix}<br>\frac{\partial E_{total}}{\partial W_{i1h1}} &amp; \frac{\partial E_{total}}{\partial W_{i1h2}}\<br>\frac{\partial E_{total}}{\partial W_{i2h1}} &amp; \frac{\partial E_{total}}{\partial W_{i2h2}}<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>\frac{\partial E_{total}}{\partial h_{out1}}<br>\cdot \frac{\partial h1_{out}}{\partial h1_{in}}<br>\cdot \frac{\partial h1_{in}}{\partial W_{i1h1}}<br>&amp;<br>\frac{\partial E_{total}}{\partial h_{out2}}<br>\cdot \frac{\partial h2_{out}}{\partial h2_{in}}<br>\cdot \frac{\partial h2_{in}}{\partial W_{i1h2}}<br>\<br>\frac{\partial E_{total}}{\partial h_{out1}}<br>\cdot \frac{\partial h_{out1}}{\partial h_{in1}}<br>\cdot \frac{\partial h_{in1}}{\partial W_{i2h1}}<br>&amp;<br>\frac{\partial E_{total}}{\partial h_{out2}}<br>\cdot \frac{\partial h_{out2}}{\partial h_{in2}}<br>\cdot \frac{\partial h_{in2}}{\partial W_{i2h2}}<br>\end{bmatrix}<br>\<br>=<br>\begin{bmatrix}<br>-0.1673*0.2239 * 0.1 &amp;  -0.4654*0.2187</em>0.1\<br>-0.1673<em>0.2239 * 0.2 &amp;  -0.4654*0.2187</em>0.2<br>\end{bmatrix}<br>\<br>=<br>\begin{bmatrix}<br>-0.0037 &amp;  -0.0102\<br>-0.0075 &amp;  -0.0204<br>\end{bmatrix}<br>$$</p>
+<h4 id="Update-weights-according-to-learning-rate-1"><a href="#Update-weights-according-to-learning-rate-1" class="headerlink" title="Update weights according to learning rate"></a>Update weights according to learning rate</h4><p>Update the weights with learning rate 0.02，we got the final weight matrix<br>$$<br>W_{ih}^*=<br>\begin{bmatrix}<br>W_{i1h1} - \eta (W_{i1h1}’) &amp;  W_{i1h2} - \eta (W_{i1h2}’)\<br>W_{i2h1} - \eta (W_{i2h1}’) &amp;  W_{i2h2} - \eta (W_{i2h2}’)<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>(0.7 -0.2*(-0.0037))&amp; (0.6 - 0.2 <em>(-0.0102)) \<br>(0.5 - 0.2</em>(-0.0075)) &amp; (0.4 - 0.2 * (-0.0204))<br>\end{bmatrix}<br>\<br>=<br>\begin{bmatrix}<br>0.7007 &amp; 0.6020\<br>0.5015 &amp; 0.4041<br>\end{bmatrix}<br>$$</p>
+<p>###5.3 Wrap up</p>
+<p>Finally we get all the weights updated<br>$$<br>W_{ho}^* =<br>\begin{bmatrix}<br>0.4055 &amp; 0.6075\<br>0.9057 &amp; 0.8077<br>\end{bmatrix}<br>$$</p>
+<p>$$<br>W_{ih}^*=<br>\begin{bmatrix}<br>0.7007 &amp; 0.6020\<br>0.5015 &amp; 0.4041<br>\end{bmatrix}<br>$$</p>
+<h2 id="6-Conclusion"><a href="#6-Conclusion" class="headerlink" title="6. Conclusion"></a>6. Conclusion</h2><ul>
+<li>Backpropagation is beautiful designed architecture. Every gate in the diagram gets some input and makes some output, the gradients of input concerning the output indicates how strongly the gate wants the output to increase or decrease. The communication between these “smart” gates make it possible for complicated prediction or classification tasks.</li>
+<li>The activation function matters. Take Sigmoid as an example, and we saw the gradients of its gates “vanish” significantly to 0.00XXX, this will make the rest of backward pass almost to zero due to the multiplication in chain rule. So we should always be nervous in Sigmoid, Relu is possibly a better choice.</li>
+<li>If we look back to the computing process,  a lot can be done when we implement the neural network with codes, such as the caching of gradients when we do forward propagation and the extracting of common gradient computation functions.</li>
+</ul>
+<h2 id="7-Reference"><a href="#7-Reference" class="headerlink" title="7. Reference"></a>7. Reference</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@14prakash/back-propagation-is-very-simple-who-made-it-complicated-97b794c97e5c">https://medium.com/@14prakash/back-propagation-is-very-simple-who-made-it-complicated-97b794c97e5c</a>.</li>
+<li><a target="_blank" rel="noopener" href="https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/">https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/</a>.  </li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b">https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b</a></li>
+<li><a target="_blank" rel="noopener" href="http://cs231n.github.io/optimization-2/">http://cs231n.github.io/optimization-2/</a> I</li>
+<li><a target="_blank" rel="noopener" href="https://google-developers.appspot.com/machine-learning/crash-course/backprop-scroll/">https://google-developers.appspot.com/machine-learning/crash-course/backprop-scroll/</a> </li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Kulbear/deep-learning-coursera/blob/master/Neural%20Networks%20and%20Deep%20Learning/Building%20your%20Deep%20Neural%20Network%20-%20Step%20by%20Step.ipynb">https://github.com/Kulbear/deep-learning-coursera/blob/master/Neural%20Networks%20and%20Deep%20Learning/Building%20your%20Deep%20Neural%20Network%20-%20Step%20by%20Step.ipynb</a></li>
+</ol>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://yoursite.com/2018/11/08/Backward-propagation-of-Neural-Network-explained/" title="Backward propagation of Neural Network explained" target="_blank" rel="external">http://yoursite.com/2018/11/08/Backward-propagation-of-Neural-Network-explained/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/niuguy" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/niuguy" target="_blank"><span class="text-dark">Feng</span><small class="ml-1x">A Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2018/11/08/Stochastic-gradient-descent/" title="Stochastic gradient descent"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2018/10/22/Pandas-How-to-plot-counts-of-each-value/" title="[Pandas]How to plot counts of each value"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/niuguy" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/home" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

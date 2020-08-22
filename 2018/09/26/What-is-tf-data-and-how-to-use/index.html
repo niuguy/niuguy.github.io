@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>What is tf.data and how to use | Hexo</title>
+  <meta name="description" content="Tf.data is a high level API provided by tensorflow, it performs as a pipeline for complex input and output. The core data structure of tf.data is Dataset which represents a potentially large set of el">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What is tf.data and how to use">
+<meta property="og:url" content="http://yoursite.com/2018/09/26/What-is-tf-data-and-how-to-use/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Tf.data is a high level API provided by tensorflow, it performs as a pipeline for complex input and output. The core data structure of tf.data is Dataset which represents a potentially large set of el">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-09-26T19:30:31.000Z">
+<meta property="article:modified_time" content="2020-08-21T21:56:24.929Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://yoursite.com/2018/09/26/What-is-tf-data-and-how-to-use/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/niuguy" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Feng</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">A Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> London, UK</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/niuguy" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/home" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/">Machine Learning</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Pandas/">Pandas</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/pandas/">pandas</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tensorflow/">tensorflow</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tools/">tools</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/11/08/Stochastic-gradient-descent/" class="title">Stochastic gradient descent</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-11-08T11:14:28.000Z" itemprop="datePublished">2018-11-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/11/08/Backward-propagation-of-Neural-Network-explained/" class="title">Backward propagation of Neural Network explained</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-11-08T11:14:28.000Z" itemprop="datePublished">2018-11-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/pandas/">pandas</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/22/Pandas-How-to-plot-counts-of-each-value/" class="title">[Pandas]How to plot counts of each value</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-22T19:40:47.000Z" itemprop="datePublished">2018-10-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Pandas/">Pandas</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/22/Pandas-How-to-calculate-datetime-difference-in-years/" class="title">[Pandas]How to calculate datetime difference in years</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-22T15:43:34.000Z" itemprop="datePublished">2018-10-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/pandas/">pandas</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/19/Pandas-How-to-list-all-columns/" class="title">[Pandas]How to list all columns</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-19T21:31:23.000Z" itemprop="datePublished">2018-10-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-What-is-tf-data-and-how-to-use" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      What is tf.data and how to use
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2018/09/26/What-is-tf-data-and-how-to-use/" class="article-date">
+	  <time datetime="2018-09-26T19:30:31.000Z" itemprop="datePublished">2018-09-26</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/tensorflow/">tensorflow</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/09/26/What-is-tf-data-and-how-to-use/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>Tf.data is a high level API provided by tensorflow, it performs as a pipeline for complex input and output. The core data structure of tf.data is Dataset which represents a potentially large set of elements. </p>
+<p>Here is the defination of Dataset given by tensorflow.org</p>
+<blockquote>
+<p>A <code>Dataset</code> can be used to represent an input pipeline as a collection of elements (nested structures of tensors) and a “logical plan” of transformations that act on those elements.</p>
+</blockquote>
+<p>To summarize, the dataset is a data pipeline, and we can do some preprocessing on it. The core problem of a pipeline is how the data be imported and consumed,  the following part will explain that as well as some useful APIs in preprocessing data.</p>
+<h3 id="1-Data-input"><a href="#1-Data-input" class="headerlink" title="1. Data input"></a>1. Data input</h3><p>Dataset can be built from several sources including csv file, numpy array and tensors.</p>
+<h4 id="From-CSV"><a href="#From-CSV" class="headerlink" title="From CSV"></a>From CSV</h4><p>Tf.data provides a convenient API  make_csv_dataset to read records from one or more csv files.</p>
+<p>Suppose the csv file is </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a,b,c,d</span><br><span class="line">how,are,you,mate</span><br><span class="line">I,am,fine,thanks</span><br></pre></td></tr></table></figure>
+
+<p>We can build a dataset from the above csv in the following way</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset = tf.contrib.data.make_csv_dataset(CSV_PATH, batch_size=<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+<p>Here batch_size represents how many records would be aquired in a batch</p>
+<p>We can use Iterator to see what contains in this dataset</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">batch = dataset.make_one_shot_iterator().get_next()</span><br><span class="line">print(batch[<span class="string">&#x27;a&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p>The result is </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.Tensor([&#39;how&#39; &#39;I&#39;], shape&#x3D;(2,), dtype&#x3D;string)</span><br></pre></td></tr></table></figure>
+
+<p>make_csv_dataset defaultly takes the first row as header, if there are no header in the csv file like this</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">how,are,you,mate</span><br><span class="line">I,am,fine,thanks</span><br></pre></td></tr></table></figure>
+
+<p>We can set <code>header=False</code>and <code>column_names=[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;&#39;d&#39;]</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset2 &#x3D; tf.contrib.data.make_csv_dataset(CSV_PATH, batch_size&#x3D;2, header&#x3D;False,column_names&#x3D;[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;&#39;d&#39;])</span><br></pre></td></tr></table></figure>
+
+<p>Dataset2 should have the same value with dataset1</p>
+<h4 id="From-Tensor-slices"><a href="#From-Tensor-slices" class="headerlink" title="From Tensor slices"></a>From Tensor slices</h4><p>We can also create a dataset from tensors, the related API is  tf.data.Dataset.from_tensor_slices()</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset2 = tf.data.Dataset.from_tensor_slices(tf.random_uniform([<span class="number">10</span>, <span class="number">5</span>]))</span><br></pre></td></tr></table></figure>
+
+<p>Actually the input of this API is not necessarily tensors,  numpy arrays are also adaptable .</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset3 &#x3D; tf.data.Dataset.from_tensor_slices(np.random.sample((10, 5)))</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Data-consuming"><a href="#2-Data-consuming" class="headerlink" title="2. Data consuming"></a>2. Data consuming</h3><p>The only way to retrieve the data is Iterator(),  Iterator enables us to loop over all the dataset and get back the data we want. There are basically two kinds of Iterator which are <a target="_blank" rel="noopener" href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset#make_one_shot_iterator"><code>make_one_shot_iterator</code></a> and <a target="_blank" rel="noopener" href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset#make_initializable_iterator"><code>make_initializable_iterator</code></a>.</p>
+<h4 id="make-one-shot-iterator"><a href="#make-one-shot-iterator" class="headerlink" title="make_one_shot_iterator"></a>make_one_shot_iterator</h4><p>The examples can be find in the first part when we show how to import csv files</p>
+<h4 id="make-initializable-iterator"><a href="#make-initializable-iterator" class="headerlink" title="make_initializable_iterator"></a>make_initializable_iterator</h4><p>Compared to one shot iterator, initializable iterator allows data to be changed after dataset has already been built.Note that this cannot work in eager_execution model. Here is the example</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># using a placeholder</span></span><br><span class="line">x = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>,<span class="number">2</span>])</span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices(x)</span><br><span class="line">data = np.random.sample((<span class="number">100</span>,<span class="number">2</span>))</span><br><span class="line">iter = dataset.make_initializable_iterator() <span class="comment"># create the iterator</span></span><br><span class="line">el = iter.get_next()</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="comment"># feed the placeholder with data</span></span><br><span class="line">    sess.run(iter.initializer, feed_dict=&#123; x: data &#125;) </span><br><span class="line">    print(sess.run(el)) <span class="comment"># output [ 0.11342909, 0.81430183]</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-Data-proprocessing"><a href="#3-Data-proprocessing" class="headerlink" title="3. Data proprocessing"></a>3. Data proprocessing</h3><p>Tf.data provides several tools for data preprocessing such as batch and shuffle</p>
+<h4 id="Batch"><a href="#Batch" class="headerlink" title="Batch"></a>Batch</h4><p>dataset.batch(BATCH_SIZE)  given the BATCH_SIZE, this API will make the output in a batch way, and output BATCH_SIZE size of data at one time.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># BATCHING</span></span><br><span class="line">tf.enable_eager_execution()</span><br><span class="line">BATCH_SIZE = <span class="number">2</span></span><br><span class="line">x = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="comment"># make a dataset from a numpy array</span></span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices(x).batch(BATCH_SIZE)</span><br><span class="line">iter = dataset.make_one_shot_iterator()</span><br><span class="line">iter.get_next()</span><br></pre></td></tr></table></figure>
+
+<p>Output</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;tf.Tensor: id=<span class="number">102</span>, shape=(<span class="number">2</span>,), dtype=int64, numpy=array([<span class="number">1</span>, <span class="number">2</span>])&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Shuffle"><a href="#Shuffle" class="headerlink" title="Shuffle"></a>Shuffle</h4><p>When preparing the training data, one important step is shuffling the data to mitigate overfitting, tf.data offers convenient API to do that.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">BATCH_SIZE = <span class="number">2</span></span><br><span class="line">x = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="comment"># make a dataset from a numpy array</span></span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices(x).shuffle(buffer_size = <span class="number">10</span>).batch(BATCH_SIZE)</span><br><span class="line">iter = dataset.make_one_shot_iterator()</span><br><span class="line">iter.get_next()</span><br></pre></td></tr></table></figure>
+
+<p>Output</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;tf.Tensor: id=<span class="number">115</span>, shape=(<span class="number">2</span>,), dtype=int64, numpy=array([<span class="number">2</span>, <span class="number">3</span>])&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://yoursite.com/2018/09/26/What-is-tf-data-and-how-to-use/" title="What is tf.data and how to use" target="_blank" rel="external">http://yoursite.com/2018/09/26/What-is-tf-data-and-how-to-use/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/niuguy" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/niuguy" target="_blank"><span class="text-dark">Feng</span><small class="ml-1x">A Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2018/10/01/Basics-of-words-embedding/" title="Basics of words embedding"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2018/09/23/Pandas-Handle-missing-data/" title="[Pandas]Handle missing data"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/niuguy" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/home" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
