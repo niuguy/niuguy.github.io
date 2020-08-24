@@ -55,11 +55,11 @@
       
       
       <div class="profile-block text-center">
-        <a id="avatar" href="https://github.com/niuguy" target="_blank">
+        <a id="avatar" href="" target="_blank">
           <img class="img-circle img-rotate" src="/images/march.jpg" width="200" height="200">
         </a>
         <h2 id="name" class="hidden-xs hidden-sm">Feng</h2>
-        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Architect &amp; AI</h3>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Architect &amp; AI &amp; Quant</h3>
         <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> London, UK</small>
       </div>
       
@@ -115,6 +115,36 @@
             <i class="icon icon-archives-fill"></i>
             
             <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
           </a>
         </li>
         
@@ -483,6 +513,10 @@
     
   <section id="comments">
   	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
   </section>
 
 
@@ -579,6 +613,23 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
    
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'http://yoursite.com/2018/09/16/Pandas-How-to-import-csv/';
+        
+        this.page.identifier = 'Pandas-How-to-import-csv';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'ofeng' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
 
 
 

@@ -18,16 +18,16 @@
   
   
   <title>Stochastic gradient descent | Feng&#39;s note</title>
-  <meta name="description" content="Stochastic Gradient decent is one of the fundamental algorithm in deep learning. It is used when we perform optimization of the cost function.Suppose the function is  $ f(x) $    As what illustrated a">
+  <meta name="description" content="Stochastic Gradient decent is one of the fundamental algorithm in deep learning. It is used when we perform optimization of the cost function.Suppose the function is  $ f(x) $  As what illustrated abo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Stochastic gradient descent">
 <meta property="og:url" content="http://yoursite.com/2018/11/08/Stochastic-gradient-descent/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Stochastic Gradient decent is one of the fundamental algorithm in deep learning. It is used when we perform optimization of the cost function.Suppose the function is  $ f(x) $    As what illustrated a">
+<meta property="og:description" content="Stochastic Gradient decent is one of the fundamental algorithm in deep learning. It is used when we perform optimization of the cost function.Suppose the function is  $ f(x) $  As what illustrated abo">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/sgd-01.png">
 <meta property="article:published_time" content="2018-11-08T11:14:28.000Z">
-<meta property="article:modified_time" content="2020-08-23T20:27:57.303Z">
+<meta property="article:modified_time" content="2020-08-24T21:09:25.230Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="AI算法">
 <meta name="twitter:card" content="summary">
@@ -59,11 +59,11 @@
       
       
       <div class="profile-block text-center">
-        <a id="avatar" href="https://github.com/niuguy" target="_blank">
+        <a id="avatar" href="" target="_blank">
           <img class="img-circle img-rotate" src="/images/march.jpg" width="200" height="200">
         </a>
         <h2 id="name" class="hidden-xs hidden-sm">Feng</h2>
-        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Architect &amp; AI</h3>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Architect &amp; AI &amp; Quant</h3>
         <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> London, UK</small>
       </div>
       
@@ -119,6 +119,36 @@
             <i class="icon icon-archives-fill"></i>
             
             <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
           </a>
         </li>
         
@@ -326,24 +356,26 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>Stochastic Gradient decent is one of the fundamental algorithm in deep learning. It is used when we perform optimization of the cost function.Suppose the function is  $ f(x) $  </p>
-<p><img src="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/sgd-01.png" alt="sgd"></p>
-<p>As what illustrated above, we want to approach the minimum value of f(x) which is the point C. If we are now at point A, the derivation of A is f’(x)&gt;0, so we need to go right down which is the opposite direction of f’(x). If we stand at B,the derivation of A is f’(x)&gt;0, we should go left down which is also the opposite direction of f’(x).  </p>
-<p>According to the optimization strategy , we should update the parameter like this:<br>$$<br>x = x - \eta f’(x)<br>$$<br>$\eta$ is so-called the learning rate, it determines the size of steps we take to reach a minimum value of $f(x)$</p>
-<h2 id="Batch-Gradient"><a href="#Batch-Gradient" class="headerlink" title="Batch Gradient"></a>Batch Gradient</h2><p>Follow the rules of gradient descent, when we perform one update of parameters the intuitive strategy is to calculate the gradients for all the examples in the dataset and sum them up, this computation process is also called batch gradient. </p>
+        <p>Stochastic Gradient decent is one of the fundamental algorithm in deep learning. It is used when we perform optimization of the cost function.Suppose the function is  $ f(x) $</p>
+<p><img src="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/sgd-01.png" alt="sgd" /></p>
+<p>As what illustrated above, we want to approach the minimum value of f(x) which is the point C. If we are now at point A, the derivation of A is f’(x)&gt;0, so we need to go right down which is the opposite direction of f’(x). If we stand at B,the derivation of A is f’(x)&gt;0, we should go left down which is also the opposite direction of f’(x).</p>
+<p>According to the optimization strategy , we should update the parameter like this:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mi>x</mi><mo>−</mo><mi>η</mi><msup><mi>f</mi><mo mathvariant="normal">′</mo></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">x = x - \eta f&#x27;(x)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">η</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span></span></span></span></span></p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>η</mi></mrow><annotation encoding="application/x-tex">\eta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">η</span></span></span></span> is so-called the learning rate, it determines the size of steps we take to reach a minimum value of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span></span></span></span></p>
+<h2 id="batch-gradient"><a class="markdownIt-Anchor" href="#batch-gradient"></a> Batch Gradient</h2>
+<p>Follow the rules of gradient descent, when we perform one update of parameters the intuitive strategy is to calculate the gradients for all the examples in the dataset and sum them up, this computation process is also called batch gradient.</p>
 <p>The pseudocode described above looks like this.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(epoches):</span><br><span class="line">    param_grad = calculate_gradient(loss_function, [examples]) </span><br><span class="line">    param = param - learning_rate * params_grad</span><br></pre></td></tr></table></figure>
-
-<p> For each update we need to walk through all these examples,  if there are millions of them,  the computation cost would be a problem, let alone there usually are several epochs of updates.</p>
-<h2 id="Stochastic-Gradient"><a href="#Stochastic-Gradient" class="headerlink" title="Stochastic Gradient"></a>Stochastic Gradient</h2><p>The inefficiency of the batch gradient leads to another strategy that is widely used in deep learning, which is stochastic gradient descent(SGD).</p>
-<p>Instead of updating the params based on the gradients of all examples, SGD  updates the param after computing the gradient of one example,  what particular is the dataset should be shuffled in each epoch.  </p>
+<p>For each update we need to walk through all these examples,  if there are millions of them,  the computation cost would be a problem, let alone there usually are several epochs of updates.</p>
+<h2 id="stochastic-gradient"><a class="markdownIt-Anchor" href="#stochastic-gradient"></a> Stochastic Gradient</h2>
+<p>The inefficiency of the batch gradient leads to another strategy that is widely used in deep learning, which is stochastic gradient descent(SGD).</p>
+<p>Instead of updating the params based on the gradients of all examples, SGD  updates the param after computing the gradient of one example,  what particular is the dataset should be shuffled in each epoch.</p>
 <p>The poseudocode of SGC looks like this:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(epochs): </span><br><span class="line">    np.random.shuffle(data) </span><br><span class="line">    <span class="keyword">for</span> example <span class="keyword">in</span> data:</span><br><span class="line">        param_grad = calculate_gradient(loss_function , example) </span><br><span class="line">        param = param - learning_rate * param_grad</span><br></pre></td></tr></table></figure>
-
-<p>The algorithm is not as complicated as its name implies. Actually, it’s too simple that we may doubt about its effectiveness in convergence. However, it has been shown that when we slowly decrease the learning rate, SGD shows the same convergence behavior as batch gradient descent, the convergence of stochastic gradient descent has been analyzed using the theories of convex minimization and of stochastic approximation. </p>
+<p>The algorithm is not as complicated as its name implies. Actually, it’s too simple that we may doubt about its effectiveness in convergence. However, it has been shown that when we slowly decrease the learning rate, SGD shows the same convergence behavior as batch gradient descent, the convergence of stochastic gradient descent has been analyzed using the theories of convex minimization and of stochastic approximation.</p>
 <p>A simple improvement of SGD is to perform an update for every mini-batch examples, which is called mini-batch gradient. It is a compromise between batch gradient and SGD and is proved effective in practices. The code looks like this:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(epochs): </span><br><span class="line">    np.random.shuffle(data) </span><br><span class="line">    <span class="keyword">for</span> batch <span class="keyword">in</span> batches(data, batch_size = <span class="number">50</span>):</span><br><span class="line">        param_grad = calculate_gradient(loss_function , batch) </span><br><span class="line">        param = param - learning_rate * param_grad</span><br></pre></td></tr></table></figure>
-
 
       
     </div>
@@ -354,6 +386,10 @@
     
   <section id="comments">
   	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
   </section>
 
 
@@ -446,6 +482,23 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
    
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'http://yoursite.com/2018/11/08/Stochastic-gradient-descent/';
+        
+        this.page.identifier = 'Stochastic-gradient-descent';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'ofeng' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
 
 
 
