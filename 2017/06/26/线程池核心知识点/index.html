@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>线程池核心知识点 | Feng&#39;s note</title>
+  <meta name="description" content="—读《java并发编程》笔记  为什么需要线程执行框架  不用线程池是否也有异步执行任务的方案？  有两种方案，一是单独起一个线程，任务由这个线程顺序执行。二是每个任务创建一个新线程，每个任务都由一个新线程去执行。 然而两种方案各有缺点： 第一种方案，因为是顺序执行，在任务的响应效率有较大影响。 第二种方案，创建线程是有资源消耗的，对于web应用这样的大流量请求，很容易就会达到资源瓶颈。 另外需要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线程池核心知识点">
+<meta property="og:url" content="http://yoursite.com/2017/06/26/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="—读《java并发编程》笔记  为什么需要线程执行框架  不用线程池是否也有异步执行任务的方案？  有两种方案，一是单独起一个线程，任务由这个线程顺序执行。二是每个任务创建一个新线程，每个任务都由一个新线程去执行。 然而两种方案各有缺点： 第一种方案，因为是顺序执行，在任务的响应效率有较大影响。 第二种方案，创建线程是有资源消耗的，对于web应用这样的大流量请求，很容易就会达到资源瓶颈。 另外需要">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-06-26T20:44:08.000Z">
+<meta property="article:modified_time" content="2020-08-26T20:44:59.294Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://yoursite.com/2017/06/26/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="" target="_blank">
+          <img class="img-circle img-rotate" src="/images/march.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Feng</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Developer &amp; Researcher</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> London, UK</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/niuguy" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/home" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Backend/">Backend</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-AI/">Data&AI</a><span class="category-list-count">15</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Distributed-System/" rel="tag">Distributed System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pandas/" rel="tag">Pandas</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tensorflow/" rel="tag">Tensorflow</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Transaction/" rel="tag">Transaction</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Algorithm/" style="font-size: 13.75px;">Algorithm</a> <a href="/tags/Distributed-System/" style="font-size: 13px;">Distributed System</a> <a href="/tags/Java/" style="font-size: 13.5px;">Java</a> <a href="/tags/Pandas/" style="font-size: 14px;">Pandas</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/Tensorflow/" style="font-size: 13.25px;">Tensorflow</a> <a href="/tags/Transaction/" style="font-size: 13px;">Transaction</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/11/08/Stochastic-gradient-descent/" class="title">Stochastic gradient descent</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-11-08T11:14:28.000Z" itemprop="datePublished">2018-11-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/11/08/Backward-propagation-of-Neural-Network-explained/" class="title">Backward propagation of Neural Network explained</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-11-08T11:14:28.000Z" itemprop="datePublished">2018-11-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/22/Pandas-How-to-plot-counts-of-each-value/" class="title">[Pandas]How to plot counts of each value</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-22T19:40:47.000Z" itemprop="datePublished">2018-10-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/22/Pandas-How-to-calculate-datetime-difference-in-years/" class="title">[Pandas]How to calculate datetime difference in years</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-22T15:43:34.000Z" itemprop="datePublished">2018-10-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/19/Pandas-How-to-list-all-columns/" class="title">[Pandas]How to list all columns</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-19T21:31:23.000Z" itemprop="datePublished">2018-10-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-线程池核心知识点" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      线程池核心知识点
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2017/06/26/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" class="article-date">
+	  <time datetime="2017-06-26T20:44:08.000Z" itemprop="datePublished">2017-06-26</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Backend/">Backend</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Java/" rel="tag">Java</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/06/26/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>—读《java并发编程》笔记</p>
+<h3 id="为什么需要线程执行框架"><a class="markdownIt-Anchor" href="#为什么需要线程执行框架"></a> 为什么需要线程执行框架</h3>
+<blockquote>
+<p>不用线程池是否也有异步执行任务的方案？</p>
+</blockquote>
+<p>有两种方案，一是单独起一个线程，任务由这个线程顺序执行。二是每个任务创建一个新线程，每个任务都由一个新线程去执行。</p>
+<p>然而两种方案各有缺点：<br />
+第一种方案，因为是顺序执行，在任务的响应效率有较大影响。<br />
+第二种方案，创建线程是有资源消耗的，对于web应用这样的大流量请求，很容易就会达到资源瓶颈。</p>
+<p>另外需要考虑的一些问题：</p>
+<ul>
+<li>可否知道当前任务在被哪个线程运行了。</li>
+<li>任务的执行顺序是怎样的，先入先出？优先队列？</li>
+<li>多少任务正在同时执行</li>
+<li>如果当前已经达到了系统性能瓶颈，怎么决定任务的优先级，哪些任务需要被移出执行队列。</li>
+<li>任务执行前的准备，以及执行后的清理工作（释放资源）如何做。</li>
+</ul>
+<p>为解决上面这些问题，客观上需要有一个管理线程资源的框架。这个框架可以优化线程执行所占资源，定制灵活的执行策略，让异步任务的执行更为健壮。</p>
+<h3 id="线程池及其创建"><a class="markdownIt-Anchor" href="#线程池及其创建"></a> 线程池及其创建</h3>
+<p>在java体系中，管理线程资源的框架便是线程池（thread pool）。线程池，顾名思义就是线程的资源池，是一种容器资源。它的主要作用就是让线程可以重用，并且保持一定数量的活跃线程，从而使任务响应时间缩短，通过对线程池运行参数的调优，可以达到任务吞吐量和相应时间的最优。</p>
+<p>线程池的创建，一般情况下，是通过concurrent包提供的工厂方法Executors<br />
+比如<br />
+<code>Executors.newFixedThreadPool(int nThreads)</code> 会返回一个固定线程数量的实现了ExecutorService接口的线程池服务，如果当前任务的提交数量超过了这个限定数量，会将其排入一个LinkedBlockingQueue中排队。<br />
+除此之外，还有<br />
+Executors.newSingleThreadExecutor， Executors.newCachedThreadPool 等等</p>
+<p>当然，如果看到过Executors 的源代码， 你就知道，还可以自己创建一个线程池，比如上述<code>Executors.newFixedThreadPool(int nThreads)</code> 其源码就是<br />
+<code>return new ThreadPoolExecutor(nThreads, nThreads,0L, TimeUnit.MILLISECONDS,new LinkedBlockingQueue&lt;Runnable&gt;(),threadFactory);</code></p>
+<h3 id="线程池的生命周期"><a class="markdownIt-Anchor" href="#线程池的生命周期"></a> 线程池的生命周期</h3>
+<p>线程池的生命周期有三个阶段，首先是running 然后是 shut down 最终是terminated</p>
+<ul>
+<li>running 顾名思义就是正常运行状态</li>
+<li>shut down 执行shutdownNow()后达到的状态，这个状态下线程池不再接受新任务，等待任务也阻*止。但是此时任务不一定运行完，事实上这个方法会返回一个list包括了还在运行的任务列表。</li>
+<li>terminated 就是在shutdown后所有任务已经完成的状态，此时没有任务在运行了。</li>
+</ul>
+<h2 id="线程池的参数"><a class="markdownIt-Anchor" href="#线程池的参数"></a> 线程池的参数</h2>
+<ol>
+<li>corePoolSize   核心线程数。这个参数的含义是线程池需要保持的最低线程数，不管当前有没有任务在运行，线程池中都会保持这个配置数量的活跃线程。当任务数量超过corePoolSize时，会被丢到工作队列中，<strong>直到队列满之前，线程池中的线程数不会增加</strong>。</li>
+<li>maxPoolSize ：最大线程数。该参数指明了一个线程池中同时可以有多少活跃线程同时运行。</li>
+<li>keepAliveTime   线程最大存活时间。 当池子中的线程数量超过了corePoolSize时，这个数值代表了那些超出的空闲线程可以存活的最大时间。</li>
+<li>workQueue：自定义的线程池队列实例。有三种队列类型可以选择，分别是无界队列，有界队列，以及 同步队列（SynchronousQueue），其中Executors.newFixedThreadPool 使用的LinkedBlockingQueue 属于无界队列， Executors.newCachedThreadPool 使用的是同步队列。其中，使用默认的无界队列，可能会存在在并发量比较高时，队列占用内存过高可能导致其溢出的风险。<br />
+queue的配置可以同前面几个参数配合，以达到不同的效果：<br />
+比如：
+<ul>
+<li>按照优先级处理一组数据，可以传入PriorityQueue 根据指定参数配置优先级， 这个时候队列长队可以设置相对较长，而corePoolSize可以设置相对小，从而达到吞吐量与占用资源的最优配置。</li>
+<li>对于大量短时间访问的请求，考虑用SynchronousQueue。同时设置一个相对较短的keepAliveTime以及极大的maxPoolSize,  SynchronousQueue的特性是如果要把一个元素加入队列，需要有另外一个线程等待接收，如果另外一个线程没有，则创建一个。这个特性很适合处理即时的消息传递，可以支撑较大的容量。</li>
+</ul>
+</li>
+<li>RejectedExecutionHandler: 队列饱和处理器。 当工作队列已经满时，要决定哪些任务保留哪些任务要丢弃，有几种策略可以选择，比如：AbortPolicy， CallerRunsPolicy，DiscardPolicy。 可以根据实际情况灵活选择。</li>
+</ol>
+
+      
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2017/08/25/What-you-need-to-know-for-memory-leaks-troubleshooting/" title="What you need to know for memory-leaks troubleshooting(排查内存泄漏你需要知道的套路)"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2017/03/25/My-take-on-distributed-system/" title="My take on distributed system(我所理解的分布式调度)"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/niuguy" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/home" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'http://yoursite.com/2017/06/26/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/';
+        
+        this.page.identifier = '线程池核心知识点';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'ofeng' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

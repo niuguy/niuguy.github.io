@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>写一个并发请求的Case | Feng&#39;s note</title>
+  <meta name="description" content="有些场景下，你可能要检查代码有没有并发问题，验证幂等或者做一下简单的压力测试， 这时候需要写一个并发请求的程序，那么怎么做呢？ 先上代码 1234567891011121314151617181920212223242526272829303132final long time_start &#x3D; System.currentTimeMillis();ExecutorService serv">
+<meta property="og:type" content="article">
+<meta property="og:title" content="写一个并发请求的Case">
+<meta property="og:url" content="http://yoursite.com/2017/08/26/%E5%86%99%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E8%AF%B7%E6%B1%82%E7%9A%84Case/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="有些场景下，你可能要检查代码有没有并发问题，验证幂等或者做一下简单的压力测试， 这时候需要写一个并发请求的程序，那么怎么做呢？ 先上代码 1234567891011121314151617181920212223242526272829303132final long time_start &#x3D; System.currentTimeMillis();ExecutorService serv">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-08-26T20:31:03.000Z">
+<meta property="article:modified_time" content="2020-08-26T20:32:12.481Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://yoursite.com/2017/08/26/%E5%86%99%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E8%AF%B7%E6%B1%82%E7%9A%84Case/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="" target="_blank">
+          <img class="img-circle img-rotate" src="/images/march.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Feng</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Developer &amp; Researcher</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> London, UK</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/niuguy" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/home" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Backend/">Backend</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-AI/">Data&AI</a><span class="category-list-count">15</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Distributed-System/" rel="tag">Distributed System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pandas/" rel="tag">Pandas</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tensorflow/" rel="tag">Tensorflow</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Transaction/" rel="tag">Transaction</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Algorithm/" style="font-size: 13.75px;">Algorithm</a> <a href="/tags/Distributed-System/" style="font-size: 13px;">Distributed System</a> <a href="/tags/Java/" style="font-size: 13.5px;">Java</a> <a href="/tags/Pandas/" style="font-size: 14px;">Pandas</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/Tensorflow/" style="font-size: 13.25px;">Tensorflow</a> <a href="/tags/Transaction/" style="font-size: 13px;">Transaction</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/11/08/Stochastic-gradient-descent/" class="title">Stochastic gradient descent</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-11-08T11:14:28.000Z" itemprop="datePublished">2018-11-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/11/08/Backward-propagation-of-Neural-Network-explained/" class="title">Backward propagation of Neural Network explained</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-11-08T11:14:28.000Z" itemprop="datePublished">2018-11-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/22/Pandas-How-to-plot-counts-of-each-value/" class="title">[Pandas]How to plot counts of each value</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-22T19:40:47.000Z" itemprop="datePublished">2018-10-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/22/Pandas-How-to-calculate-datetime-difference-in-years/" class="title">[Pandas]How to calculate datetime difference in years</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-22T15:43:34.000Z" itemprop="datePublished">2018-10-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/19/Pandas-How-to-list-all-columns/" class="title">[Pandas]How to list all columns</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-19T21:31:23.000Z" itemprop="datePublished">2018-10-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-写一个并发请求的Case" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      写一个并发请求的Case
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2017/08/26/%E5%86%99%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E8%AF%B7%E6%B1%82%E7%9A%84Case/" class="article-date">
+	  <time datetime="2017-08-26T20:31:03.000Z" itemprop="datePublished">2017-08-26</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Backend/">Backend</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Java/" rel="tag">Java</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/08/26/%E5%86%99%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E8%AF%B7%E6%B1%82%E7%9A%84Case/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>有些场景下，你可能要检查代码有没有并发问题，验证幂等或者做一下简单的压力测试， 这时候需要写一个并发请求的程序，那么怎么做呢？<br />
+先上代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">final long time_start &#x3D; System.currentTimeMillis();</span><br><span class="line">ExecutorService service &#x3D; Executors.newFixedThreadPool(10);</span><br><span class="line"></span><br><span class="line">int client_num &#x3D; 10;</span><br><span class="line"></span><br><span class="line">final CountDownLatch countDownLatch &#x3D; new CountDownLatch(1);</span><br><span class="line"></span><br><span class="line">for (int i &#x3D; 0; i &lt; client_num; i++) &#123;</span><br><span class="line">    Runnable job &#x3D; new Runnable() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run()  &#123;</span><br><span class="line">            Worker worker &#x3D; new Worker();</span><br><span class="line">            try &#123;</span><br><span class="line">                countDownLatch.await();</span><br><span class="line">                worker.doWork();</span><br><span class="line">            &#125;catch(Exception e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    service.submit(job);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">countDownLatch.countDown();</span><br><span class="line"></span><br><span class="line">service.shutdown();</span><br><span class="line"></span><br><span class="line">while (!service.isTerminated()) &#123;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(&quot;time consuming is &quot; + (System.currentTimeMillis() - time_start));</span><br></pre></td></tr></table></figure>
+<p>我们来拆解下这个Case，看看都做了些什么：</p>
+<h3 id="1-容器准备"><a class="markdownIt-Anchor" href="#1-容器准备"></a> 1. 容器准备</h3>
+<p>首先，你需要一个线程池来调用任务处理，虽然你可以每次new一个线程来做，但是无论是在生产环境还是测试，都不太建议这样做。本示例用的是<br />
+<code>ExecutorService service = Executors.newFixedThreadPool(10)</code>  其效果是构造一个固定线程数的线程池，这个线程池的coreSize和maxSize都是10， 也就是说，最多可以同时处理10个任务，多了的就要排队。<br />
+线程池装载完任务后，执行submit , 但是此时任务并未执行，具体原因看下面。</p>
+<h3 id="2-并发执行"><a class="markdownIt-Anchor" href="#2-并发执行"></a> 2. 并发执行</h3>
+<p>这里是比较tricky的一个点，因为要模拟完全并发的情况，就要保证所有任务同一时间触发，这里我们用了一个java.util.concurrent的工具类 CountDownLatch， 从名字大概可以猜测到，这个是一个像栅栏一样的工具，先把羊圈在里面，等count数到0的时候，打开栅栏，放出群羊。。<br />
+使用步骤： 首先，初始化countDownLatch计数为1。 然后， 在业务代码里在执行业务逻辑之前我们嵌入了一行 <code>countDownLatch.await()</code> 。最后， 当所有任务都装载完毕提交后，执行<code>countDownLatch.countDown()</code>，如同发令枪一般，所有的任务同时触发，并发量达到client_num的数量10。</p>
+<h3 id="3-任务结束"><a class="markdownIt-Anchor" href="#3-任务结束"></a> 3. 任务结束</h3>
+<p>任务结束的时候调用的是线程池的shutdown方法, 看一下这个方法的注释</p>
+<blockquote>
+<p>Attempts to stop all actively executing tasks, halts the processing of waiting tasks, and returns a list of the tasks that were awaiting execution.</p>
+</blockquote>
+<p>意思是这个方法只是尝试去停止所有任务，但是并不保证都能结束，并且没有结束的任务是以list返回的。<br />
+所以后面又跟了一个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">while (!service.isTerminated()) &#123;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>循环一直等待所有的任务结束完毕，最后再统计所有任务的执行时间。</p>
+<h2 id="结语"><a class="markdownIt-Anchor" href="#结语"></a> 结语</h2>
+<p>这是一段比较简单的并发测试代码，单元测试足够用，但是如果用做规模化的压力测试，还需要考虑压力机与测试机的连接以及数据热点等一系列问题，这又是个很大的话题了。</p>
+
+      
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2018/07/10/Tensorflow101/" title="Tensorflow101"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2017/08/25/What-you-need-to-know-for-memory-leaks-troubleshooting/" title="What you need to know for memory-leaks troubleshooting(排查内存泄漏你需要知道的套路)"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/niuguy" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/home" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'http://yoursite.com/2017/08/26/%E5%86%99%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E8%AF%B7%E6%B1%82%E7%9A%84Case/';
+        
+        this.page.identifier = '写一个并发请求的Case';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'ofeng' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

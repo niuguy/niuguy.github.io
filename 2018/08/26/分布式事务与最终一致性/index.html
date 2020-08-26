@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>分布式事务与最终一致性 | Feng&#39;s note</title>
+  <meta name="description" content="为什么需要分布式事务 先摆一个例子： A账户要向B账户转账，100元， 操作的步骤是  A账户先减掉100元 B账户再加上100元  非常简单。。在单个数据库实例的情况下，开启事务，先执行A-100 ，再执行B+100, 事务提交，结束。 然而，由于业务增长， 导致一个数据库实例已经不能满足所有数据存储，此时A与B存在于不同的数据库实例上，这个时候执行这两部操作就要每个实例分别启动一个事务，A减">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式事务与最终一致性">
+<meta property="og:url" content="http://yoursite.com/2018/08/26/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E4%B8%8E%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="为什么需要分布式事务 先摆一个例子： A账户要向B账户转账，100元， 操作的步骤是  A账户先减掉100元 B账户再加上100元  非常简单。。在单个数据库实例的情况下，开启事务，先执行A-100 ，再执行B+100, 事务提交，结束。 然而，由于业务增长， 导致一个数据库实例已经不能满足所有数据存储，此时A与B存在于不同的数据库实例上，这个时候执行这两部操作就要每个实例分别启动一个事务，A减">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://user-images.githubusercontent.com/1400357/91354624-ea702800-e7e4-11ea-9083-51664cdeebd9.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/1400357/91354630-eba15500-e7e4-11ea-80f0-71ce1e4acc73.png">
+<meta property="article:published_time" content="2018-08-26T20:38:34.000Z">
+<meta property="article:modified_time" content="2020-08-26T20:42:54.703Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Transaction">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://user-images.githubusercontent.com/1400357/91354624-ea702800-e7e4-11ea-9083-51664cdeebd9.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://yoursite.com/2018/08/26/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E4%B8%8E%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.1.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="" target="_blank">
+          <img class="img-circle img-rotate" src="/images/march.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Feng</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Developer &amp; Researcher</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> London, UK</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/niuguy" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/home" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Backend/">Backend</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-AI/">Data&AI</a><span class="category-list-count">15</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Distributed-System/" rel="tag">Distributed System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pandas/" rel="tag">Pandas</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tensorflow/" rel="tag">Tensorflow</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Transaction/" rel="tag">Transaction</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Algorithm/" style="font-size: 13.75px;">Algorithm</a> <a href="/tags/Distributed-System/" style="font-size: 13px;">Distributed System</a> <a href="/tags/Java/" style="font-size: 13.5px;">Java</a> <a href="/tags/Pandas/" style="font-size: 14px;">Pandas</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/Tensorflow/" style="font-size: 13.25px;">Tensorflow</a> <a href="/tags/Transaction/" style="font-size: 13px;">Transaction</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/11/08/Stochastic-gradient-descent/" class="title">Stochastic gradient descent</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-11-08T11:14:28.000Z" itemprop="datePublished">2018-11-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/11/08/Backward-propagation-of-Neural-Network-explained/" class="title">Backward propagation of Neural Network explained</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-11-08T11:14:28.000Z" itemprop="datePublished">2018-11-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/22/Pandas-How-to-plot-counts-of-each-value/" class="title">[Pandas]How to plot counts of each value</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-22T19:40:47.000Z" itemprop="datePublished">2018-10-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/22/Pandas-How-to-calculate-datetime-difference-in-years/" class="title">[Pandas]How to calculate datetime difference in years</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-22T15:43:34.000Z" itemprop="datePublished">2018-10-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Data-AI/">Data&AI</a>
+              </p>
+              <p class="item-title">
+                <a href="/2018/10/19/Pandas-How-to-list-all-columns/" class="title">[Pandas]How to list all columns</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2018-10-19T21:31:23.000Z" itemprop="datePublished">2018-10-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-分布式事务与最终一致性" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      分布式事务与最终一致性
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2018/08/26/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E4%B8%8E%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/" class="article-date">
+	  <time datetime="2018-08-26T20:38:34.000Z" itemprop="datePublished">2018-08-26</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Backend/">Backend</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Transaction/" rel="tag">Transaction</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/08/26/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E4%B8%8E%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="为什么需要分布式事务"><a class="markdownIt-Anchor" href="#为什么需要分布式事务"></a> 为什么需要分布式事务</h2>
+<p>先摆一个例子：<br />
+A账户要向B账户转账，100元， 操作的步骤是</p>
+<blockquote>
+<p>A账户先减掉100元<br />
+B账户再加上100元</p>
+</blockquote>
+<p>非常简单。。在单个数据库实例的情况下，开启事务，先执行A-100 ，再执行B+100, 事务提交，结束。<br />
+然而，由于业务增长， 导致一个数据库实例已经不能满足所有数据存储，此时A与B存在于不同的数据库实例上，这个时候执行这两部操作就要每个实例分别启动一个事务，A减掉后提交，B增加时，其所在机器挂掉了。。  那么A就损失了100元，这显然是不可接受的。</p>
+<p>那么这个问题怎么解？</p>
+<h2 id="二阶段提交"><a class="markdownIt-Anchor" href="#二阶段提交"></a> 二阶段提交</h2>
+<p>解这个问题，需要让跨越多个数据源的一次业务行为，还能保持事务的ACID（原子、一致、隔离、持久）。<br />
+如果只是各个参与方各自为战，显然不行，因为缺少一个可以观看全局的组织者， 每个参与者都不知道其他参与者的情况，也就无法判断当前的全局情况，自己是不是要提交。有一个组织者出现后，每个参与者在准备提交前都可以问一下组织者，其他人好了没有，如果得到回答说，都好了，那么各自就开始最终提交。<br />
+这个过程其实就是二阶段提交（2PC）的主要思想。<br />
+关于二阶段协议，左耳朵耗子的博客（ <a target="_blank" rel="noopener" href="http://coolshell.cn/articles/10910.html">分布式系统的事务处理 | | 酷 壳 - CoolShell</a> ）讲了一个绝妙的例子：</p>
+<blockquote>
+<p>一对准夫妻在教堂举办婚礼，<br />
+神父通常会先问新娘：你愿意爱你面前的这个人，生老病死。。  ， 新娘回答：我愿意。<br />
+然后神父再问新郎：你愿意。。。 新郎回答：我愿意。<br />
+最后神父宣布新郎新娘成为一对夫妻。</p>
+</blockquote>
+<p>跟上述描述的二阶段提交是相同的过程， 双方都同意了，神父才会宣布婚姻成立，不可以说只有一个人同意，神父就宣布，你已经结了一半婚，没有意义。<br />
+这个过程，画出来流程图是这样的：</p>
+<p><img src="https://user-images.githubusercontent.com/1400357/91354624-ea702800-e7e4-11ea-9083-51664cdeebd9.png" alt="pic1" /></p>
+<h2 id="分布式事务的问题"><a class="markdownIt-Anchor" href="#分布式事务的问题"></a> 分布式事务的问题</h2>
+<p>二阶段提交过程是分布式事务的一个比较通用的解决方案了， 然而也存在它的局限。由于一次操作可能涉及到几个参与者，那么一次操作所需要花费的时间，就是多个参与者prepare+commit时间的总和。这可能带来两个方面的问题，一是总体耗时的增加，二是由第一个问题带来的资源损耗。</p>
+<p>第一个问题，带来的是用户体验上的下降，设想你去便利店消费，要转账给店员10元， 等了好几分钟才转成功，这时后面排队都十几人了。</p>
+<p>第二个问题，则是给系统带来的服务容量的挑战，设想淘宝双十一这种场景，每秒钟上万笔交易，涉及大量转账划拨操作，如果全部由二阶段的分布式事务实现，延迟不说，光是机器性能就会很容易到极限。</p>
+<h2 id="另一种方案"><a class="markdownIt-Anchor" href="#另一种方案"></a> 另一种方案</h2>
+<p>那么有没有替代方案？</p>
+<p>先回归到问题的本质，分布式事务解决的其实是数据的一致性问题，A给B转账100元， 效果是A减了100，B要增加100， 一增一减要相等，至于这个相等是A操作完之后等着B加了100才结束，还是A操作完之后，有另外一种机制，保证B在后面某个时刻不多不少只增加100。</p>
+<p>后一种解法，就是通过引入异步消息的方式，来替换第一种分布式事务的方案。<br />
+简单示意图如下；</p>
+<p><img src="https://user-images.githubusercontent.com/1400357/91354630-eba15500-e7e4-11ea-80f0-71ce1e4acc73.png" alt="pic2" /></p>
+<p>可以看到，整个过程分为三步：</p>
+<ol>
+<li>发起转账一方，记录一条扣减流水。</li>
+<li>转账发起方发送消息给转账接收方（接收方也可能是自己）。</li>
+<li>接收方写入一条增加流水。</li>
+</ol>
+<p>总体思路是先暂存转账记录凭证，利用消息系统的可靠性，保证整个转账操作达到最终一致。</p>
+<p>上面只是简略步骤，如果要达到替代两阶段的效果，还需要一些支撑，比如：</p>
+<ul>
+<li>消息可能发送失败，需要发送端有恢复机制，定时重试失败流水。</li>
+<li>消息真实发送后，A的本地事务不可以失败，这要求要么把消息发送放到最后，要么需要发送消息本身要跟A处于同一个事务，所谓事务消息（这又是一个很大的话题）</li>
+<li>消息可能重复发送，但是B不可以重复处理， 需要B保持一个接收消息的记录，每次比对排除重复。</li>
+</ul>
+<p>这样看来，使用异步消息的方案，也并不简单，或许一致性问题本身就是一个复杂的课题。</p>
+
+      
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2018/09/16/Pandas-How-to-import-csv/" title="[Pandas]How to import CSV"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2018/08/26/CPU%EF%BC%8FLoad%E5%81%8F%E9%AB%98%E7%9A%84%E6%8E%92%E6%9F%A5%E6%AD%A5%E9%AA%A4/" title="CPU／Load偏高的排查步骤"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/niuguy" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/home" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'http://yoursite.com/2018/08/26/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E4%B8%8E%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/';
+        
+        this.page.identifier = '分布式事务与最终一致性';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'ofeng' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>
