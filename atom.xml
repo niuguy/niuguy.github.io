@@ -6,7 +6,7 @@
   <link href="http://yoursite.com/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-08-26T21:24:42.159Z</updated>
+  <updated>2020-08-29T06:34:25.443Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,9 +17,86 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Kaggle竞赛指南（四）—— 探索性数据分析</title>
+    <link href="http://yoursite.com/2019/11/02/How-to-Kaggle-4/"/>
+    <id>http://yoursite.com/2019/11/02/How-to-Kaggle-4/</id>
+    <published>2019-11-02T07:26:52.000Z</published>
+    <updated>2020-08-29T06:34:25.443Z</updated>
+    
+    <content type="html"><![CDATA[<p>之前说到在模型选择方面没有银弹，那么如何确定最合适的模型提出假设，探索性数据分析（EDA）是一个必不可少的环节。</p><p><strong>为什么要做EDA</strong></p><ol><li>更好的理解数据。数据主要是什么类型，数据量有多少，大概分布如何。。</li><li>构建模型直觉。根据对数据的了解可以构建对于模型的直觉，这可能需要一些经验。</li><li>提出模型假设。当你对数据有基本的了解以及直觉之后就可以预设从那个范围选取模型，线性、决策树、聚类还是NN。</li></ol><p><strong>分析什么</strong></p><p>这里我们以iris数据集为例</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">iris &#x3D; pd.read_csv(&#39;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;mwaskom&#x2F;seaborn-data&#x2F;master&#x2F;iris.csv&#39;)</span><br></pre></td></tr></table></figure><ol><li><p>数据取样<br /><img src="https://user-images.githubusercontent.com/1400357/91630420-34b1fe80-e9c9-11ea-83b4-5d5663def575.png" alt="" /><br />随机获取5个样例，可以看到有多少列，每列的数据类型。类似的你也可以用<code>.head()</code>或者<code>.tail()</code>方法， 得到的分别是数据集的头部和尾部数据。</p></li><li><p>概要统计信息</p></li></ol><p>主要用到的是Pandas的describe()</p><p><img src="https://user-images.githubusercontent.com/1400357/91630438-57441780-e9c9-11ea-993a-9185091a96d2.png" alt="" /></p><p>这个方法输出非常丰富，包括数据总量、平均数、方差、最小最大值以及各种分位数。通过这个结果可以对数据大概分布有一个了解</p><ol start="3"><li>可视化<br />数据可视化在EDA过程中非常重要，常常可以通过可视化过程发现可能的建模方向。可视化主要有两个目的，一是探索单个特征的分布规律 ， 二是探索特征之间的相互关系。</li></ol><p>在单特征探索用到的主要工具有直方图、散点图</p><p>直方图<br /><img src="https://user-images.githubusercontent.com/1400357/91630449-6e830500-e9c9-11ea-8ef4-885c3aa6749b.png" alt="" /><br />直方图将单个特征值的数据划分为不同的数据区段，可以直观看到数据在各个区段的分布情况。需要注意的是，直方图是一种聚合方法，我们无法看到一个数据区间里面的数据分布情况，这有时候可能造成判断偏差。<br />在存在数据缺失或有异常值的情况这种误差可能尤其明显，这时候可能需要做一些预处理，比如填补缺失值或者取log等操作。</p><p>点图<br /><img src="https://user-images.githubusercontent.com/1400357/91630459-88244c80-e9c9-11ea-962d-875d46b5dd74.png" alt="" /></p><p>以index为x轴， 各特征值为y值画散点图，可以看到数据随index变化情况，用以检查数据有没有shuffle, 比如上图petal_length是均匀分布的，petal_width就呈现出阶段性特点。</p><p>在多特征相互作用探索用到的主要工具有散点图和相关矩阵图</p><p>散点图</p><p><img src="https://user-images.githubusercontent.com/1400357/91630475-9d997680-e9c9-11ea-8b6f-7890eed98338.png" alt="" /></p><p>可以看两个特征之间的相互关系。值得注意的是，有时散点图会</p><p>矩阵图<br /><img src="https://user-images.githubusercontent.com/1400357/91630502-b73abe00-e9c9-11ea-9379-8ae1da7a2156.png" alt="" /></p><p><img src="https://user-images.githubusercontent.com/1400357/91630510-ce79ab80-e9c9-11ea-8074-5f8a9df13c2c.png" alt="" /></p><p>矩阵图囊括了散点图和直方图，是Pandas提供的一种非常方便的可视化工具，但是需要注意的是对于大型数据集渲染速度可能有些慢</p><p><strong>写在最后</strong><br />EDA 由于其探索方式多种多样，其本身可以称之为一种艺术，其效果好坏来自于你对数据的直觉以及对于各种工具技巧的熟悉程度，想要提高这方面的能力需要不断的练习并且学习各种先进的思路。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;之前说到在模型选择方面没有银弹，那么如何确定最合适的模型提出假设，探索性数据分析（EDA）是一个必不可少的环节。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;为什么要做EDA&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;更好的理解数据。数据主要是什么类型，数据量有多少，大概分布如何。。&lt;</summary>
+      
+    
+    
+    
+    <category term="Data&amp;AI" scheme="http://yoursite.com/categories/Data-AI/"/>
+    
+    
+    <category term="Kaggle" scheme="http://yoursite.com/tags/Kaggle/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Kaggle竞赛指南（三）—— 数据预处理</title>
+    <link href="http://yoursite.com/2019/10/27/How-to-Kaggle-3/"/>
+    <id>http://yoursite.com/2019/10/27/How-to-Kaggle-3/</id>
+    <published>2019-10-27T18:26:35.000Z</published>
+    <updated>2020-08-27T17:32:56.045Z</updated>
+    
+    <content type="html"><![CDATA[<p>数据预预处理对于机器学习结果来说是至关重要，有时甚至是决定性的。本篇我们将讨论针对不同的数据类型，如何根据不同的数据模型来做预处理。具体我们将讨论四种最常见类型的数据，分别是 数字数据，类别数据，时间数据和坐标数据。</p><h3 id="数字数据"><a class="markdownIt-Anchor" href="#数字数据"></a> 数字数据</h3><ol><li>标准化（Scaling）</li></ol><p>为什么要标准化？ 非标准化的数据会造成计算数据之间距离时，在一个数据纬度上的距离被过度放大，可能会极大的影响分类的准确性。 如下图，如果我们采用k-NN计算节点间距离，左右两个x1坐标系的尺度不同直接影响了绿色节点的分类结果。<br /><img src="https://user-images.githubusercontent.com/1400357/91475165-19dd6e00-e893-11ea-89d3-cd7181c0bee1.png" alt="" /></p><p>标准化有四种常规实现方式，对应于Sklearn 以及Numpy中的实现，分别是MinMaxScaler， StandardScaler</p><p><strong>MinMaxScaler</strong><br />转化数据到[0, 1]区间<br /><code>X = (X-X.min())/(X.max() - X.min())</code><br />具体可使用 sklearn.preprocessing.MinMaxScaler</p><p><strong>StandardScaler</strong><br />转化数据到 平均值=0， 方差=1<br /><code>X = (X-X.min())/X.std()</code><br />具体可使用sklearn.preprocessing.StandardScaler</p><p>是否所有模型都需要标准化？ 答案是否定的，实际上决策树相关模型就不需要进行数值标准化，因为树模型不用考虑节点之间的相互距离。</p><ol start="2"><li>离群值（Outlier）与排序</li></ol><p>有时一个数据集中可能有几个数据点偏离其他数据点太远，这可能会极大影响分类效果，如下图所示：</p><p><img src="https://user-images.githubusercontent.com/1400357/91475264-3e394a80-e893-11ea-8c2a-3d7f0682a24a.png" alt="" /></p><p>这时候我们需要把离群点找出来剔除或单独处理，一种最简单可行的方法是对数据点进行排序，并用排序后的index代替原数值，这种方式把数据节点之间的距离尺度拉平到1个单位。</p><p>比如</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rank([-100, 0, 1e5]) &#x3D;&#x3D;[0,1,2]</span><br><span class="line">rank([1000,1,10]) &#x3D; [2,0,1] </span><br></pre></td></tr></table></figure><p>sklearn.stats.RankData可以实现上述排序+映射的功能</p><ol start="3"><li>取对数或开平方</li></ol><p>对于神经网络模型来说，如果数值太靠近0， 可以采取对数或开平方的方式来使数据变得更加可区分，借助于Numpy 比如：<br /><code>np.log(1 + x)</code><br /><code>np.sqrt(1+x)</code></p><ol start="4"><li>创造新的特征值</li></ol><p>有时候你不必局限于已有数据的特征，可以创造一些新的特征值来使数据的表达更为丰富，在部分竞赛题目中，新特征值的构建对结果也产生了至关重要的作用</p><p>例如房地产数据，假设你已经有房子面积和总价数据，你可以很自然的想到房屋单价这一可能的新特征。有时候新特征可能需要一些统计知识，比如时间序列数据中每个窗口数据，可以添加其均值方差等新特征。总体来说，对于新特征的挖掘能力取决于两方面：一是领域知识的了解程度；二是通过探索性数据分析（EDA）所获得的发现</p><h3 id="类别数据"><a class="markdownIt-Anchor" href="#类别数据"></a> 类别数据</h3><p>类别数据，又称可枚举数据，是一种广泛存在的数据类型，比如性别，职业，学历等。 序数词是指一个序列中的一部分数据，比如考试名词。这些数据需要转换成数值数据以供模型使用。典型的处理方式有适用于决策树相关模型的LabelEncoding 和FrequencyEncoding ， 以及适用于线性及其他非决策树模型的OneHot Encoding</p><ol><li><p>LabelEncoding<br />将类别或序数词直接映射为数值数据，具体有两种映射方式，一是按照字母顺序，二是按照出现顺序，比如下面这组数据：[S, C, S, S, S Q]<br />按照字母顺序映射结果 为[2, 1, 2, 2, 2, 3] 按照 出现顺序则为[1, 2, 1, 1, 1, 3]<br />分别采用的软件包为  sklearn.preprocessing.LabelEncoder 和 Pandas.factorize</p></li><li><p>Frequency Encoding<br />FrequencyEncoding 是指计算每个类别的出现频率，按照上述例子计算 那么我们有<code>P(S) = 4/6</code> <code>P(C) = 1/6</code> <code>P(Q)=1/6</code></p></li><li><p>One-hot Encoding<br />对于非决策树模型来说，One-Hot Encoding 是一个更合适的预处理方法，其具体处理过程如下所示：</p></li></ol><p><img src="https://user-images.githubusercontent.com/1400357/91475326-54470b00-e893-11ea-8092-99fcdc5ae13e.png" alt="" /></p><p>One-Hot 将一维特征拓展为N维（N=类别总数）， 每行对应的列为1，其他为0。<br />由于处理后的数值只能为0或1，所以OneHot的过程也同时是数据标准化的过程。<br />One-Hot一个潜在的缺点是，如果类别数过多会生成一个庞大的稀疏矩阵，使计算效率大打折扣，这个时候可以考虑用其他方式比如广泛用于自然语言处理的Word2Vec。</p><h3 id="时间和地理坐标数据"><a class="markdownIt-Anchor" href="#时间和地理坐标数据"></a> 时间和地理坐标数据</h3><p>时间和地理坐标数据有一些相似点是，时间和地理坐标本身是一种标尺不是数据，但是我们可以根据时间和地理坐标的特性生成新的数字或者类别特征。<br /><strong>时间数据</strong><br /><img src="https://user-images.githubusercontent.com/1400357/91475421-780a5100-e893-11ea-8d86-96eb1cd56f7e.png" alt="" /></p><p>时间数据可以从三个方面考虑其新特征：</p><ol><li>周期性<br />秒、分、时、星期、月、年。例如病人服药记录，一种药需要三天吃一次，可能就需要3天为一个时间周期来计算相关特征。</li><li>距离某个时间距离<br />分析电商销售数据比较常用的是计算比如开店后多少星期，从上一个节假日之后多少天的销售额。</li><li>时间差<br />两个时间点之间的数据差也可能成为新的特征值，比如股市每日收盘和开盘之间的价格变化。</li></ol><p><strong>地理坐标数据</strong><br /><img src="https://user-images.githubusercontent.com/1400357/91475477-8eb0a800-e893-11ea-9692-a0d65019ee2f.png" alt="" /></p><p>类似于时间数据，地理坐标数据也可以产生很多有用的特征，假设要预测一个地区的房价信息，在给定了一个城市比如伦敦</p><p>我们可以从几个方向去探索：</p><ol><li>聚类中心点<br />可以尝试依据房价的经纬度进行聚类分析，分析发现关键性的地标中心，比如伦敦塔、海德公园、大英博物馆等 。</li><li>距离信息<br />可计算预测的地点到中心点的距离值</li><li>聚合分析<br />在预测点周围比如1英里、3英里 半径范围内房子的类型价格、教育设施、生活设施等统计信息。</li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;数据预预处理对于机器学习结果来说是至关重要，有时甚至是决定性的。本篇我们将讨论针对不同的数据类型，如何根据不同的数据模型来做预处理。具体我们将讨论四种最常见类型的数据，分别是 数字数据，类别数据，时间数据和坐标数据。&lt;/p&gt;
+&lt;h3 id=&quot;数字数据&quot;&gt;&lt;a class=&quot;</summary>
+      
+    
+    
+    
+    <category term="Data&amp;AI" scheme="http://yoursite.com/categories/Data-AI/"/>
+    
+    
+    <category term="Kaggle" scheme="http://yoursite.com/tags/Kaggle/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Kaggle竞赛指南（二） —— 主流机器学习算法</title>
+    <link href="http://yoursite.com/2019/08/27/How-to-Kaggle-2/"/>
+    <id>http://yoursite.com/2019/08/27/How-to-Kaggle-2/</id>
+    <published>2019-08-27T17:08:51.000Z</published>
+    <updated>2020-08-27T17:25:41.949Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="https://user-images.githubusercontent.com/1400357/91473128-58bdf480-e890-11ea-9db0-7339c430e9e0.png" alt="" /></p><p>目前竞赛中（其实也是常规实际问题）的主流算法有四大门类：  Linear, Tree-based, kNN 以及 Neural Networks 下面分别简单介绍一下：</p><h2 id="linear相关模型"><a class="markdownIt-Anchor" href="#linear相关模型"></a> Linear相关模型</h2><p>假设我们有两组点， 灰色点属于一类，绿色点属于另一类，如上图所示， 那么我们可以很方便的拟合条直线将之区分为两类，落在右上方的为A 落在左下方的为B。<br /><img src="https://user-images.githubusercontent.com/1400357/91473847-5d36dd00-e891-11ea-93aa-8ce12b55e02c.png" alt="" /></p><p>上述是两维的情况， 这种思路还可可以拓展到高维空间， 这个时候分界展现形式就可能是一个平面而非直线了， 具体算法比如Logistic Regression 以及SVM。</p><p>Linear相关模型非常适用于<strong>稀疏高维数据</strong>的分类。不过也有很多数据没有那么容易用Linear区分，比如下面这种“环”数据：</p><p><img src="https://upload-images.jianshu.io/upload_images/1886630-ba74277e84f5ec61.png" alt="" /></p><p>在应用过程中你不必从头实现Linear算法，各种现成的库可以在<a href="https://scikit-learn.org/stable/">Scikit-learn</a>或者 <a href="https://github.com/VowpalWabbit/vowpal_wabbit/wiki">Vowpal Wabbit</a>找到， 后者专门用于处理大型数据集。</p><p><img src="https://user-images.githubusercontent.com/1400357/91473985-8e171200-e891-11ea-873a-234e271098ac.png" alt="" /></p><h2 id="tree-based模型"><a class="markdownIt-Anchor" href="#tree-based模型"></a> Tree-based模型</h2><p>Tree-based(决策树)模型通常是作为构建复杂模型的一个基础模型。类似于线性模型，我们假设有两组数据点，我们尝试用一条平行于坐标轴的直线将之分开</p><p><img src="https://user-images.githubusercontent.com/1400357/91474073-aab34a00-e891-11ea-9945-5a4b4d09158f.png" alt="" /></p><p>现在我们得到了两片区域，上面这片区域是灰色点的概率为1， 下面这片是灰色的概率为0.2 。 那么上面空间不用再拆分了，我们继续画一条直线拆分下面这片区域</p><p><img src="https://user-images.githubusercontent.com/1400357/91474155-c1f23780-e891-11ea-80e6-5fb31d16a129.png" alt="" /></p><p>这样我们得到左下区域的灰色概率为0， 剩余区域灰色概率为1。这个过程就是决策树工作的典型过程， 简单来讲就是使用分治的策略不断划分子空间直到不可再划分为止。</p><p>决策树算法的策略简单但是非常有效，其有两个最有名的变形分别是随机森林（Random Forest）和梯度提升决策树（Gradient Boost Decision Trees, GBDT）。决策树及其变形在Kaggle竞赛中应用极为广泛，不夸张的说几乎所有<strong>表格数据</strong>相关的竞赛其冠军方案都使用了这种策略。</p><p>不过决策树也不是万能的，在很多有明显线性依赖关系的数据集上，决策树表现要比线性模型要差很多，因为为了分割空间其需要生成大量树分岔，而且在决策边界也可能会变得不准确。</p><p>对于基本的决策树和Random Forest，我们依然可以在<a href="https://scikit-learn.org/stable/">Scikit-learn</a>或者 <a href="https://github.com/VowpalWabbit/vowpal_wabbit/wiki">Vowpal Wabbit</a>中找到其实现，对于GBDT有两个主流的实现分别是 <a href="https://xgboost.readthedocs.io/en/latest/">XGBoost</a>和<a href="https://lightgbm.readthedocs.io/en/latest/">LightGBM</a></p><h2 id="k-nn"><a class="markdownIt-Anchor" href="#k-nn"></a> k-NN</h2><p>k-NN 是 k-Nearest 即K 邻近算法的缩写，我们还是从分类预测问题入手，类似的，我们希望预测下图中带问好的这个点的分类</p><p><img src="https://user-images.githubusercontent.com/1400357/91474592-52c91300-e892-11ea-8c84-7cf970136aff.png" alt="Screenshot from 2019-07-03 10-36-52.png" /></p><p>我们做一个假设， 即彼此接近的点可能会有相同的标签，因此我们希望能找到距离目标点相近的点，并把这个点的标签作为目标点的标签，因此某个点属于那个分类是由其邻居“投票”决定的。这个寻找过程就是邻近算法的基本思路。如果我们再拓展到k 个目标找其邻近的点，那么这个算法就会产出k个分类, 也就是k-NN算法。</p><p>尽管K-NN思路简单，但是却是竞赛中非常常用的一种前期处理思路。类似于前面两个模型，k-NN的实现也可以在<a href="https://scikit-learn.org/stable/">Scikit-learn</a>或者 <a href="https://github.com/VowpalWabbit/vowpal_wabbit/wiki">Vowpal Wabbit</a>中找到。</p><h2 id="neural-networksnn"><a class="markdownIt-Anchor" href="#neural-networksnn"></a> Neural Networks(NN)</h2><p>NN是近几年耀眼的明星，这其实不是一个算法，而是一类特殊的机器学习模型，直观来讲，NN 类似于一个黑盒，与决策树不同，NN 可以生成一个平滑的分割曲线，在一些特定问题如图像、声音、文本和序列上，NN都取得了革命性的进步。NN的具体原理是需要专门系统学习的，但是你可以在 <a href="https://playground.tensorflow.org/">https://playground.tensorflow.org/</a>获得一个直观的认识<br /><img src="https://user-images.githubusercontent.com/1400357/91474744-886dfc00-e892-11ea-82f6-fadee9b563d1.png" alt="https://playground.tensorflow.org/" /><br />实现NN的软件包非常多，主流的有Tensorflow, Keras, Pytorch, Mxnet 。其中Keras是对Tensorflow的易用化封装， Pytorch近来由于其定义网络的灵活性受到越来越多资深Kaggler的青睐。</p><h2 id="one-more-thing"><a class="markdownIt-Anchor" href="#one-more-thing"></a> One more thing</h2><blockquote><p>Here is no method which outperforms all others for all tasks<br />没有银弹</p></blockquote><p>没有一种方法可以适用于所有数据，每种方法都限定与其适用的数据类型假设。通常我们看到大多数竞赛题目上，GBDT 和 NN 方法都表现良好，但并不能因此低估其他比如Linear和K-NN方法，在某些问题上后者可能表现更好,比如这个结合了逻辑回归和随机森林算法的方案，得分超过了CNN获得了第一（<a href="http://blog.kaggle.com/2017/03/24/leaf-classification-competition-1st-place-winners-interview-ivan-sosnovik/">http://blog.kaggle.com/2017/03/24/leaf-classification-competition-1st-place-winners-interview-ivan-sosnovik/</a><br />）</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/1400357/91473128-58bdf480-e890-11ea-9db0-7339c430e9e0.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;目前竞赛中（其实也</summary>
+      
+    
+    
+    
+    <category term="Data&amp;AI" scheme="http://yoursite.com/categories/Data-AI/"/>
+    
+    
+    <category term="Kaggle" scheme="http://yoursite.com/tags/Kaggle/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Kaggle 竞赛指南（一） —— 简介</title>
-    <link href="http://yoursite.com/2019/08/26/Kaggle-%E7%AB%9E%E8%B5%9B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89-%E2%80%94%E2%80%94-%E7%AE%80%E4%BB%8B/"/>
-    <id>http://yoursite.com/2019/08/26/Kaggle-%E7%AB%9E%E8%B5%9B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89-%E2%80%94%E2%80%94-%E7%AE%80%E4%BB%8B/</id>
+    <link href="http://yoursite.com/2019/08/26/How-to-kaggle-1/"/>
+    <id>http://yoursite.com/2019/08/26/How-to-kaggle-1/</id>
     <published>2019-08-26T21:06:54.000Z</published>
     <updated>2020-08-26T21:24:42.159Z</updated>
     
@@ -435,81 +512,6 @@ A账户要向B账户转账，100元， 操作的步骤是&lt;/p&gt;
     
     
     <category term="Profile" scheme="http://yoursite.com/tags/Profile/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Tensorflow101</title>
-    <link href="http://yoursite.com/2018/07/10/Tensorflow101/"/>
-    <id>http://yoursite.com/2018/07/10/Tensorflow101/</id>
-    <published>2018-07-10T21:25:42.000Z</published>
-    <updated>2020-08-25T17:34:24.033Z</updated>
-    
-    <content type="html"><![CDATA[<p>Tensorflow is a high performance numerical computation software library, it is mostly known for its strong support for machine learning and deep learning.</p><h3 id="how-to-install"><a class="markdownIt-Anchor" href="#how-to-install"></a> How to Install</h3><p>If you have ‘pip’, everything is simple<br /><code>pip install tensorflow</code></p><h3 id="basic-concepts"><a class="markdownIt-Anchor" href="#basic-concepts"></a> Basic Concepts</h3><blockquote><p>Graph</p></blockquote><p>Graph is a fundamental concept in Tensorflow. Take ReLU computation as an example, the function of ReLU is</p><p><em>h=ReLU(Wx+b)</em></p><p>In the view of Tensorflow, the function looks like this</p><p><img src="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/101_01.png" alt="relu_graph" /></p><blockquote><p>Nodes</p></blockquote><p>Variables such as <em>W</em> and <em>b</em> , placeholders such as x, are operations such as <em>MatMul</em>, <em>Add</em> are all nodes in the graph.</p><blockquote><p>Edges</p></blockquote><p>The edges between nodes indicate the data which flow between nodes,  in tensorflow data is represented as “tensor” .</p><p>“tensor” + “flow”  = “tensorflow”</p><h3 id="codes"><a class="markdownIt-Anchor" href="#codes"></a> Codes</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line"></span><br><span class="line">b &#x3D; tf.Variable(tf.zeros((10,)))</span><br><span class="line">W &#x3D; tf.Variable(tf.random_uniform((20, 10), -1, 1))</span><br><span class="line"></span><br><span class="line">x &#x3D; tf.placeholder(tf.float32, (10, 20))</span><br><span class="line"></span><br><span class="line">h &#x3D; tf.nn.relu(tf.matmul(x, W) + b)</span><br><span class="line"></span><br><span class="line">writer &#x3D; tf.summary.FileWriter(&#39;.&#x2F;graphs&#39;, tf.get_default_graph())</span><br><span class="line"></span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">sess.run(tf.global_variables_initializer())</span><br><span class="line">sess.run(h, &#123;x: np.random.random((10, 20))&#125;)</span><br><span class="line"></span><br><span class="line">writer.close()</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>Here are the steps described in the above codes.</p><ol><li>Create a graph using Variables and placeholders.</li><li>Start a tensorflow session and deploy the graph into the session.</li><li>Run the session, let the tensors flow.</li><li>Write processing logs using tools such as tf.summary.</li></ol><p>Session is the so called execution environment. It needs two parameters which are “Fetches” and “Feeds”.</p><p><code>sess.run(fetches, feeds)</code></p><p>Fetches: List of graph nodes</p><p>Feeds: Dictionary mapping from graph nodes to concrete values.</p><p>In the ReLU example, Fetches = h = tf.nn.relu(tf.matmul(x, W) + b) , Feeds = {x: np.random.random((10, 20))}</p><p>It would be interesting to see what happened during the running time. We can try TensorBoard.</p><h2 id="tensorboard-result"><a class="markdownIt-Anchor" href="#tensorboard-result"></a> TensorBoard Result</h2><p><img src="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/101_02.png" alt="tensorboard" /></p><p><img src="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/101_03.png" alt="tensorboard_relu" /></p><p>The Main Graph clearly shows how the tensor flows through the graph. In a complex machine learning program, the printed diagram is a convenient tool to increase the confidence of the result.</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;Tensorflow is a high performance numerical computation software library, it is mostly known for its strong support for machine learning a</summary>
-      
-    
-    
-    
-    <category term="Data&amp;AI" scheme="http://yoursite.com/categories/Data-AI/"/>
-    
-    
-    <category term="Tensorflow" scheme="http://yoursite.com/tags/Tensorflow/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>写一个并发请求的Case</title>
-    <link href="http://yoursite.com/2017/08/26/%E5%86%99%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E8%AF%B7%E6%B1%82%E7%9A%84Case/"/>
-    <id>http://yoursite.com/2017/08/26/%E5%86%99%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E8%AF%B7%E6%B1%82%E7%9A%84Case/</id>
-    <published>2017-08-26T20:31:03.000Z</published>
-    <updated>2020-08-26T20:32:12.481Z</updated>
-    
-    <content type="html"><![CDATA[<p>有些场景下，你可能要检查代码有没有并发问题，验证幂等或者做一下简单的压力测试， 这时候需要写一个并发请求的程序，那么怎么做呢？<br />先上代码</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">final long time_start &#x3D; System.currentTimeMillis();</span><br><span class="line">ExecutorService service &#x3D; Executors.newFixedThreadPool(10);</span><br><span class="line"></span><br><span class="line">int client_num &#x3D; 10;</span><br><span class="line"></span><br><span class="line">final CountDownLatch countDownLatch &#x3D; new CountDownLatch(1);</span><br><span class="line"></span><br><span class="line">for (int i &#x3D; 0; i &lt; client_num; i++) &#123;</span><br><span class="line">    Runnable job &#x3D; new Runnable() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run()  &#123;</span><br><span class="line">            Worker worker &#x3D; new Worker();</span><br><span class="line">            try &#123;</span><br><span class="line">                countDownLatch.await();</span><br><span class="line">                worker.doWork();</span><br><span class="line">            &#125;catch(Exception e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    service.submit(job);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">countDownLatch.countDown();</span><br><span class="line"></span><br><span class="line">service.shutdown();</span><br><span class="line"></span><br><span class="line">while (!service.isTerminated()) &#123;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(&quot;time consuming is &quot; + (System.currentTimeMillis() - time_start));</span><br></pre></td></tr></table></figure><p>我们来拆解下这个Case，看看都做了些什么：</p><h3 id="1-容器准备"><a class="markdownIt-Anchor" href="#1-容器准备"></a> 1. 容器准备</h3><p>首先，你需要一个线程池来调用任务处理，虽然你可以每次new一个线程来做，但是无论是在生产环境还是测试，都不太建议这样做。本示例用的是<br /><code>ExecutorService service = Executors.newFixedThreadPool(10)</code>  其效果是构造一个固定线程数的线程池，这个线程池的coreSize和maxSize都是10， 也就是说，最多可以同时处理10个任务，多了的就要排队。<br />线程池装载完任务后，执行submit , 但是此时任务并未执行，具体原因看下面。</p><h3 id="2-并发执行"><a class="markdownIt-Anchor" href="#2-并发执行"></a> 2. 并发执行</h3><p>这里是比较tricky的一个点，因为要模拟完全并发的情况，就要保证所有任务同一时间触发，这里我们用了一个java.util.concurrent的工具类 CountDownLatch， 从名字大概可以猜测到，这个是一个像栅栏一样的工具，先把羊圈在里面，等count数到0的时候，打开栅栏，放出群羊。。<br />使用步骤： 首先，初始化countDownLatch计数为1。 然后， 在业务代码里在执行业务逻辑之前我们嵌入了一行 <code>countDownLatch.await()</code> 。最后， 当所有任务都装载完毕提交后，执行<code>countDownLatch.countDown()</code>，如同发令枪一般，所有的任务同时触发，并发量达到client_num的数量10。</p><h3 id="3-任务结束"><a class="markdownIt-Anchor" href="#3-任务结束"></a> 3. 任务结束</h3><p>任务结束的时候调用的是线程池的shutdown方法, 看一下这个方法的注释</p><blockquote><p>Attempts to stop all actively executing tasks, halts the processing of waiting tasks, and returns a list of the tasks that were awaiting execution.</p></blockquote><p>意思是这个方法只是尝试去停止所有任务，但是并不保证都能结束，并且没有结束的任务是以list返回的。<br />所以后面又跟了一个</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">while (!service.isTerminated()) &#123;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure><p>循环一直等待所有的任务结束完毕，最后再统计所有任务的执行时间。</p><h2 id="结语"><a class="markdownIt-Anchor" href="#结语"></a> 结语</h2><p>这是一段比较简单的并发测试代码，单元测试足够用，但是如果用做规模化的压力测试，还需要考虑压力机与测试机的连接以及数据热点等一系列问题，这又是个很大的话题了。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;有些场景下，你可能要检查代码有没有并发问题，验证幂等或者做一下简单的压力测试， 这时候需要写一个并发请求的程序，那么怎么做呢？&lt;br /&gt;
-先上代码&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutt</summary>
-      
-    
-    
-    
-    <category term="Backend" scheme="http://yoursite.com/categories/Backend/"/>
-    
-    
-    <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>What you need to know for memory-leaks troubleshooting(排查内存泄漏你需要知道的套路)</title>
-    <link href="http://yoursite.com/2017/08/25/What-you-need-to-know-for-memory-leaks-troubleshooting/"/>
-    <id>http://yoursite.com/2017/08/25/What-you-need-to-know-for-memory-leaks-troubleshooting/</id>
-    <published>2017-08-25T16:12:06.000Z</published>
-    <updated>2020-08-25T17:35:11.324Z</updated>
-    
-    <content type="html"><![CDATA[<p>内存泄漏是一个比较棘手的问题，大多数时候没有明显的报错，这给问题排查带来很大困难，好在前人已经遇到很多类似问题，也留下了一些典型的排查套路，大部分时候只需要按图索骥，一步步来即可。</p><h2 id="套路之工具篇"><a class="markdownIt-Anchor" href="#套路之工具篇"></a> 套路之工具篇</h2><ul><li>ps或者jps<br />ps:查找活跃的进程<br />典型用法：<code>ps -ef|grep java</code><br />jps:查找活跃的 java进程*<br />典型用法：<code>jps -v</code></li><li>jmap<br />jmap 可以将java内存打印出来，作为内存分析工具（如MAT）的输入</li><li>jinfo<br />可以用来查看java进程的启动信息，可以看下内存堆大小的设置</li><li>jstat<br />可以用来打印JVM的运行时GC统计信息, 典型用法如<br /><code>jstat -gcutil 21891 250 2</code><br />表示链接到21891这个进程，每250ms用gcutil打印一次，一共取2个实例，通常打印出来的效果是这样的</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ jstat -gcutil 19677 1000 2</span><br><span class="line">  S0     S1     E      O      P     YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line"> 85.04   0.00  15.15   3.61  44.32      4    0.834     1    0.705    1.538</span><br><span class="line"> 85.04   0.00  15.15   3.61  44.32      4    0.834     1    0.705    1.538</span><br></pre></td></tr></table></figure><ul><li>MAT<br />可以分析jmaps生成的内存快照，如果你用Eclipse可以直接在eclipse-&gt;help-&gt;install software   输入 <a href="http://download.eclipse.org/mat/1.6.1/update-site/">http://download.eclipse.org/mat/1.6.1/update-site/</a> 按照提示安装</li></ul><p>PS：如果命令有任何不清楚，男人(man)是你的好朋友：）</p><h2 id="套路之实战篇"><a class="markdownIt-Anchor" href="#套路之实战篇"></a> 套路之实战篇</h2><h3 id="1-获取内存dump"><a class="markdownIt-Anchor" href="#1-获取内存dump"></a> 1. 获取内存dump</h3><blockquote><p>进程还活着：</p></blockquote><ul><li>使用ps查找java进程ID<br /><code>ps -ef|grep java 或者 jps</code></li><li>jmap 将内存dump到本地<br /><code>jmap -dump:live,format=b,file=dump.bin 19677</code><br />会输出dump.bin文件</li></ul><blockquote><p>已经OOM挂了：</p></blockquote><p>提前在java 运行参数添加   <code>-XX:+HeapDumpOnOutOfMemoryError</code> 表示挂了需要dump当时内存，再添加 <code>-XX:HeapDumpPath=/tmp</code>表示dump内存存放的位置, 这样当应用down掉之后，会输出一个.hprof文件</p><h3 id="2-内存分析"><a class="markdownIt-Anchor" href="#2-内存分析"></a> 2. 内存分析</h3><ul><li>使用MAT导入上一步生成的dump文件，分析之后你会看到类似这样一张图</li></ul><p><img src="https://user-images.githubusercontent.com/1400357/91207332-7fe5bc00-e700-11ea-8f32-7959f1bec32b.png" alt="1.png" /></p><p>从这里为入口，可以查看哪些对象占用内存较大，内存泄漏的可疑点在哪里，比如这个case, 点到Leak Suspects这个链接可以看到</p><p><img src="https://user-images.githubusercontent.com/1400357/91207479-b7546880-e700-11ea-826b-17a0844ca778.png" alt="2.png" /></p><p>这是个比较直观的问题，HashMapEntry对象占用了超过99%的内存空间，可以直接看业务代码哪里HashMap使用出了问题。<br />这是MAT比较简单的应用，其他高级用法可以看MAT官方文档，或这篇文章 <a href="http://www.cnblogs.com/AloneSword/p/3821569.html">Java程序内存分析：使用mat工具分析内存占用 - 孤剑 - 博客园</a></p><h2 id="结语"><a class="markdownIt-Anchor" href="#结语"></a> 结语</h2><p>相信了解了这些工具与套路，下次遇到可疑内存泄漏或者OOM这样的严重问题，就不会茫然无措了。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;内存泄漏是一个比较棘手的问题，大多数时候没有明显的报错，这给问题排查带来很大困难，好在前人已经遇到很多类似问题，也留下了一些典型的排查套路，大部分时候只需要按图索骥，一步步来即可。&lt;/p&gt;
-&lt;h2 id=&quot;套路之工具篇&quot;&gt;&lt;a class=&quot;markdownIt-Ancho</summary>
-      
-    
-    
-    
-    <category term="Backend" scheme="http://yoursite.com/categories/Backend/"/>
-    
-    
-    <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
     
   </entry>
   

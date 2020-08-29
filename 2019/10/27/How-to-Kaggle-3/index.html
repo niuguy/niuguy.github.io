@@ -17,16 +17,27 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>Tag: Kaggle | Feng&#39;s note</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/tags/Kaggle/index.html">
+  <title>Kaggle竞赛指南（三）—— 数据预处理 | Feng&#39;s note</title>
+  <meta name="description" content="数据预预处理对于机器学习结果来说是至关重要，有时甚至是决定性的。本篇我们将讨论针对不同的数据类型，如何根据不同的数据模型来做预处理。具体我们将讨论四种最常见类型的数据，分别是 数字数据，类别数据，时间数据和坐标数据。  数字数据  标准化（Scaling）  为什么要标准化？ 非标准化的数据会造成计算数据之间距离时，在一个数据纬度上的距离被过度放大，可能会极大的影响分类的准确性。 如下图，如果我们">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kaggle竞赛指南（三）—— 数据预处理">
+<meta property="og:url" content="http://yoursite.com/2019/10/27/How-to-Kaggle-3/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="数据预预处理对于机器学习结果来说是至关重要，有时甚至是决定性的。本篇我们将讨论针对不同的数据类型，如何根据不同的数据模型来做预处理。具体我们将讨论四种最常见类型的数据，分别是 数字数据，类别数据，时间数据和坐标数据。  数字数据  标准化（Scaling）  为什么要标准化？ 非标准化的数据会造成计算数据之间距离时，在一个数据纬度上的距离被过度放大，可能会极大的影响分类的准确性。 如下图，如果我们">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://user-images.githubusercontent.com/1400357/91475165-19dd6e00-e893-11ea-89d3-cd7181c0bee1.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/1400357/91475264-3e394a80-e893-11ea-8c2a-3d7f0682a24a.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/1400357/91475326-54470b00-e893-11ea-8092-99fcdc5ae13e.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/1400357/91475421-780a5100-e893-11ea-8d86-96eb1cd56f7e.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/1400357/91475477-8eb0a800-e893-11ea-9692-a0d65019ee2f.png">
+<meta property="article:published_time" content="2019-10-27T18:26:35.000Z">
+<meta property="article:modified_time" content="2020-08-27T17:32:56.045Z">
 <meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Kaggle">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://user-images.githubusercontent.com/1400357/91475165-19dd6e00-e893-11ea-89d3-cd7181c0bee1.png">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://yoursite.com/tags/Kaggle/index.html">
+  <link rel="canonical" href="http://yoursite.com/2019/10/27/How-to-Kaggle-3/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -304,138 +315,180 @@
 </aside>
 
   
-  <main class="main" role="main">
-  <article class="content article article-tags post-type-list" itemscope="">
-    <header class="article-header">
-      <h1 itemprop="name" class="hidden-xs">Tag: Kaggle</h1>
-      <p class="text-muted hidden-xs">Total 4 articles</p>
-      <nav role="navigation" id="nav-main" class="okayNav">
-        <ul>
-          <li><a href="/tags">All</a></li>
-          
-          <li><a href="/tags/Distributed-System/">Distributed System</a></li>
-          
-          <li><a href="/tags/Algorithm/">Algorithm</a></li>
-          
-          <li><a href="/tags/Java/">Java</a></li>
-          
-          <li><a href="/tags/Pandas/">Pandas</a></li>
-          
-          <li><a href="/tags/Tensorflow/">Tensorflow</a></li>
-          
-          <li><a href="/tags/Profile/">Profile</a></li>
-          
-          <li><a href="/tags/Transaction/">Transaction</a></li>
-          
-          <li><a href="/tags/Kaggle/">Kaggle</a></li>
-          
-        </ul>
-      </nav>
-    </header>
-    <!-- /header -->
-    <div class="article-body">
-      <div class="row">
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-How-to-Kaggle-3" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
         
-<div class="col-md-6">
-    
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2019-11-02T07:26:52.000Z" itemprop="datePublished">2019-11-02</time>
-     </div>
-     <h3 class="article-title" itemprop="name">
-       <a class="article-link" href="/2019/11/02/How-to-Kaggle-4/">Kaggle竞赛指南（四）—— 探索性数据分析</a>
-     </h3>
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/Kaggle/" class="label label-default mb">Kaggle</a>
-     
-     
-   </div>
-   
-</article>
+  
+    <h1 class="article-title" itemprop="name">
+      Kaggle竞赛指南（三）—— 数据预处理
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/10/27/How-to-Kaggle-3/" class="article-date">
+	  <time datetime="2019-10-27T18:26:35.000Z" itemprop="datePublished">2019-10-27</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Data-AI/">Data&AI</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Kaggle/" rel="tag">Kaggle</a>
+  </span>
 
 
-</div>
+        
 
-<div class="col-md-6">
-    
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2019-10-27T18:26:35.000Z" itemprop="datePublished">2019-10-27</time>
-     </div>
-     <h3 class="article-title" itemprop="name">
-       <a class="article-link" href="/2019/10/27/How-to-Kaggle-3/">Kaggle竞赛指南（三）—— 数据预处理</a>
-     </h3>
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/Kaggle/" class="label label-default mb">Kaggle</a>
-     
-     
-   </div>
-   
-</article>
-
-
-</div>
-
-<div class="col-md-6">
-    
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2019-08-27T17:08:51.000Z" itemprop="datePublished">2019-08-27</time>
-     </div>
-     <h3 class="article-title" itemprop="name">
-       <a class="article-link" href="/2019/08/27/How-to-Kaggle-2/">Kaggle竞赛指南（二） —— 主流机器学习算法</a>
-     </h3>
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/Kaggle/" class="label label-default mb">Kaggle</a>
-     
-     
-   </div>
-   
-</article>
-
-
-</div>
-
-<div class="col-md-6">
-    
-<article class="panel panel-default hover-shadow hover-grow" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="panel-body">
-     <div class="article-meta">
-       <time datetime="2019-08-26T21:06:54.000Z" itemprop="datePublished">2019-08-26</time>
-     </div>
-     <h3 class="article-title" itemprop="name">
-       <a class="article-link" href="/2019/08/26/How-to-kaggle-1/">Kaggle 竞赛指南（一） —— 简介</a>
-     </h3>
-   </div>
-   
-   <div class="panel-footer">
-     
-      <a href="/tags/Kaggle/" class="label label-default mb">Kaggle</a>
-     
-     
-   </div>
-   
-</article>
-
-
-</div>
-
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/10/27/How-to-Kaggle-3/#comments" class="article-comment-link">Comments</a></span>
+        
       </div>
     </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>数据预预处理对于机器学习结果来说是至关重要，有时甚至是决定性的。本篇我们将讨论针对不同的数据类型，如何根据不同的数据模型来做预处理。具体我们将讨论四种最常见类型的数据，分别是 数字数据，类别数据，时间数据和坐标数据。</p>
+<h3 id="数字数据"><a class="markdownIt-Anchor" href="#数字数据"></a> 数字数据</h3>
+<ol>
+<li>标准化（Scaling）</li>
+</ol>
+<p>为什么要标准化？ 非标准化的数据会造成计算数据之间距离时，在一个数据纬度上的距离被过度放大，可能会极大的影响分类的准确性。 如下图，如果我们采用k-NN计算节点间距离，左右两个x1坐标系的尺度不同直接影响了绿色节点的分类结果。<br />
+<img src="https://user-images.githubusercontent.com/1400357/91475165-19dd6e00-e893-11ea-89d3-cd7181c0bee1.png" alt="" /></p>
+<p>标准化有四种常规实现方式，对应于Sklearn 以及Numpy中的实现，分别是MinMaxScaler， StandardScaler</p>
+<p><strong>MinMaxScaler</strong><br />
+转化数据到[0, 1]区间<br />
+<code>X = (X-X.min())/(X.max() - X.min())</code><br />
+具体可使用 sklearn.preprocessing.MinMaxScaler</p>
+<p><strong>StandardScaler</strong><br />
+转化数据到 平均值=0， 方差=1<br />
+<code>X = (X-X.min())/X.std()</code><br />
+具体可使用sklearn.preprocessing.StandardScaler</p>
+<p>是否所有模型都需要标准化？ 答案是否定的，实际上决策树相关模型就不需要进行数值标准化，因为树模型不用考虑节点之间的相互距离。</p>
+<ol start="2">
+<li>离群值（Outlier）与排序</li>
+</ol>
+<p>有时一个数据集中可能有几个数据点偏离其他数据点太远，这可能会极大影响分类效果，如下图所示：</p>
+<p><img src="https://user-images.githubusercontent.com/1400357/91475264-3e394a80-e893-11ea-8c2a-3d7f0682a24a.png" alt="" /></p>
+<p>这时候我们需要把离群点找出来剔除或单独处理，一种最简单可行的方法是对数据点进行排序，并用排序后的index代替原数值，这种方式把数据节点之间的距离尺度拉平到1个单位。</p>
+<p>比如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rank([-100, 0, 1e5]) &#x3D;&#x3D;[0,1,2]</span><br><span class="line">rank([1000,1,10]) &#x3D; [2,0,1] </span><br></pre></td></tr></table></figure>
+<p>sklearn.stats.RankData可以实现上述排序+映射的功能</p>
+<ol start="3">
+<li>取对数或开平方</li>
+</ol>
+<p>对于神经网络模型来说，如果数值太靠近0， 可以采取对数或开平方的方式来使数据变得更加可区分，借助于Numpy 比如：<br />
+<code>np.log(1 + x)</code><br />
+<code>np.sqrt(1+x)</code></p>
+<ol start="4">
+<li>创造新的特征值</li>
+</ol>
+<p>有时候你不必局限于已有数据的特征，可以创造一些新的特征值来使数据的表达更为丰富，在部分竞赛题目中，新特征值的构建对结果也产生了至关重要的作用</p>
+<p>例如房地产数据，假设你已经有房子面积和总价数据，你可以很自然的想到房屋单价这一可能的新特征。有时候新特征可能需要一些统计知识，比如时间序列数据中每个窗口数据，可以添加其均值方差等新特征。总体来说，对于新特征的挖掘能力取决于两方面：一是领域知识的了解程度；二是通过探索性数据分析（EDA）所获得的发现</p>
+<h3 id="类别数据"><a class="markdownIt-Anchor" href="#类别数据"></a> 类别数据</h3>
+<p>类别数据，又称可枚举数据，是一种广泛存在的数据类型，比如性别，职业，学历等。 序数词是指一个序列中的一部分数据，比如考试名词。这些数据需要转换成数值数据以供模型使用。典型的处理方式有适用于决策树相关模型的LabelEncoding 和FrequencyEncoding ， 以及适用于线性及其他非决策树模型的OneHot Encoding</p>
+<ol>
+<li>
+<p>LabelEncoding<br />
+将类别或序数词直接映射为数值数据，具体有两种映射方式，一是按照字母顺序，二是按照出现顺序，比如下面这组数据：[S, C, S, S, S Q]<br />
+按照字母顺序映射结果 为[2, 1, 2, 2, 2, 3] 按照 出现顺序则为[1, 2, 1, 1, 1, 3]<br />
+分别采用的软件包为  sklearn.preprocessing.LabelEncoder 和 Pandas.factorize</p>
+</li>
+<li>
+<p>Frequency Encoding<br />
+FrequencyEncoding 是指计算每个类别的出现频率，按照上述例子计算 那么我们有<code>P(S) = 4/6</code> <code>P(C) = 1/6</code> <code>P(Q)=1/6</code></p>
+</li>
+<li>
+<p>One-hot Encoding<br />
+对于非决策树模型来说，One-Hot Encoding 是一个更合适的预处理方法，其具体处理过程如下所示：</p>
+</li>
+</ol>
+<p><img src="https://user-images.githubusercontent.com/1400357/91475326-54470b00-e893-11ea-8092-99fcdc5ae13e.png" alt="" /></p>
+<p>One-Hot 将一维特征拓展为N维（N=类别总数）， 每行对应的列为1，其他为0。<br />
+由于处理后的数值只能为0或1，所以OneHot的过程也同时是数据标准化的过程。<br />
+One-Hot一个潜在的缺点是，如果类别数过多会生成一个庞大的稀疏矩阵，使计算效率大打折扣，这个时候可以考虑用其他方式比如广泛用于自然语言处理的Word2Vec。</p>
+<h3 id="时间和地理坐标数据"><a class="markdownIt-Anchor" href="#时间和地理坐标数据"></a> 时间和地理坐标数据</h3>
+<p>时间和地理坐标数据有一些相似点是，时间和地理坐标本身是一种标尺不是数据，但是我们可以根据时间和地理坐标的特性生成新的数字或者类别特征。<br />
+<strong>时间数据</strong><br />
+<img src="https://user-images.githubusercontent.com/1400357/91475421-780a5100-e893-11ea-8d86-96eb1cd56f7e.png" alt="" /></p>
+<p>时间数据可以从三个方面考虑其新特征：</p>
+<ol>
+<li>周期性<br />
+秒、分、时、星期、月、年。例如病人服药记录，一种药需要三天吃一次，可能就需要3天为一个时间周期来计算相关特征。</li>
+<li>距离某个时间距离<br />
+分析电商销售数据比较常用的是计算比如开店后多少星期，从上一个节假日之后多少天的销售额。</li>
+<li>时间差<br />
+两个时间点之间的数据差也可能成为新的特征值，比如股市每日收盘和开盘之间的价格变化。</li>
+</ol>
+<p><strong>地理坐标数据</strong><br />
+<img src="https://user-images.githubusercontent.com/1400357/91475477-8eb0a800-e893-11ea-9692-a0d65019ee2f.png" alt="" /></p>
+<p>类似于时间数据，地理坐标数据也可以产生很多有用的特征，假设要预测一个地区的房价信息，在给定了一个城市比如伦敦</p>
+<p>我们可以从几个方向去探索：</p>
+<ol>
+<li>聚类中心点<br />
+可以尝试依据房价的经纬度进行聚类分析，分析发现关键性的地标中心，比如伦敦塔、海德公园、大英博物馆等 。</li>
+<li>距离信息<br />
+可计算预测的地点到中心点的距离值</li>
+<li>聚合分析<br />
+在预测点周围比如1英里、3英里 半径范围内房子的类型价格、教育设施、生活设施等统计信息。</li>
+</ol>
+
+      
+    </div>
   </article>
-   
+  
+    
+  <section id="comments">
+  	
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/11/02/How-to-Kaggle-4/" title="Kaggle竞赛指南（四）—— 探索性数据分析"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/08/27/How-to-Kaggle-2/" title="Kaggle竞赛指南（二） —— 主流机器学习算法"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -484,6 +537,29 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+
+   
+
+
+
+
+   
+    
+    <script defer>
+    var disqus_config = function () {
+        
+            this.page.url = 'http://yoursite.com/2019/10/27/How-to-Kaggle-3/';
+        
+        this.page.identifier = 'How-to-Kaggle-3';
+    };
+    (function() { 
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'ofeng' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
 
 
 
