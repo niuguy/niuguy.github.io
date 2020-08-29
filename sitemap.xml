@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2019/08/26/How-to-kaggle-1/</loc>
+    
+    <lastmod>2020-08-29</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/about/index.html</loc>
+    
+    <lastmod>2020-08-29</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2019/11/28/How-to-Kaggle-5/</loc>
     
     <lastmod>2020-08-29</lastmod>
@@ -30,35 +44,28 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2019/08/26/How-to-kaggle-1/</loc>
+    <loc>http://yoursite.com/2017/06/26/Key-points-of-threadpool/</loc>
     
     <lastmod>2020-08-26</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/06/26/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/</loc>
+    <loc>http://yoursite.com/2018/08/26/Distributed-transactions-and-eventual-consistency/</loc>
     
     <lastmod>2020-08-26</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/08/26/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E4%B8%8E%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/</loc>
+    <loc>http://yoursite.com/2018/08/26/How-to-troubleshooting-CPU-load-problems/</loc>
     
     <lastmod>2020-08-26</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/08/26/CPU%EF%BC%8FLoad%E5%81%8F%E9%AB%98%E7%9A%84%E6%8E%92%E6%9F%A5%E6%AD%A5%E9%AA%A4/</loc>
-    
-    <lastmod>2020-08-26</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/08/26/%E5%86%99%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E8%AF%B7%E6%B1%82%E7%9A%84Case/</loc>
+    <loc>http://yoursite.com/2017/08/26/A-concurrency-requesting-case/</loc>
     
     <lastmod>2020-08-26</lastmod>
     
@@ -180,13 +187,6 @@
     <loc>http://yoursite.com/2018/11/08/Backward-propagation-of-Neural-Network-explained/</loc>
     
     <lastmod>2020-08-25</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/about/index.html</loc>
-    
-    <lastmod>2020-08-24</lastmod>
     
   </url>
   
