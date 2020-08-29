@@ -6,7 +6,7 @@
   <link href="http://yoursite.com/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-08-29T06:34:25.443Z</updated>
+  <updated>2020-08-29T06:36:43.249Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Kaggle竞赛指南（五）—— 探索性数据分析</title>
+    <link href="http://yoursite.com/2019/11/28/How-to-Kaggle-5/"/>
+    <id>http://yoursite.com/2019/11/28/How-to-Kaggle-5/</id>
+    <published>2019-11-28T07:26:52.000Z</published>
+    <updated>2020-08-29T06:36:43.249Z</updated>
+    
+    <content type="html"><![CDATA[<p>顶级的Kaggler都有自己的一套问题解决流程，熟悉这些套路能极大提高求解问题的效率。今天我们来看一下目前Kaggle总排名第四的<a href="https://www.kaggle.com/kazanova">kazanova</a>总结出来的一套解题套路。<br />具体如下：</p><p><img src="https://user-images.githubusercontent.com/1400357/91630580-595aa600-e9ca-11ea-9dbb-aeacfebf956c.png" alt="" /></p><p>下面分别看一下各阶段主要做什么事情：</p><ol><li>理解问题</li></ol><ul><li>这是个什么问题。分类还是回归，预测还是优化，需要有一个直观理解。</li><li>数据特征。图像数据，文本数据还是声音数据，数据集是表格数据么，是否是与时间相关的。</li><li>数据规模。从而可能需要准备什么样的软硬件，需不需要用GPU， 大概需要用多少内存以及硬盘。</li></ul><ol start="2"><li>探索性数据分析</li></ol><ul><li>画出每个变量的直方图，看一下训练集及测试集的分布相似程度，</li><li>画出特征变量相对于目标变量的关系图，特征变量相对于时间的变化图（如果是时间序列问题）<br />通过看数据分布可以导出相应的交叉验证策略。</li></ul><ol start="3"><li>制定交叉验证（CV）策略<br />在对数据充分理解基础上，要确定验证策略，这一步非常重要，实际上很多排名靠前的方案最主要就是因为找到了正确的CV策略。可以从以下几点思考：</li></ol><ul><li>时间是否是个重要的变量。如果是需要根据时间做训练集测试集的分割，且要注意要用历史数据来预测未来数据。</li><li>如果数据分布是分层的，是否要考虑用分层验证（Stratified Validation）</li><li>如果数据是随机分布的，是否考虑采用随机验证，如随机K折验证</li></ul><ol start="4"><li>特征工程<br />特征工程做的好坏在大多数竞赛问题中起到了决定性的作用，面对不同问题需要采取不同策略，具体思考方向如下。</li></ol><ul><li>图像识别：考虑正规化（scaling），平移(shifting)，翻转(rotation)以及CNN。 参考<a href="https://www.kaggle.com/c/data-science-bowl-2018">https://www.kaggle.com/c/data-science-bowl-2018</a></li><li>声音识别：傅立叶变换（Fourier），<a href="https://en.wikipedia.org/wiki/Mel-frequency_cepstrum">mfcc</a>, 波普分析（specgram），正规化。 参考<a href="https://www.kaggle.com/c/tensorflow-speech-recognition-challenge">https://www.kaggle.com/c/tensorflow-speech-recognition-challenge</a></li><li>文本分类：Tf-idf, svd, Stemming, 拼写检查（spell checking）, stop words’ removal, x-grams 。参考<a href="https://www.kaggle.com/c/stumbleupon/overview">https://www.kaggle.com/c/stumbleupon/overview</a></li><li>时间序列： 时间延迟（Lags）,加权平均（weighted average）, 指数平滑（expotional smoothing） 。参考<a href="https://www.kaggle.com/c/walmart-recruiting-store-sales-forecasting">https://www.kaggle.com/c/walmart-recruiting-store-sales-forecasting</a></li><li>类别数据：目标特征，频率，one-hot， 顺序，label encoding。 参考<a href="https://www.kaggle.com/c/amazon-employee-access-challenge">https://www.kaggle.com/c/amazon-employee-access-challenge</a></li><li>数字数据：正规化，绑定（binning）, 求导（derivatives），离群值（outlier remove）,降纬。参考<br /><a href="https://www.kaggle.com/c/afsis-soil-properties/overview">https://www.kaggle.com/c/afsis-soil-properties/overview</a></li><li>交互数据：相乘，相除，相加，groupby。 参照<a href="https://www.kaggle.com/c/homesite-quote-conversion">https://www.kaggle.com/c/homesite-quote-conversion</a></li><li>推荐系统: 历史交易数据，货品流行程度，购买频度。参考<a href="https://www.kaggle.com/c/acquire-valued-shoppers-challenge">https://www.kaggle.com/c/acquire-valued-shoppers-challenge</a></li></ul><ol start="5"><li>方法建模<br />类似于特征工程， 根据不同问题有不同的建模策略</li></ol><ul><li>图像识别：CNN(ResNet, VGG)</li><li>声音识别：CNNs(CRNN), LSTM</li><li>文本分类：GBM, Linear, DL, Naive Bayes, KNNs, LibFM, Libffm</li><li>时间序列： Augtoregressive, ARIMA, Linear, GBMs, DL, LSTMs</li><li>类别数据：GBMs, Linear, DL, LibFM, Libffm</li><li>数字数据：GBMs, Linear, DL, SVMs</li><li>交互数据：GBMs, Linear, DL</li><li>推荐系统: CF, DL, LibFM, Libffm, GBMs</li></ul><p>应用中每种方法独立运行评估， 在不同的数据集上评估，可考虑做bagging.</p><ol start="6"><li>集成学习</li></ol><p>这个阶段邻近竞赛结束，此时已经保存了基于不同方法的预测结果，可根据这些结果做有机整合争取最优化预测模型并提交。有多种集成学习策略，比如针对小数据集可以考虑简单的平均化（averaging）， 对于大规模数据集可以考虑做stacking。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;顶级的Kaggler都有自己的一套问题解决流程，熟悉这些套路能极大提高求解问题的效率。今天我们来看一下目前Kaggle总排名第四的&lt;a href=&quot;https://www.kaggle.com/kazanova&quot;&gt;kazanova&lt;/a&gt;总结出来的一套解题套路。&lt;br /&gt;</summary>
+      
+    
+    
+    
+    <category term="Data&amp;AI" scheme="http://yoursite.com/categories/Data-AI/"/>
+    
+    
+    <category term="Kaggle" scheme="http://yoursite.com/tags/Kaggle/"/>
+    
+  </entry>
   
   <entry>
     <title>Kaggle竞赛指南（四）—— 探索性数据分析</title>
@@ -486,32 +510,6 @@ A账户要向B账户转账，100元， 操作的步骤是&lt;/p&gt;
     
     
     <category term="Transaction" scheme="http://yoursite.com/tags/Transaction/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CPU／Load偏高的排查步骤</title>
-    <link href="http://yoursite.com/2018/08/26/CPU%EF%BC%8FLoad%E5%81%8F%E9%AB%98%E7%9A%84%E6%8E%92%E6%9F%A5%E6%AD%A5%E9%AA%A4/"/>
-    <id>http://yoursite.com/2018/08/26/CPU%EF%BC%8FLoad%E5%81%8F%E9%AB%98%E7%9A%84%E6%8E%92%E6%9F%A5%E6%AD%A5%E9%AA%A4/</id>
-    <published>2018-08-26T20:34:35.000Z</published>
-    <updated>2020-08-26T20:37:38.997Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="1-查找-java进程"><a class="markdownIt-Anchor" href="#1-查找-java进程"></a> 1. 查找 java进程</h2><p><code>ps -ef|grep java</code></p><h2 id="2-查找耗时最高线程"><a class="markdownIt-Anchor" href="#2-查找耗时最高线程"></a> 2. 查找耗时最高线程</h2><p><code>top -Hp #进程id#</code></p><h2 id="3-将线程id转换为16进制"><a class="markdownIt-Anchor" href="#3-将线程id转换为16进制"></a> 3. 将线程id转换为16进制</h2><p><code>printf “%x\n” #线程id#</code></p><h2 id="4-使用stack查找相应线程栈信息"><a class="markdownIt-Anchor" href="#4-使用stack查找相应线程栈信息"></a> 4. 使用stack查找相应线程栈信息</h2><p><code>jstack -l #进程id#| grep #16进制线程id#</code></p><h2 id="5-开始分析线程堆栈"><a class="markdownIt-Anchor" href="#5-开始分析线程堆栈"></a> 5. 开始分析线程堆栈</h2><p>先复习一下线程的各种状态， 包括 NEW(新建)， Runnable(可运行)， Running(运行) ，Block(阻塞)， Dead(死亡)   其中阻塞还分为 等待阻塞、同步阻塞。<br />转换关系如下图：</p><p><img src="https://user-images.githubusercontent.com/1400357/91354176-366e9d00-e7e4-11ea-83f6-9997243b0ecb.jpg" alt="线程状态转换.jpg" /></p><p>(图片来自 <a href="https://my.oschina.net/mingdongcheng/blog/139263">https://my.oschina.net/mingdongcheng/blog/139263</a>)</p><p>接下来看一下jstack打出来的线程堆栈，大概是这样的：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&quot;Timer-0&quot; #25 daemon prio&#x3D;5 os_prio&#x3D;31 tid&#x3D;0x00007fd051bb1800 nid&#x3D;0xfabb in Object.wait() [0x0000700008e90000]</span><br><span class="line">   java.lang.Thread.State: WAITING (on object monitor)</span><br><span class="line">at java.lang.Object.wait(Native Method)</span><br><span class="line">at java.lang.Object.wait(Object.java:502)</span><br><span class="line">at java.util.TimerThread.mainLoop(Timer.java:526)</span><br><span class="line">- locked &lt;0x00000007a22af328&gt; (a java.util.TaskQueue)</span><br><span class="line">at java.util.TimerThread.run(Timer.java:505)</span><br><span class="line"></span><br><span class="line">   Locked ownable synchronizers:</span><br><span class="line">- None</span><br></pre></td></tr></table></figure><p>需要重点关注有没有以下几个状态：</p><ol><li>DeadLock  死锁</li><li>Waiting on Condition  资源等待</li><li>Blocked  阻塞<br />具体的case分析可以参考这篇文章  <a href="http://www.cnblogs.com/nexiyi/p/java_thread_jstack.html">Java线程Dump分析工具—jstack - 残雪余香 - 博客园</a></li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;1-查找-java进程&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#1-查找-java进程&quot;&gt;&lt;/a&gt; 1. 查找 java进程&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;ps -ef|grep java&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&quot;2-</summary>
-      
-    
-    
-    
-    <category term="Backend" scheme="http://yoursite.com/categories/Backend/"/>
-    
-    
-    <category term="Profile" scheme="http://yoursite.com/tags/Profile/"/>
     
   </entry>
   
