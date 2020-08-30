@@ -17,21 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>[Pandas]Handle missing data | Feng&#39;s note</title>
-  <meta name="description" content="Missing data is a common problem in real data preprocessing, luckily pandas has done a lot to help us handle it. This article will show the codes on how to do it. ###Produce some data with missing val">
+  <title>The guide to predictive data analysis on MIMIC | Feng&#39;s note</title>
+  <meta name="description" content="Below is my teaching materials when I served as assistant teacher on Digital Health and data analysis at Reading University. The dataset I used for this course is MIMIC. If you are interested in healt">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[Pandas]Handle missing data">
-<meta property="og:url" content="http://yoursite.com/2018/09/23/Pandas-Handle-missing-data/index.html">
+<meta property="og:title" content="The guide to predictive data analysis on MIMIC">
+<meta property="og:url" content="http://yoursite.com/2020/05/30/The-guide-to-predictive-data-analysis-on-MIMIC/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Missing data is a common problem in real data preprocessing, luckily pandas has done a lot to help us handle it. This article will show the codes on how to do it. ###Produce some data with missing val">
+<meta property="og:description" content="Below is my teaching materials when I served as assistant teacher on Digital Health and data analysis at Reading University. The dataset I used for this course is MIMIC. If you are interested in healt">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2018-09-23T19:40:37.000Z">
-<meta property="article:modified_time" content="2020-08-25T17:33:39.579Z">
+<meta property="article:published_time" content="2020-05-30T07:40:46.000Z">
+<meta property="article:modified_time" content="2020-08-30T08:13:05.971Z">
 <meta property="article:author" content="John Doe">
-<meta property="article:tag" content="Pandas">
+<meta property="article:tag" content="Health">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://yoursite.com/2018/09/23/Pandas-Handle-missing-data/index.html">
+  <link rel="canonical" href="http://yoursite.com/2020/05/30/The-guide-to-predictive-data-analysis-on-MIMIC/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -312,14 +312,14 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="post-Pandas-Handle-missing-data" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-The-guide-to-predictive-data-analysis-on-MIMIC" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      [Pandas]Handle missing data
+      The guide to predictive data analysis on MIMIC
     </h1>
   
 
@@ -327,8 +327,8 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2018/09/23/Pandas-Handle-missing-data/" class="article-date">
-	  <time datetime="2018-09-23T19:40:37.000Z" itemprop="datePublished">2018-09-23</time>
+	<a href="/2020/05/30/The-guide-to-predictive-data-analysis-on-MIMIC/" class="article-date">
+	  <time datetime="2020-05-30T07:40:46.000Z" itemprop="datePublished">2020-05-30</time>
 	</a>
 </span>
         
@@ -340,574 +340,34 @@
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Pandas/" rel="tag">Pandas</a>
+	<a class="article-tag-link-link" href="/tags/Health/" rel="tag">Health</a>
   </span>
 
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/09/23/Pandas-Handle-missing-data/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/05/30/The-guide-to-predictive-data-analysis-on-MIMIC/#comments" class="article-comment-link">Comments</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 797(words)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count: 83(words)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 4(minutes)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count: 1(minutes)</span>
 	
 
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>Missing data is a common problem in real data preprocessing, luckily pandas has done a lot to help us handle it. This article will show the codes on how to do it.</p>
-<p>###Produce some data with missing values.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(np.random.randn(<span class="number">5</span>, <span class="number">3</span>), index=[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;h&#x27;</span>],</span><br><span class="line">                 columns=[<span class="string">&#x27;one&#x27;</span>, <span class="string">&#x27;two&#x27;</span>, <span class="string">&#x27;three&#x27;</span>])</span><br><span class="line">df[<span class="string">&#x27;four&#x27;</span>]=<span class="string">&#x27;bar&#x27;</span></span><br><span class="line">df[<span class="string">&#x27;five&#x27;</span>]= df[<span class="string">&#x27;one&#x27;</span>] &gt; <span class="number">0</span></span><br><span class="line">df[<span class="string">&#x27;date&#x27;</span>]= pd.Timestamp(<span class="string">&#x27;2018-01-01&#x27;</span>)</span><br><span class="line">df2 = df.reindex([<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>,<span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span>,<span class="string">&#x27;g&#x27;</span>, <span class="string">&#x27;h&#x27;</span>])</span><br><span class="line">df2</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>one</th>
-<th>two</th>
-<th>three</th>
-<th>four</th>
-<th>five</th>
-<th>date</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>-0.614301</td>
-<td>0.628725</td>
-<td>-0.903163</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>b</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaT</td>
-</tr>
-<tr>
-<td>c</td>
-<td>-0.297019</td>
-<td>1.357266</td>
-<td>-0.665749</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>d</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaT</td>
-</tr>
-<tr>
-<td>e</td>
-<td>0.311524</td>
-<td>-0.328388</td>
-<td>0.777467</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>f</td>
-<td>0.572373</td>
-<td>-0.309563</td>
-<td>-0.296276</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>g</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaT</td>
-</tr>
-<tr>
-<td>h</td>
-<td>-1.303842</td>
-<td>1.239911</td>
-<td>-0.909255</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-</tbody>
-</table>
-<p>Notice that NaN is the default marker of missing number, text or boolean, NaT is for missing datetime</p>
-<h3 id="detect-missing-value"><a class="markdownIt-Anchor" href="#detect-missing-value"></a> Detect missing value</h3>
-<p>pandas provides two methods, isna() and notna()</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.isna()</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>one</th>
-<th>two</th>
-<th>three</th>
-<th>four</th>
-<th>five</th>
-<th>date</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>b</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>c</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>d</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>e</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>f</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>g</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>h</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.notna()</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>one</th>
-<th>two</th>
-<th>three</th>
-<th>four</th>
-<th>five</th>
-<th>date</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>b</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>c</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>d</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>e</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>f</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>g</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>h</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-</tbody>
-</table>
-<h3 id="cleaning"><a class="markdownIt-Anchor" href="#cleaning"></a> Cleaning</h3>
-<p>drop na value, dropna() has a parameter axis which indicates either colums(axis = 1) or rows(axis = 0) will be dropped, the default value of axis is 0</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.dropna()</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>one</th>
-<th>two</th>
-<th>three</th>
-<th>four</th>
-<th>five</th>
-<th>date</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>-0.614301</td>
-<td>0.628725</td>
-<td>-0.903163</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>c</td>
-<td>-0.297019</td>
-<td>1.357266</td>
-<td>-0.665749</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>e</td>
-<td>0.311524</td>
-<td>-0.328388</td>
-<td>0.777467</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>f</td>
-<td>0.572373</td>
-<td>-0.309563</td>
-<td>-0.296276</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>h</td>
-<td>-1.303842</td>
-<td>1.239911</td>
-<td>-0.909255</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-</tbody>
-</table>
-<p>Drop columns with missing data</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.dropna(axis = <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-</tr>
-<tr>
-<td>b</td>
-</tr>
-<tr>
-<td>c</td>
-</tr>
-<tr>
-<td>d</td>
-</tr>
-<tr>
-<td>e</td>
-</tr>
-<tr>
-<td>f</td>
-</tr>
-<tr>
-<td>g</td>
-</tr>
-<tr>
-<td>h</td>
-</tr>
-</tbody>
-</table>
-<p>All columns are removed…</p>
-<h3 id="fill-na"><a class="markdownIt-Anchor" href="#fill-na"></a> Fill na</h3>
-<p>Na value can be easily filled by fillna()</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.fillna(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>one</th>
-<th>two</th>
-<th>three</th>
-<th>four</th>
-<th>five</th>
-<th>date</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>-0.614301</td>
-<td>0.628725</td>
-<td>-0.903163</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01 00:00:00</td>
-</tr>
-<tr>
-<td>b</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>c</td>
-<td>-0.297019</td>
-<td>1.357266</td>
-<td>-0.665749</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01 00:00:00</td>
-</tr>
-<tr>
-<td>d</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>e</td>
-<td>0.311524</td>
-<td>-0.328388</td>
-<td>0.777467</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01 00:00:00</td>
-</tr>
-<tr>
-<td>f</td>
-<td>0.572373</td>
-<td>-0.309563</td>
-<td>-0.296276</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01 00:00:00</td>
-</tr>
-<tr>
-<td>g</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>h</td>
-<td>-1.303842</td>
-<td>1.239911</td>
-<td>-0.909255</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01 00:00:00</td>
-</tr>
-</tbody>
-</table>
-<p>We can also fill data with respect to their column property</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.fillna(value = &#123;<span class="string">&#x27;one&#x27;</span>: <span class="number">0</span>, <span class="string">&#x27;four&#x27;</span>: <span class="string">&#x27;missing&#x27;</span>, <span class="string">&#x27;five&#x27;</span>: <span class="literal">False</span>, <span class="string">&#x27;date&#x27;</span>: pd.Timestamp(<span class="string">&#x27;2000-01-01&#x27;</span>)&#125;)</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>one</th>
-<th>two</th>
-<th>three</th>
-<th>four</th>
-<th>five</th>
-<th>date</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>-0.614301</td>
-<td>0.628725</td>
-<td>-0.903163</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>b</td>
-<td>0.000000</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>missing</td>
-<td>False</td>
-<td>2000-01-01</td>
-</tr>
-<tr>
-<td>c</td>
-<td>-0.297019</td>
-<td>1.357266</td>
-<td>-0.665749</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>d</td>
-<td>0.000000</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>missing</td>
-<td>False</td>
-<td>2000-01-01</td>
-</tr>
-<tr>
-<td>e</td>
-<td>0.311524</td>
-<td>-0.328388</td>
-<td>0.777467</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>f</td>
-<td>0.572373</td>
-<td>-0.309563</td>
-<td>-0.296276</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>g</td>
-<td>0.000000</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>missing</td>
-<td>False</td>
-<td>2000-01-01</td>
-</tr>
-<tr>
-<td>h</td>
-<td>-1.303842</td>
-<td>1.239911</td>
-<td>-0.909255</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-</tbody>
-</table>
-<p>Remind that fillna() will not replace na in orignial dataframe, in other words, the df2 remains the same after all the above operation, If you want it to be permanantely changed, add parameter inplace = True like this.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.fillna(value = <span class="number">0</span>, inplace = <span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+        <p>Below is my teaching materials when I served as assistant teacher on Digital Health and data analysis at Reading University. The dataset I used for this course is <a target="_blank" rel="noopener" href="https://mimic.physionet.org">MIMIC</a>. If you are interested in healthcare data analysis, this might be what you want to check.</p>
+<h4 id="1-sql-basics"><a class="markdownIt-Anchor" href="#1-sql-basics"></a> <a target="_blank" rel="noopener" href="https://github.com/niuguy/digithealthcourse/blob/master/%5B000%5DSql_basics.ipynb">1. SQL basics</a></h4>
+<h4 id="2-introduction-to-python"><a class="markdownIt-Anchor" href="#2-introduction-to-python"></a> <a target="_blank" rel="noopener" href="https://github.com/niuguy/digithealthcourse/blob/master/%5B011%5DIntroduction_to_python.ipynb">2. Introduction to Python</a></h4>
+<h4 id="3-numpy-and-pandas"><a class="markdownIt-Anchor" href="#3-numpy-and-pandas"></a> <a target="_blank" rel="noopener" href="https://github.com/niuguy/digithealthcourse/blob/master/%5B021%5DEDA_Numpy%20and%20Pandas.ipynb">3. Numpy and Pandas</a></h4>
+<h4 id="4-how-to-do-feature-engineering-for-mortality-prediction"><a class="markdownIt-Anchor" href="#4-how-to-do-feature-engineering-for-mortality-prediction"></a> <a target="_blank" rel="noopener" href="https://github.com/niuguy/digithealthcourse/blob/master/%5B022%5DMIMIC3_Mortality_EDA.ipynb">4. How to do feature engineering for mortality prediction</a></h4>
+<h4 id="5-introduction-to-machine-learning-methods"><a class="markdownIt-Anchor" href="#5-introduction-to-machine-learning-methods"></a> <a target="_blank" rel="noopener" href="https://github.com/niuguy/digithealthcourse/blob/master/%5B023%5DMIMIC3_Mortality_Model.ipynb">5. Introduction to machine learning methods</a></h4>
+<h4 id="6-explaination-analysis-on-model-results"><a class="markdownIt-Anchor" href="#6-explaination-analysis-on-model-results"></a> <a target="_blank" rel="noopener" href="https://github.com/niuguy/digithealthcourse/blob/master/%5B024%5DMIMIC3_motality_Model_explain.ipynb">6. Explaination analysis on model results</a></h4>
+<h4 id="7-introduction-to-unsupervisd-learning"><a class="markdownIt-Anchor" href="#7-introduction-to-unsupervisd-learning"></a> <a target="_blank" rel="noopener" href="https://github.com/niuguy/digithealthcourse/blob/master/%5B025%5DMIMIC3_unsupervised_learning.ipynb">7. Introduction to unsupervisd learning</a></h4>
+<h4 id="references"><a class="markdownIt-Anchor" href="#references"></a> <a target="_blank" rel="noopener" href="https://github.com/niuguy/digithealthcourse/blob/master/README.md">References</a></h4>
 
       
     </div>
@@ -931,13 +391,9 @@
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2018/09/26/What-is-tf-data-and-how-to-use/" title="What is tf.data and how to use"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2018/09/20/Pandas-How-to-select-data/" title="[Pandas]How to select data"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2019/11/28/How-to-Kaggle-5/" title="Kaggle竞赛指南（五）—— 问题求解套路"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
@@ -1015,9 +471,9 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
     <script defer>
     var disqus_config = function () {
         
-            this.page.url = 'http://yoursite.com/2018/09/23/Pandas-Handle-missing-data/';
+            this.page.url = 'http://yoursite.com/2020/05/30/The-guide-to-predictive-data-analysis-on-MIMIC/';
         
-        this.page.identifier = 'Pandas-Handle-missing-data';
+        this.page.identifier = 'The-guide-to-predictive-data-analysis-on-MIMIC';
     };
     (function() { 
         var d = document, s = d.createElement('script');  

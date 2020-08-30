@@ -6,7 +6,7 @@
   <link href="http://yoursite.com/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-08-29T06:36:43.249Z</updated>
+  <updated>2020-08-30T08:13:05.971Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,35 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Kaggle竞赛指南（五）—— 探索性数据分析</title>
+    <title>The guide to predictive data analysis on MIMIC</title>
+    <link href="http://yoursite.com/2020/05/30/The-guide-to-predictive-data-analysis-on-MIMIC/"/>
+    <id>http://yoursite.com/2020/05/30/The-guide-to-predictive-data-analysis-on-MIMIC/</id>
+    <published>2020-05-30T07:40:46.000Z</published>
+    <updated>2020-08-30T08:13:05.971Z</updated>
+    
+    <content type="html"><![CDATA[<p>Below is my teaching materials when I served as assistant teacher on Digital Health and data analysis at Reading University. The dataset I used for this course is <a href="https://mimic.physionet.org">MIMIC</a>. If you are interested in healthcare data analysis, this might be what you want to check.</p><h4 id="1-sql-basics"><a class="markdownIt-Anchor" href="#1-sql-basics"></a> <a href="https://github.com/niuguy/digithealthcourse/blob/master/%5B000%5DSql_basics.ipynb">1. SQL basics</a></h4><h4 id="2-introduction-to-python"><a class="markdownIt-Anchor" href="#2-introduction-to-python"></a> <a href="https://github.com/niuguy/digithealthcourse/blob/master/%5B011%5DIntroduction_to_python.ipynb">2. Introduction to Python</a></h4><h4 id="3-numpy-and-pandas"><a class="markdownIt-Anchor" href="#3-numpy-and-pandas"></a> <a href="https://github.com/niuguy/digithealthcourse/blob/master/%5B021%5DEDA_Numpy%20and%20Pandas.ipynb">3. Numpy and Pandas</a></h4><h4 id="4-how-to-do-feature-engineering-for-mortality-prediction"><a class="markdownIt-Anchor" href="#4-how-to-do-feature-engineering-for-mortality-prediction"></a> <a href="https://github.com/niuguy/digithealthcourse/blob/master/%5B022%5DMIMIC3_Mortality_EDA.ipynb">4. How to do feature engineering for mortality prediction</a></h4><h4 id="5-introduction-to-machine-learning-methods"><a class="markdownIt-Anchor" href="#5-introduction-to-machine-learning-methods"></a> <a href="https://github.com/niuguy/digithealthcourse/blob/master/%5B023%5DMIMIC3_Mortality_Model.ipynb">5. Introduction to machine learning methods</a></h4><h4 id="6-explaination-analysis-on-model-results"><a class="markdownIt-Anchor" href="#6-explaination-analysis-on-model-results"></a> <a href="https://github.com/niuguy/digithealthcourse/blob/master/%5B024%5DMIMIC3_motality_Model_explain.ipynb">6. Explaination analysis on model results</a></h4><h4 id="7-introduction-to-unsupervisd-learning"><a class="markdownIt-Anchor" href="#7-introduction-to-unsupervisd-learning"></a> <a href="https://github.com/niuguy/digithealthcourse/blob/master/%5B025%5DMIMIC3_unsupervised_learning.ipynb">7. Introduction to unsupervisd learning</a></h4><h4 id="references"><a class="markdownIt-Anchor" href="#references"></a> <a href="https://github.com/niuguy/digithealthcourse/blob/master/README.md">References</a></h4>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;Below is my teaching materials when I served as assistant teacher on Digital Health and data analysis at Reading University. The dataset </summary>
+      
+    
+    
+    
+    <category term="Data&amp;AI" scheme="http://yoursite.com/categories/Data-AI/"/>
+    
+    
+    <category term="Health" scheme="http://yoursite.com/tags/Health/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Kaggle竞赛指南（五）—— 问题求解套路</title>
     <link href="http://yoursite.com/2019/11/28/How-to-Kaggle-5/"/>
     <id>http://yoursite.com/2019/11/28/How-to-Kaggle-5/</id>
     <published>2019-11-28T07:26:52.000Z</published>
-    <updated>2020-08-29T06:36:43.249Z</updated>
+    <updated>2020-08-29T09:43:28.695Z</updated>
     
     <content type="html"><![CDATA[<p>顶级的Kaggler都有自己的一套问题解决流程，熟悉这些套路能极大提高求解问题的效率。今天我们来看一下目前Kaggle总排名第四的<a href="https://www.kaggle.com/kazanova">kazanova</a>总结出来的一套解题套路。<br />具体如下：</p><p><img src="https://user-images.githubusercontent.com/1400357/91630580-595aa600-e9ca-11ea-9dbb-aeacfebf956c.png" alt="" /></p><p>下面分别看一下各阶段主要做什么事情：</p><ol><li>理解问题</li></ol><ul><li>这是个什么问题。分类还是回归，预测还是优化，需要有一个直观理解。</li><li>数据特征。图像数据，文本数据还是声音数据，数据集是表格数据么，是否是与时间相关的。</li><li>数据规模。从而可能需要准备什么样的软硬件，需不需要用GPU， 大概需要用多少内存以及硬盘。</li></ul><ol start="2"><li>探索性数据分析</li></ol><ul><li>画出每个变量的直方图，看一下训练集及测试集的分布相似程度，</li><li>画出特征变量相对于目标变量的关系图，特征变量相对于时间的变化图（如果是时间序列问题）<br />通过看数据分布可以导出相应的交叉验证策略。</li></ul><ol start="3"><li>制定交叉验证（CV）策略<br />在对数据充分理解基础上，要确定验证策略，这一步非常重要，实际上很多排名靠前的方案最主要就是因为找到了正确的CV策略。可以从以下几点思考：</li></ol><ul><li>时间是否是个重要的变量。如果是需要根据时间做训练集测试集的分割，且要注意要用历史数据来预测未来数据。</li><li>如果数据分布是分层的，是否要考虑用分层验证（Stratified Validation）</li><li>如果数据是随机分布的，是否考虑采用随机验证，如随机K折验证</li></ul><ol start="4"><li>特征工程<br />特征工程做的好坏在大多数竞赛问题中起到了决定性的作用，面对不同问题需要采取不同策略，具体思考方向如下。</li></ol><ul><li>图像识别：考虑正规化（scaling），平移(shifting)，翻转(rotation)以及CNN。 参考<a href="https://www.kaggle.com/c/data-science-bowl-2018">https://www.kaggle.com/c/data-science-bowl-2018</a></li><li>声音识别：傅立叶变换（Fourier），<a href="https://en.wikipedia.org/wiki/Mel-frequency_cepstrum">mfcc</a>, 波普分析（specgram），正规化。 参考<a href="https://www.kaggle.com/c/tensorflow-speech-recognition-challenge">https://www.kaggle.com/c/tensorflow-speech-recognition-challenge</a></li><li>文本分类：Tf-idf, svd, Stemming, 拼写检查（spell checking）, stop words’ removal, x-grams 。参考<a href="https://www.kaggle.com/c/stumbleupon/overview">https://www.kaggle.com/c/stumbleupon/overview</a></li><li>时间序列： 时间延迟（Lags）,加权平均（weighted average）, 指数平滑（expotional smoothing） 。参考<a href="https://www.kaggle.com/c/walmart-recruiting-store-sales-forecasting">https://www.kaggle.com/c/walmart-recruiting-store-sales-forecasting</a></li><li>类别数据：目标特征，频率，one-hot， 顺序，label encoding。 参考<a href="https://www.kaggle.com/c/amazon-employee-access-challenge">https://www.kaggle.com/c/amazon-employee-access-challenge</a></li><li>数字数据：正规化，绑定（binning）, 求导（derivatives），离群值（outlier remove）,降纬。参考<br /><a href="https://www.kaggle.com/c/afsis-soil-properties/overview">https://www.kaggle.com/c/afsis-soil-properties/overview</a></li><li>交互数据：相乘，相除，相加，groupby。 参照<a href="https://www.kaggle.com/c/homesite-quote-conversion">https://www.kaggle.com/c/homesite-quote-conversion</a></li><li>推荐系统: 历史交易数据，货品流行程度，购买频度。参考<a href="https://www.kaggle.com/c/acquire-valued-shoppers-challenge">https://www.kaggle.com/c/acquire-valued-shoppers-challenge</a></li></ul><ol start="5"><li>方法建模<br />类似于特征工程， 根据不同问题有不同的建模策略</li></ol><ul><li>图像识别：CNN(ResNet, VGG)</li><li>声音识别：CNNs(CRNN), LSTM</li><li>文本分类：GBM, Linear, DL, Naive Bayes, KNNs, LibFM, Libffm</li><li>时间序列： Augtoregressive, ARIMA, Linear, GBMs, DL, LSTMs</li><li>类别数据：GBMs, Linear, DL, LibFM, Libffm</li><li>数字数据：GBMs, Linear, DL, SVMs</li><li>交互数据：GBMs, Linear, DL</li><li>推荐系统: CF, DL, LibFM, Libffm, GBMs</li></ul><p>应用中每种方法独立运行评估， 在不同的数据集上评估，可考虑做bagging.</p><ol start="6"><li>集成学习</li></ol><p>这个阶段邻近竞赛结束，此时已经保存了基于不同方法的预测结果，可根据这些结果做有机整合争取最优化预测模型并提交。有多种集成学习策略，比如针对小数据集可以考虑简单的平均化（averaging）， 对于大规模数据集可以考虑做stacking。</p>]]></content>
     
@@ -484,33 +508,6 @@
     
     
     <category term="Pandas" scheme="http://yoursite.com/tags/Pandas/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>分布式事务与最终一致性</title>
-    <link href="http://yoursite.com/2018/08/26/Distributed-transactions-and-eventual-consistency/"/>
-    <id>http://yoursite.com/2018/08/26/Distributed-transactions-and-eventual-consistency/</id>
-    <published>2018-08-26T20:38:34.000Z</published>
-    <updated>2020-08-26T20:42:54.703Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="为什么需要分布式事务"><a class="markdownIt-Anchor" href="#为什么需要分布式事务"></a> 为什么需要分布式事务</h2><p>先摆一个例子：<br />A账户要向B账户转账，100元， 操作的步骤是</p><blockquote><p>A账户先减掉100元<br />B账户再加上100元</p></blockquote><p>非常简单。。在单个数据库实例的情况下，开启事务，先执行A-100 ，再执行B+100, 事务提交，结束。<br />然而，由于业务增长， 导致一个数据库实例已经不能满足所有数据存储，此时A与B存在于不同的数据库实例上，这个时候执行这两部操作就要每个实例分别启动一个事务，A减掉后提交，B增加时，其所在机器挂掉了。。  那么A就损失了100元，这显然是不可接受的。</p><p>那么这个问题怎么解？</p><h2 id="二阶段提交"><a class="markdownIt-Anchor" href="#二阶段提交"></a> 二阶段提交</h2><p>解这个问题，需要让跨越多个数据源的一次业务行为，还能保持事务的ACID（原子、一致、隔离、持久）。<br />如果只是各个参与方各自为战，显然不行，因为缺少一个可以观看全局的组织者， 每个参与者都不知道其他参与者的情况，也就无法判断当前的全局情况，自己是不是要提交。有一个组织者出现后，每个参与者在准备提交前都可以问一下组织者，其他人好了没有，如果得到回答说，都好了，那么各自就开始最终提交。<br />这个过程其实就是二阶段提交（2PC）的主要思想。<br />关于二阶段协议，左耳朵耗子的博客（ <a href="http://coolshell.cn/articles/10910.html">分布式系统的事务处理 | | 酷 壳 - CoolShell</a> ）讲了一个绝妙的例子：</p><blockquote><p>一对准夫妻在教堂举办婚礼，<br />神父通常会先问新娘：你愿意爱你面前的这个人，生老病死。。  ， 新娘回答：我愿意。<br />然后神父再问新郎：你愿意。。。 新郎回答：我愿意。<br />最后神父宣布新郎新娘成为一对夫妻。</p></blockquote><p>跟上述描述的二阶段提交是相同的过程， 双方都同意了，神父才会宣布婚姻成立，不可以说只有一个人同意，神父就宣布，你已经结了一半婚，没有意义。<br />这个过程，画出来流程图是这样的：</p><p><img src="https://user-images.githubusercontent.com/1400357/91354624-ea702800-e7e4-11ea-9083-51664cdeebd9.png" alt="pic1" /></p><h2 id="分布式事务的问题"><a class="markdownIt-Anchor" href="#分布式事务的问题"></a> 分布式事务的问题</h2><p>二阶段提交过程是分布式事务的一个比较通用的解决方案了， 然而也存在它的局限。由于一次操作可能涉及到几个参与者，那么一次操作所需要花费的时间，就是多个参与者prepare+commit时间的总和。这可能带来两个方面的问题，一是总体耗时的增加，二是由第一个问题带来的资源损耗。</p><p>第一个问题，带来的是用户体验上的下降，设想你去便利店消费，要转账给店员10元， 等了好几分钟才转成功，这时后面排队都十几人了。</p><p>第二个问题，则是给系统带来的服务容量的挑战，设想淘宝双十一这种场景，每秒钟上万笔交易，涉及大量转账划拨操作，如果全部由二阶段的分布式事务实现，延迟不说，光是机器性能就会很容易到极限。</p><h2 id="另一种方案"><a class="markdownIt-Anchor" href="#另一种方案"></a> 另一种方案</h2><p>那么有没有替代方案？</p><p>先回归到问题的本质，分布式事务解决的其实是数据的一致性问题，A给B转账100元， 效果是A减了100，B要增加100， 一增一减要相等，至于这个相等是A操作完之后等着B加了100才结束，还是A操作完之后，有另外一种机制，保证B在后面某个时刻不多不少只增加100。</p><p>后一种解法，就是通过引入异步消息的方式，来替换第一种分布式事务的方案。<br />简单示意图如下；</p><p><img src="https://user-images.githubusercontent.com/1400357/91354630-eba15500-e7e4-11ea-80f0-71ce1e4acc73.png" alt="pic2" /></p><p>可以看到，整个过程分为三步：</p><ol><li>发起转账一方，记录一条扣减流水。</li><li>转账发起方发送消息给转账接收方（接收方也可能是自己）。</li><li>接收方写入一条增加流水。</li></ol><p>总体思路是先暂存转账记录凭证，利用消息系统的可靠性，保证整个转账操作达到最终一致。</p><p>上面只是简略步骤，如果要达到替代两阶段的效果，还需要一些支撑，比如：</p><ul><li>消息可能发送失败，需要发送端有恢复机制，定时重试失败流水。</li><li>消息真实发送后，A的本地事务不可以失败，这要求要么把消息发送放到最后，要么需要发送消息本身要跟A处于同一个事务，所谓事务消息（这又是一个很大的话题）</li><li>消息可能重复发送，但是B不可以重复处理， 需要B保持一个接收消息的记录，每次比对排除重复。</li></ul><p>这样看来，使用异步消息的方案，也并不简单，或许一致性问题本身就是一个复杂的课题。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;为什么需要分布式事务&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#为什么需要分布式事务&quot;&gt;&lt;/a&gt; 为什么需要分布式事务&lt;/h2&gt;
-&lt;p&gt;先摆一个例子：&lt;br /&gt;
-A账户要向B账户转账，100元， 操作的步骤是&lt;/p&gt;
-&lt;block</summary>
-      
-    
-    
-    
-    <category term="Backend" scheme="http://yoursite.com/categories/Backend/"/>
-    
-    
-    <category term="Transaction" scheme="http://yoursite.com/tags/Transaction/"/>
     
   </entry>
   
