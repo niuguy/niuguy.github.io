@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2018/07/10/Tensorflow101/</loc>
+    
+    <lastmod>2020-08-31</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/11/08/Stochastic-gradient-descent/</loc>
+    
+    <lastmod>2020-08-31</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/11/08/Backward-propagation-of-Neural-Network-explained/</loc>
+    
+    <lastmod>2020-08-31</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2019/11/28/How-to-Kaggle-5/</loc>
     
     <lastmod>2020-08-30</lastmod>
@@ -93,13 +114,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/07/10/Tensorflow101/</loc>
-    
-    <lastmod>2020-08-25</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2018/09/20/Pandas-How-to-select-data/</loc>
     
     <lastmod>2020-08-25</lastmod>
@@ -184,20 +198,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/11/08/Stochastic-gradient-descent/</loc>
-    
-    <lastmod>2020-08-25</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/11/08/Backward-propagation-of-Neural-Network-explained/</loc>
-    
-    <lastmod>2020-08-25</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/tags/index.html</loc>
     
     <lastmod>2020-08-24</lastmod>
@@ -221,7 +221,7 @@
 
   <url>
     <loc>http://yoursite.com/</loc>
-    <lastmod>2020-08-30</lastmod>
+    <lastmod>2020-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -229,63 +229,63 @@
   
   <url>
     <loc>http://yoursite.com/tags/Distributed-System/</loc>
-    <lastmod>2020-08-30</lastmod>
+    <lastmod>2020-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Algorithm/</loc>
-    <lastmod>2020-08-30</lastmod>
+    <lastmod>2020-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Java/</loc>
-    <lastmod>2020-08-30</lastmod>
+    <lastmod>2020-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Pandas/</loc>
-    <lastmod>2020-08-30</lastmod>
+    <lastmod>2020-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Tensorflow/</loc>
-    <lastmod>2020-08-30</lastmod>
+    <lastmod>2020-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Profile/</loc>
-    <lastmod>2020-08-30</lastmod>
+    <lastmod>2020-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Transaction/</loc>
-    <lastmod>2020-08-30</lastmod>
+    <lastmod>2020-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Kaggle/</loc>
-    <lastmod>2020-08-30</lastmod>
+    <lastmod>2020-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Health/</loc>
-    <lastmod>2020-08-30</lastmod>
+    <lastmod>2020-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
@@ -294,14 +294,14 @@
   
   <url>
     <loc>http://yoursite.com/categories/Data-AI/</loc>
-    <lastmod>2020-08-30</lastmod>
+    <lastmod>2020-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/categories/Backend/</loc>
-    <lastmod>2020-08-30</lastmod>
+    <lastmod>2020-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
