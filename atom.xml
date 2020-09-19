@@ -6,7 +6,7 @@
   <link href="http://yoursite.com/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-09-12T20:27:42.865Z</updated>
+  <updated>2020-09-19T10:14:22.295Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Kong Vs Goku</title>
+    <link href="http://yoursite.com/2020/09/19/Kong-VS-Goku/"/>
+    <id>http://yoursite.com/2020/09/19/Kong-VS-Goku/</id>
+    <published>2020-09-19T09:44:08.000Z</published>
+    <updated>2020-09-19T10:14:22.295Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近由于工作需要用到API网关做请求转发用，挑了目前人气较高的两款 Kong 和Goku 对比研究一下。</p><h2 id="基本情况"><a class="markdownIt-Anchor" href="#基本情况"></a> 基本情况</h2><p>Kong( <a href="https://github.com/niuguy/kong">https://github.com/niuguy/kong</a> )基于Lua 构建，始创于2009年，目前在Github拥有26.9K Goku(<a href="https://github.com/eolinker/goku-api-gateway">https://github.com/eolinker/goku-api-gateway</a>) 基于Go构建，始创于2017年，目前在Github 有2.1K获赞。</p><h2 id="功能对比"><a class="markdownIt-Anchor" href="#功能对比"></a> 功能对比</h2><p>以下功能列表整理自两个项目的github主页</p><table><thead><tr><th>功能</th><th>Kong</th><th>Goku</th></tr></thead><tbody><tr><td>云原生</td><td>多种方式支持</td><td>多种方式支持</td></tr><tr><td>K8s原生</td><td>支持原生绑定</td><td>？？</td></tr><tr><td>负载均衡</td><td>支持dynamic 以及hash-based</td><td>支持带权重round-robin</td></tr><tr><td>服务发现</td><td>支持Consul等注册中心</td><td>支持Consul、Eureka 等注册中心</td></tr><tr><td>健康检查</td><td>主动以及被动检测，并支持死循环检测</td><td>？？</td></tr><tr><td>路由设置</td><td>完整匹配+前缀+正则匹配</td><td>支持多种匹配规则，可设置访问策略</td></tr><tr><td>Serverless</td><td>支持</td><td>支持</td></tr><tr><td>水平拓展</td><td>可水平拓展节点</td><td>可水平拓展节点</td></tr><tr><td>插件系统</td><td>基于Lua module</td><td>基于go</td></tr><tr><td>API管理</td><td>提供admin API。另有一个独立开源项目Konga可提供这些admin API的界面配置</td><td>提供图形化配置界面，但部分配置如路由可能需要购买企业版</td></tr><tr><td>日志系统</td><td>可记录全生命周期日志</td><td>可记录全生命周期以及控制台</td></tr><tr><td>服务编排</td><td>无。但理论上可以通过插件实现</td><td>通过管理界面提供丰富的服务编排选择，可通过添加step方式完成其次请求，链式访问多个第三方终端</td></tr><tr><td>数据转换</td><td>可通过插件+配置完成数据字段转换</td><td>通过界面配置方式完成数据转换，并支持数据支持字段的过滤、删除、移动、重命名、拆包和封包等</td></tr><tr><td>监控集成</td><td>支持Prometheus等</td><td>支持Prometheus等</td></tr></tbody></table><h2 id="运行性能"><a class="markdownIt-Anchor" href="#运行性能"></a> 运行性能</h2><p>Kong 由于本质上是运行在Ngix的一个模块，其性能有Ngix加持保证。Goku 在其主页上对比号称比Kong 要更强一些，但有待于实际验证</p><h2 id="上手难易度"><a class="markdownIt-Anchor" href="#上手难易度"></a> 上手难易度</h2><p>通过实际本地(Mac)搭建，由于两个项目都提供了完整的docker image, 所以按照官方手册操作一两天时间即可本地运行demo, 如果需要拓展的话要根据对Lua 或者Go的熟悉程度。值得一提的是，Kong 近期也提供了适配Go的插件开发模块。</p><h2 id="社区支持"><a class="markdownIt-Anchor" href="#社区支持"></a> 社区支持</h2><p>作为老牌Gateway, Kong 有超过450K的社区注册开发者，同时其企业版拥有众多重量级的用户。相比Goku这方面会弱一些，影响力主要集中在国内，但是可见近两年发展之迅速，未来可期。有意思的是Kong-金刚，Goku-悟空，由于Goku是后来者，猜项目人员是有悟空挑战金刚的意思吧：）</p><h2 id="简评"><a class="markdownIt-Anchor" href="#简评"></a> 简评</h2><p>如果要从这俩个产品选型的话可能要考虑几个方面，如果是简单业务场景不需要过多业务开发，那么Goku提供的原生页面管理以及服务编排功能可谓非常方便。如果需要定制开发，那么要考虑一下团队对于Lua还是Go的接受程度以及社区的支持程度。如果是非技术型企业需要更完善的产品支持，Kong 和Goku 各提供收费产品提供包括全周期开发管理等功能。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;最近由于工作需要用到API网关做请求转发用，挑了目前人气较高的两款 Kong 和Goku 对比研究一下。&lt;/p&gt;
+&lt;h2 id=&quot;基本情况&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#基本情况&quot;&gt;&lt;/a&gt; 基本情况&lt;/h2&gt;
+&lt;p&gt;Kong( </summary>
+      
+    
+    
+    
+    <category term="Backend" scheme="http://yoursite.com/categories/Backend/"/>
+    
+    
+    <category term="Gateway" scheme="http://yoursite.com/tags/Gateway/"/>
+    
+  </entry>
   
   <entry>
     <title>聊聊我喜欢的英国报刊</title>
@@ -480,30 +506,6 @@
     
     
     <category term="Algorithm" scheme="http://yoursite.com/tags/Algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>[Pandas]How to drop columns/rows</title>
-    <link href="http://yoursite.com/2018/09/18/Pandas-How-to-drop-columns-rows/"/>
-    <id>http://yoursite.com/2018/09/18/Pandas-How-to-drop-columns-rows/</id>
-    <published>2018-09-18T20:39:25.000Z</published>
-    <updated>2020-08-25T17:33:48.421Z</updated>
-    
-    <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(&#123;<span class="string">&#x27;A#&#x27;</span>:[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], <span class="string">&#x27;B#&#x27;</span>:[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>], <span class="string">&#x27;C#&#x27;</span>:[<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]&#125;)</span><br><span class="line">df</span><br></pre></td></tr></table></figure><table><thead><tr><th>A#</th><th>B#</th><th>C#</th></tr></thead><tbody><tr><td>1</td><td>4</td><td>7</td></tr><tr><td>2</td><td>5</td><td>8</td></tr><tr><td>3</td><td>6</td><td>9</td></tr></tbody></table><h3 id="drop-columns"><a class="markdownIt-Anchor" href="#drop-columns"></a> Drop columns</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">df.drop([<span class="string">&#x27;B#&#x27;</span>, <span class="string">&#x27;C#&#x27;</span>], axis = <span class="number">1</span>)</span><br><span class="line"><span class="comment">#or</span></span><br><span class="line">df.drop(columns=[<span class="string">&#x27;B#&#x27;</span>, <span class="string">&#x27;C#&#x27;</span>])</span><br></pre></td></tr></table></figure><table><thead><tr><th>A#</th></tr></thead><tbody><tr><td>1</td></tr><tr><td>2</td></tr><tr><td>3</td></tr></tbody></table><h3 id="drop-rows"><a class="markdownIt-Anchor" href="#drop-rows"></a> Drop rows</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.drop([<span class="number">0</span>,<span class="number">1</span>])</span><br></pre></td></tr></table></figure><table><thead><tr><th>A#</th><th>B#</th><th>C#</th></tr></thead><tbody><tr><td>3</td><td>6</td><td>9</td></tr></tbody></table>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span clas</summary>
-      
-    
-    
-    
-    <category term="Data&amp;AI" scheme="http://yoursite.com/categories/Data-AI/"/>
-    
-    
-    <category term="Pandas" scheme="http://yoursite.com/tags/Pandas/"/>
     
   </entry>
   
