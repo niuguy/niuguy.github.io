@@ -159,6 +159,138 @@ ga('send', 'pageview');
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-What-is-tf-data-and-how-to-use" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/26/What-is-tf-data-and-how-to-use/">What is tf.data and how to use</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/26/What-is-tf-data-and-how-to-use/" class="archive-article-date">
+  	<time datetime="2018-09-26T19:30:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Tf.data is a high level API provided by tensorflow, it performs as a pipeline for complex input and output. The core data structure of tf.data is Dataset which represents a potentially large set of elements.</p>
+<p>Here is the defination of Dataset given by <a target="_blank" rel="noopener" href="http://tensorflow.org">tensorflow.org</a></p>
+<blockquote>
+<p>A <code>Dataset</code> can be used to represent an input pipeline as a collection of elements (nested structures of tensors) and a “logical plan” of transformations that act on those elements.</p>
+</blockquote>
+<p>To summarize, the dataset is a data pipeline, and we can do some preprocessing on it. The core problem of a pipeline is how the data be imported and consumed,  the following part will explain that as well as some useful APIs in preprocessing data.</p>
+<h3 id="1-data-input"><a class="markdownIt-Anchor" href="#1-data-input"></a> 1. Data input</h3>
+<p>Dataset can be built from several sources including csv file, numpy array and tensors.</p>
+<h4 id="from-csv"><a class="markdownIt-Anchor" href="#from-csv"></a> From CSV</h4>
+<p>Tf.data provides a convenient API  make_csv_dataset to read records from one or more csv files.</p>
+<p>Suppose the csv file is</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a,b,c,d</span><br><span class="line">how,are,you,mate</span><br><span class="line">I,am,fine,thanks</span><br></pre></td></tr></table></figure>
+<p>We can build a dataset from the above csv in the following way</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset = tf.contrib.data.make_csv_dataset(CSV_PATH, batch_size=<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>Here batch_size represents how many records would be aquired in a batch</p>
+<p>We can use Iterator to see what contains in this dataset</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">batch = dataset.make_one_shot_iterator().get_next()</span><br><span class="line">print(batch[<span class="string">&#x27;a&#x27;</span>])</span><br></pre></td></tr></table></figure>
+<p>The result is</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.Tensor([&#39;how&#39; &#39;I&#39;], shape&#x3D;(2,), dtype&#x3D;string)</span><br></pre></td></tr></table></figure>
+<p>make_csv_dataset defaultly takes the first row as header, if there are no header in the csv file like this</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">how,are,you,mate</span><br><span class="line">I,am,fine,thanks</span><br></pre></td></tr></table></figure>
+<p>We can set <code>header=False</code>and <code>column_names=['a','b','c''d']</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset2 &#x3D; tf.contrib.data.make_csv_dataset(CSV_PATH, batch_size&#x3D;2, header&#x3D;False,column_names&#x3D;[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;&#39;d&#39;])</span><br></pre></td></tr></table></figure>
+<p>Dataset2 should have the same value with dataset1</p>
+<h4 id="from-tensor-slices"><a class="markdownIt-Anchor" href="#from-tensor-slices"></a> From Tensor slices</h4>
+<p>We can also create a dataset from tensors, the related API is  tf.data.Dataset.from_tensor_slices()</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset2 = tf.data.Dataset.from_tensor_slices(tf.random_uniform([<span class="number">10</span>, <span class="number">5</span>]))</span><br></pre></td></tr></table></figure>
+<p>Actually the input of this API is not necessarily tensors,  numpy arrays are also adaptable .</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset3 &#x3D; tf.data.Dataset.from_tensor_slices(np.random.sample((10, 5)))</span><br></pre></td></tr></table></figure>
+<h3 id="2-data-consuming"><a class="markdownIt-Anchor" href="#2-data-consuming"></a> 2. Data consuming</h3>
+<p>The only way to retrieve the data is Iterator(),  Iterator enables us to loop over all the dataset and get back the data we want. There are basically two kinds of Iterator which are <a target="_blank" rel="noopener" href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset#make_one_shot_iterator"><code>make_one_shot_iterator</code></a> and <a target="_blank" rel="noopener" href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset#make_initializable_iterator"><code>make_initializable_iterator</code></a>.</p>
+<h4 id="make_one_shot_iterator"><a class="markdownIt-Anchor" href="#make_one_shot_iterator"></a> make_one_shot_iterator</h4>
+<p>The examples can be find in the first part when we show how to import csv files</p>
+<h4 id="make_initializable_iterator"><a class="markdownIt-Anchor" href="#make_initializable_iterator"></a> make_initializable_iterator</h4>
+<p>Compared to one shot iterator, initializable iterator allows data to be changed after dataset has already been built.Note that this cannot work in eager_execution model. Here is the example</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># using a placeholder</span></span><br><span class="line">x = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>,<span class="number">2</span>])</span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices(x)</span><br><span class="line">data = np.random.sample((<span class="number">100</span>,<span class="number">2</span>))</span><br><span class="line">iter = dataset.make_initializable_iterator() <span class="comment"># create the iterator</span></span><br><span class="line">el = iter.get_next()</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="comment"># feed the placeholder with data</span></span><br><span class="line">    sess.run(iter.initializer, feed_dict=&#123; x: data &#125;) </span><br><span class="line">    print(sess.run(el)) <span class="comment"># output [ 0.11342909, 0.81430183]</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-data-proprocessing"><a class="markdownIt-Anchor" href="#3-data-proprocessing"></a> 3. Data proprocessing</h3>
+<p>Tf.data provides several tools for data preprocessing such as batch and shuffle</p>
+<h4 id="batch"><a class="markdownIt-Anchor" href="#batch"></a> Batch</h4>
+<p>dataset.batch(BATCH_SIZE)  given the BATCH_SIZE, this API will make the output in a batch way, and output BATCH_SIZE size of data at one time.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># BATCHING</span></span><br><span class="line">tf.enable_eager_execution()</span><br><span class="line">BATCH_SIZE = <span class="number">2</span></span><br><span class="line">x = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="comment"># make a dataset from a numpy array</span></span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices(x).batch(BATCH_SIZE)</span><br><span class="line">iter = dataset.make_one_shot_iterator()</span><br><span class="line">iter.get_next()</span><br></pre></td></tr></table></figure>
+<p>Output</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;tf.Tensor: id=<span class="number">102</span>, shape=(<span class="number">2</span>,), dtype=int64, numpy=array([<span class="number">1</span>, <span class="number">2</span>])&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="shuffle"><a class="markdownIt-Anchor" href="#shuffle"></a> Shuffle</h4>
+<p>When preparing the training data, one important step is shuffling the data to mitigate overfitting, tf.data offers convenient API to do that.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">BATCH_SIZE = <span class="number">2</span></span><br><span class="line">x = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="comment"># make a dataset from a numpy array</span></span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices(x).shuffle(buffer_size = <span class="number">10</span>).batch(BATCH_SIZE)</span><br><span class="line">iter = dataset.make_one_shot_iterator()</span><br><span class="line">iter.get_next()</span><br></pre></td></tr></table></figure>
+<p>Output</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;tf.Tensor: id=<span class="number">115</span>, shape=(<span class="number">2</span>,), dtype=int64, numpy=array([<span class="number">2</span>, <span class="number">3</span>])&gt;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Tensorflow</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Data-AI//" class="article-tag-list-link color3">Data&AI</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/26/What-is-tf-data-and-how-to-use/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Pandas-Handle-missing-data" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2177,112 +2309,6 @@ B账户再加上100元</p>
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/07/10/Tensorflow101/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-A-concurrency-requesting-case" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/26/A-concurrency-requesting-case/">写一个并发请求的Case</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/26/A-concurrency-requesting-case/" class="archive-article-date">
-  	<time datetime="2017-08-26T20:31:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>有些场景下，你可能要检查代码有没有并发问题，验证幂等或者做一下简单的压力测试， 这时候需要写一个并发请求的程序，那么怎么做呢？<br />
-先上代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">final long time_start &#x3D; System.currentTimeMillis();</span><br><span class="line">ExecutorService service &#x3D; Executors.newFixedThreadPool(10);</span><br><span class="line"></span><br><span class="line">int client_num &#x3D; 10;</span><br><span class="line"></span><br><span class="line">final CountDownLatch countDownLatch &#x3D; new CountDownLatch(1);</span><br><span class="line"></span><br><span class="line">for (int i &#x3D; 0; i &lt; client_num; i++) &#123;</span><br><span class="line">    Runnable job &#x3D; new Runnable() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run()  &#123;</span><br><span class="line">            Worker worker &#x3D; new Worker();</span><br><span class="line">            try &#123;</span><br><span class="line">                countDownLatch.await();</span><br><span class="line">                worker.doWork();</span><br><span class="line">            &#125;catch(Exception e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    service.submit(job);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">countDownLatch.countDown();</span><br><span class="line"></span><br><span class="line">service.shutdown();</span><br><span class="line"></span><br><span class="line">while (!service.isTerminated()) &#123;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(&quot;time consuming is &quot; + (System.currentTimeMillis() - time_start));</span><br></pre></td></tr></table></figure>
-<p>我们来拆解下这个Case，看看都做了些什么：</p>
-<h3 id="1-容器准备"><a class="markdownIt-Anchor" href="#1-容器准备"></a> 1. 容器准备</h3>
-<p>首先，你需要一个线程池来调用任务处理，虽然你可以每次new一个线程来做，但是无论是在生产环境还是测试，都不太建议这样做。本示例用的是<br />
-<code>ExecutorService service = Executors.newFixedThreadPool(10)</code>  其效果是构造一个固定线程数的线程池，这个线程池的coreSize和maxSize都是10， 也就是说，最多可以同时处理10个任务，多了的就要排队。<br />
-线程池装载完任务后，执行submit , 但是此时任务并未执行，具体原因看下面。</p>
-<h3 id="2-并发执行"><a class="markdownIt-Anchor" href="#2-并发执行"></a> 2. 并发执行</h3>
-<p>这里是比较tricky的一个点，因为要模拟完全并发的情况，就要保证所有任务同一时间触发，这里我们用了一个java.util.concurrent的工具类 CountDownLatch， 从名字大概可以猜测到，这个是一个像栅栏一样的工具，先把羊圈在里面，等count数到0的时候，打开栅栏，放出群羊。。<br />
-使用步骤： 首先，初始化countDownLatch计数为1。 然后， 在业务代码里在执行业务逻辑之前我们嵌入了一行 <code>countDownLatch.await()</code> 。最后， 当所有任务都装载完毕提交后，执行<code>countDownLatch.countDown()</code>，如同发令枪一般，所有的任务同时触发，并发量达到client_num的数量10。</p>
-<h3 id="3-任务结束"><a class="markdownIt-Anchor" href="#3-任务结束"></a> 3. 任务结束</h3>
-<p>任务结束的时候调用的是线程池的shutdown方法, 看一下这个方法的注释</p>
-<blockquote>
-<p>Attempts to stop all actively executing tasks, halts the processing of waiting tasks, and returns a list of the tasks that were awaiting execution.</p>
-</blockquote>
-<p>意思是这个方法只是尝试去停止所有任务，但是并不保证都能结束，并且没有结束的任务是以list返回的。<br />
-所以后面又跟了一个</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">while (!service.isTerminated()) &#123;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p>循环一直等待所有的任务结束完毕，最后再统计所有任务的执行时间。</p>
-<h2 id="结语"><a class="markdownIt-Anchor" href="#结语"></a> 结语</h2>
-<p>这是一段比较简单的并发测试代码，单元测试足够用，但是如果用做规模化的压力测试，还需要考虑压力机与测试机的连接以及数据热点等一系列问题，这又是个很大的话题了。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Backend//" class="article-tag-list-link color3">Backend</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/26/A-concurrency-requesting-case/">展开全文 >></a>
         </p>
       
 
