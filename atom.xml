@@ -6,7 +6,7 @@
   <link href="http://yoursite.com/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-10-10T11:37:19.277Z</updated>
+  <updated>2020-10-17T12:21:44.441Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>乡愁不知何处</title>
+    <link href="http://yoursite.com/2020/10/17/homesick-nowhere/"/>
+    <id>http://yoursite.com/2020/10/17/homesick-nowhere/</id>
+    <published>2020-10-17T10:42:39.000Z</published>
+    <updated>2020-10-17T12:21:44.441Z</updated>
+    
+    <content type="html"><![CDATA[<p>入秋渐寒，乡愁渐起，然而问题是，我思的是哪个乡？</p><p>家乡理应是出生之地，从蹒跚学步到翩翩少年，生命的开始到对世界开始认知的地方充斥了太多回忆，然而作为一个十八线小镇青年，我的回忆并没有那么好，很小的时候物质匮乏，年级稍大一些学业的压力（山东），让你一直都想逃离，记得当时高中班主任给我们的毕业寄语是“不要回来”，现在想起来真是心有戚戚焉</p><p>家乡也可以是你心智成熟后自己选择的地方，80后小镇青年的常规路线是去一个大点的城市上学，然后工作结婚买房定居，在一个比较开放包容的城市，人们会叫你为新XX人，如果是像深圳这种内部移民城市，他们就直接会叫你深圳人。让你有种宾至如归的感觉。你心安理得的把自己装进这个新的身份里，然而你心里却知道这里并不真的是家乡。那种感觉如同你只读了一个学校的研究生，你是不好意思叫自己是这个学校的毕业生，虽然你这么叫无可指摘。</p><p>如果你离经叛道的当了“反贼”出国去定居了，家乡就更是一个复杂的概念存在了，你可以叫中国为家乡，可以叫你工作多年的城市为家乡，当然也可以叫你出生地为家乡。那么你深思熟虑一番周折站在的这个地方呢？</p><p>你肯定是有很多喜欢这里的理由的，环境、教育、社区这些你可能都非常满意，你甚至已经规划买房生儿育女，计划退休养老。。这里总算是家了吧</p><p>或许是吧，直到有天你路过一家新开的中餐馆迈不开腿，直到你在商场里隐约听到中文立马去寻找声音来源， 直到你终于有了个带小院的房子，第一反应是怎么种点韭菜小青菜。然后你就清楚，那些深刻印在你潜意识的，家乡的感觉</p><p>在大城市困惑于归属感，在国外困惑于家乡味道，但这都算是乡愁么，是也不是，思念这些以前稀松平常的东西换种角度其实还是漂泊者的特权，想想可能还挺酷的，因为某种程度上你比别人多了一层人生的体验。</p><p>你看，聊以自慰也是漂泊者的一种特权。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;入秋渐寒，乡愁渐起，然而问题是，我思的是哪个乡？&lt;/p&gt;
+&lt;p&gt;家乡理应是出生之地，从蹒跚学步到翩翩少年，生命的开始到对世界开始认知的地方充斥了太多回忆，然而作为一个十八线小镇青年，我的回忆并没有那么好，很小的时候物质匮乏，年级稍大一些学业的压力（山东），让你一直都想逃离，</summary>
+      
+    
+    
+    
+    <category term="杂文" scheme="http://yoursite.com/categories/%E6%9D%82%E6%96%87/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>UK疫情两三事</title>
@@ -473,31 +496,6 @@
     
     
     <category term="Pandas" scheme="http://yoursite.com/tags/Pandas/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Basics of words embedding</title>
-    <link href="http://yoursite.com/2018/10/01/Basics-of-words-embedding/"/>
-    <id>http://yoursite.com/2018/10/01/Basics-of-words-embedding/</id>
-    <published>2018-10-01T10:14:28.000Z</published>
-    <updated>2020-10-04T09:41:54.449Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="why-embedding"><a class="markdownIt-Anchor" href="#why-embedding"></a> Why embedding</h3><p>Natural language processing systems traditionally treat words as discrete atomic symbols, and this may lead to some obstacles in word preprocessing:</p><ol><li>These encodings provide no useful information regarding the <strong>relationships</strong> that may exist between the individual symbols.</li><li>Discrete ids furthermore lead to <strong>data sparsity</strong>. We may need more data to train statistical models successfully.</li></ol><p>To address these two problems, word embeddings provide a solution to  represent words and their relative meanings densely.</p><h3 id="overview"><a class="markdownIt-Anchor" href="#overview"></a> Overview</h3><p>Embedding derives from <a href="https://en.wikipedia.org/wiki/Vector_space_model">Vector Space Models(VSMs)</a>,  one of its well-known schemes is <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">Tf-Idf</a> weights. VSMs can transfer text documents into vectors of identifies, the fundamental theory they rely on is Distribution hypothesis which states that <strong>words that appear in the same contexts share semantic meaning</strong>.</p><p>VSMs have two main approaches: Count-based methods and predictive methods.  Count-based methods compute the statistics of how often some word co-occurs with its neighbor words in a large text corpus and then map these count-statistics down to a small, dense vector for each word. Predictive models directly try to predict a word from its neighbors regarding learned small, dense <em>embedding vectors</em> (considered parameters of the model).</p><p>Among all the embedding methods, Glove(Count-based) and Word2vec(Predictive) are the most popular.</p><h3 id="count-based-embedding"><a class="markdownIt-Anchor" href="#count-based-embedding"></a> Count-based Embedding</h3><p>GloVe is an <strong>unsupervised learning algorithm</strong> for obtaining vector representations for words.  The main intuition underlying the model is the simple observation that ratios of word-word co-occurrence probabilities have the potential for encoding some form of meaning. It is designed to enable the vector differences between words  to capture as much as possible the meaning specified by the juxtaposition of two words.</p><p>The <a href="https://nlp.stanford.edu/projects/glove/">project page of glove</a>  gives detailed information of how glove vectors are computed and provides several pretrained glove word vectors. As the article highlighted , glove was developed with the following consideration:</p><blockquote><p>The Euclidean distance (or cosine similarity) between two word vectors provides an effective method for measuring the linguistic or semantic similarity of the corresponding words.</p><p>Similarity metrics used for nearest neighbor may be problematic when two given words almost always exhibit more intricate relationships than can be captured by a single number.</p><p>It is necessary for a model to associate more than a single number to the word pair.</p></blockquote><p>Training GloVe model on a large corpus can be extremely time consuming, but it is a one-time cost.  <a href="https://nlp.stanford.edu/projects/glove/">project page of glove</a> also provides some pre-trained word vectors, e.g. glove.6B.zip is word vectors trained from words on Wikipedia, take the first line of this file for example</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">the -0.038194 -0.24487 0.72812 -0.39961 0.083172 0.043953 -0.39141 0.3344 -0.57545 0.087459 0.28787 -0.06731 0.30906 -0.26384 -0.13231 -0.20757 0.33395 -0.33848 -0.31743 ...</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>‘‘the’’ is followed by 100 floats which are the vector values of this word</p><p>We can build a dict whose key is words and value is their glove vector</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">embeddings_index = dict()</span><br><span class="line">f = open(<span class="string">&#x27;./glove.6B.100d.txt&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">    values = line.split()</span><br><span class="line">    word = values[<span class="number">0</span>]</span><br><span class="line">    coefs = asarray(values[<span class="number">1</span>:], dtype = <span class="string">&#x27;float32&#x27;</span>)</span><br><span class="line">    embeddings_index[word] = coefs</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure><p>When we need to build a embedding layer , we just look up the vectors  for input words in the dict.</p><h3 id="word2vec"><a class="markdownIt-Anchor" href="#word2vec"></a> Word2vec</h3><p>Word2vec, as illustrated in the first part,  is a predictive model for word embedding. There are two main branches of Word2vec, the Continuous Bag-of-Words model (CBOW) and the Skip-Gram model. The two models predict words in a different direction, CBOW predicts target words (e.g. ‘mat’) from source context words (‘the cat sits on the’), while the skip-gram does the inverse and predicts source context-words from the target words. Therefore,  CBOW treats an entire context as one observation and is compatible with smaller datasets, while skip-gram treats each context-target pair as a new observation and play better with larger datasets.</p><p>We will focus on skip-gram as we need to deal with large datasets in most time. Here is the structure of this model.</p><p><img src="https://raw.githubusercontent.com/niuguy/niuguy.github.io/master/pic/skip_gram.npg.png" alt="Skip-gram Neural Network Architecture" /></p><p>The Skip-gram model is trained like this,  Given a specific word in the middle of a sentence (the input word), look at the words nearby and pick one at random. The network is going to tell us the probability for every word in our vocabulary of being the “nearby word” that we chose. The output probabilities are going to relate to how likely it is find each vocabulary word nearby our input word.</p><p>The coding example of how to build and train the Skip-gram model can be found <a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_basic.py">here</a></p><p>Next post I will try to use embedding to solve an interesting real world problem.</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h3 id=&quot;why-embedding&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#why-embedding&quot;&gt;&lt;/a&gt; Why embedding&lt;/h3&gt;
-&lt;p&gt;Natural language processing systems tra</summary>
-      
-    
-    
-    
-    <category term="Data&amp;AI" scheme="http://yoursite.com/categories/Data-AI/"/>
-    
-    
-    <category term="Algorithm" scheme="http://yoursite.com/tags/Algorithm/"/>
     
   </entry>
   
