@@ -6,15 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Hexo</title>
+  <title>关于queen‘s gambit（后翼弃兵） | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/page/4/index.html">
+  <meta name="description" content="知乎体： 热爱做一件事是什么感觉？ 看完Queen’s gambit这部剧就大概知道了。剧情梗概：女主Beth从小生活在孤儿院，机缘巧合从杂务工Shaibel那里了解到了象棋（chess）,自此便一发不可收拾，虽一路坎坷，从无名小卒最终成长为国际象棋大师。 这部剧一共七集，我是分三次看完，整体感觉像看了一部电影，最大的感觉是，如果你真的一直持续专注做一件事情，是很难不成功的。 专注也是需要勇气甚">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于queen‘s gambit（后翼弃兵）">
+<meta property="og:url" content="http://yoursite.com/2020/11/07/queens-gambit/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="知乎体： 热爱做一件事是什么感觉？ 看完Queen’s gambit这部剧就大概知道了。剧情梗概：女主Beth从小生活在孤儿院，机缘巧合从杂务工Shaibel那里了解到了象棋（chess）,自此便一发不可收拾，虽一路坎坷，从无名小卒最终成长为国际象棋大师。 这部剧一共七集，我是分三次看完，整体感觉像看了一部电影，最大的感觉是，如果你真的一直持续专注做一件事情，是很难不成功的。 专注也是需要勇气甚">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://user-images.githubusercontent.com/1400357/98440334-14e93600-20f0-11eb-9067-685f0caf2b30.jpg">
+<meta property="article:published_time" content="2020-11-07T10:13:01.000Z">
+<meta property="article:modified_time" content="2020-11-07T11:56:50.098Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://user-images.githubusercontent.com/1400357/98440334-14e93600-20f0-11eb-9067-685f0caf2b30.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -157,102 +163,72 @@ ga('send', 'pageview');
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-Distributed-transactions-and-eventual-consistency" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-queens-gambit" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/26/Distributed-transactions-and-eventual-consistency/">分布式事务与最终一致性</a>
+    <h1 class="article-title" itemprop="name">
+      关于queen‘s gambit（后翼弃兵）
     </h1>
   
 
         
-        <a href="/2018/08/26/Distributed-transactions-and-eventual-consistency/" class="archive-article-date">
-  	<time datetime="2018-08-26T20:38:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-26</time>
+        <a href="/2020/11/07/queens-gambit/" class="archive-article-date">
+  	<time datetime="2020-11-07T10:13:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-07</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="为什么需要分布式事务"><a class="markdownIt-Anchor" href="#为什么需要分布式事务"></a> 为什么需要分布式事务</h2>
-<p>先摆一个例子：<br />
-A账户要向B账户转账，100元， 操作的步骤是</p>
-<blockquote>
-<p>A账户先减掉100元<br />
-B账户再加上100元</p>
-</blockquote>
-<p>非常简单。。在单个数据库实例的情况下，开启事务，先执行A-100 ，再执行B+100, 事务提交，结束。<br />
-然而，由于业务增长， 导致一个数据库实例已经不能满足所有数据存储，此时A与B存在于不同的数据库实例上，这个时候执行这两部操作就要每个实例分别启动一个事务，A减掉后提交，B增加时，其所在机器挂掉了。。  那么A就损失了100元，这显然是不可接受的。</p>
-<p>那么这个问题怎么解？</p>
-<h2 id="二阶段提交"><a class="markdownIt-Anchor" href="#二阶段提交"></a> 二阶段提交</h2>
-<p>解这个问题，需要让跨越多个数据源的一次业务行为，还能保持事务的ACID（原子、一致、隔离、持久）。<br />
-如果只是各个参与方各自为战，显然不行，因为缺少一个可以观看全局的组织者， 每个参与者都不知道其他参与者的情况，也就无法判断当前的全局情况，自己是不是要提交。有一个组织者出现后，每个参与者在准备提交前都可以问一下组织者，其他人好了没有，如果得到回答说，都好了，那么各自就开始最终提交。<br />
-这个过程其实就是二阶段提交（2PC）的主要思想。<br />
-关于二阶段协议，左耳朵耗子的博客（ <a target="_blank" rel="noopener" href="http://coolshell.cn/articles/10910.html">分布式系统的事务处理 | | 酷 壳 - CoolShell</a> ）讲了一个绝妙的例子：</p>
-<blockquote>
-<p>一对准夫妻在教堂举办婚礼，<br />
-神父通常会先问新娘：你愿意爱你面前的这个人，生老病死。。  ， 新娘回答：我愿意。<br />
-然后神父再问新郎：你愿意。。。 新郎回答：我愿意。<br />
-最后神父宣布新郎新娘成为一对夫妻。</p>
-</blockquote>
-<p>跟上述描述的二阶段提交是相同的过程， 双方都同意了，神父才会宣布婚姻成立，不可以说只有一个人同意，神父就宣布，你已经结了一半婚，没有意义。<br />
-这个过程，画出来流程图是这样的：</p>
-<p><img src="https://user-images.githubusercontent.com/1400357/91354624-ea702800-e7e4-11ea-9083-51664cdeebd9.png" alt="pic1" /></p>
-<h2 id="分布式事务的问题"><a class="markdownIt-Anchor" href="#分布式事务的问题"></a> 分布式事务的问题</h2>
-<p>二阶段提交过程是分布式事务的一个比较通用的解决方案了， 然而也存在它的局限。由于一次操作可能涉及到几个参与者，那么一次操作所需要花费的时间，就是多个参与者prepare+commit时间的总和。这可能带来两个方面的问题，一是总体耗时的增加，二是由第一个问题带来的资源损耗。</p>
-<p>第一个问题，带来的是用户体验上的下降，设想你去便利店消费，要转账给店员10元， 等了好几分钟才转成功，这时后面排队都十几人了。</p>
-<p>第二个问题，则是给系统带来的服务容量的挑战，设想淘宝双十一这种场景，每秒钟上万笔交易，涉及大量转账划拨操作，如果全部由二阶段的分布式事务实现，延迟不说，光是机器性能就会很容易到极限。</p>
-<h2 id="另一种方案"><a class="markdownIt-Anchor" href="#另一种方案"></a> 另一种方案</h2>
-<p>那么有没有替代方案？</p>
-<p>先回归到问题的本质，分布式事务解决的其实是数据的一致性问题，A给B转账100元， 效果是A减了100，B要增加100， 一增一减要相等，至于这个相等是A操作完之后等着B加了100才结束，还是A操作完之后，有另外一种机制，保证B在后面某个时刻不多不少只增加100。</p>
-<p>后一种解法，就是通过引入异步消息的方式，来替换第一种分布式事务的方案。<br />
-简单示意图如下；</p>
-<p><img src="https://user-images.githubusercontent.com/1400357/91354630-eba15500-e7e4-11ea-80f0-71ce1e4acc73.png" alt="pic2" /></p>
-<p>可以看到，整个过程分为三步：</p>
-<ol>
-<li>发起转账一方，记录一条扣减流水。</li>
-<li>转账发起方发送消息给转账接收方（接收方也可能是自己）。</li>
-<li>接收方写入一条增加流水。</li>
-</ol>
-<p>总体思路是先暂存转账记录凭证，利用消息系统的可靠性，保证整个转账操作达到最终一致。</p>
-<p>上面只是简略步骤，如果要达到替代两阶段的效果，还需要一些支撑，比如：</p>
-<ul>
-<li>消息可能发送失败，需要发送端有恢复机制，定时重试失败流水。</li>
-<li>消息真实发送后，A的本地事务不可以失败，这要求要么把消息发送放到最后，要么需要发送消息本身要跟A处于同一个事务，所谓事务消息（这又是一个很大的话题）</li>
-<li>消息可能重复发送，但是B不可以重复处理， 需要B保持一个接收消息的记录，每次比对排除重复。</li>
-</ul>
-<p>这样看来，使用异步消息的方案，也并不简单，或许一致性问题本身就是一个复杂的课题。</p>
+        <p><img src="https://user-images.githubusercontent.com/1400357/98440334-14e93600-20f0-11eb-9067-685f0caf2b30.jpg" alt="p2621146861 (1)" /></p>
+<p>知乎体： 热爱做一件事是什么感觉？</p>
+<p>看完Queen’s gambit这部剧就大概知道了。剧情梗概：女主Beth从小生活在孤儿院，机缘巧合从杂务工Shaibel那里了解到了象棋（chess）,自此便一发不可收拾，虽一路坎坷，从无名小卒最终成长为国际象棋大师。</p>
+<p>这部剧一共七集，我是分三次看完，整体感觉像看了一部电影，最大的感觉是，如果你真的一直持续专注做一件事情，是很难不成功的。</p>
+<p>专注也是需要勇气甚至是叛逆的。在孤儿院，每个人都在唱诗班唱歌的时候，Beth可以毫不犹豫的扔掉课本跑到地下室去学棋，发现蓝色药丸产生的幻觉可以看到棋谱，就不惜去药房偷药，被现场发现也没有悔意。刚被领养的时候，买不起棋谱杂志也会偷拿（当然结尾补回来了），参加大奖赛会想尽各种办法最后从启蒙老师那里拿到启动资金。</p>
+<p>这部剧可贵的是并没有走向狗血，女主的经历似乎是每个人都可能会经历的，童年的窘迫，少年的懵懂以及青年的迷茫。特别的是Beth有着天赋，并且重要的是她意识到了这一点。我看剧的时候也会想，假设自己坚持小时候的哪怕一点小小爱好，后面都可能结出绚烂的果实。唏嘘感叹，原来人生可以如此精彩的。</p>
+<p>最喜欢的镜头是Beth坐在棋桌前准备开始时那犀利而专注的眼神，感觉像是，从此开始我的世界里只有象棋。这就是所谓的心流吧，当你完全专注到一件事情里面的时候，你能感受到极大的愉悦。我们会找各种方法试图让自己静下来，比如练习冥想，练习瑜伽，练习深呼吸。而这部剧告诉我们，只要简单专注在自己热爱的事情上，就可以持续的获得这种体验。</p>
+<p>印象深刻的一幕是Beth因为去莫斯科比赛需要美国基督教协会的赞助，但是条件是需要面对媒体发表她的反共产主义声明。Beth干脆的拒绝了，因为这跟她热爱的象棋没有关系。结尾的时候她甚至跑到莫斯科街头去跟市民对弈。这有点弘扬美国价值观的味道，可是我觉得除去这些还是可以解释的通， 因为Beth一路走来就是因为纯粹的热爱这项活动，如果潦倒时的各种困难不能阻碍这种纯粹，那么成名后的诱惑也同样不可以。这算得上是知行合一了。好像各种类似励志的故事都有知行合一的影子，比如另一部布拉德皮特主演的Money ball 也是一个类似的拒绝诱惑坚持自我的ending。</p>
+<p>这部剧也使我思考，什么样的人生才算精彩？参加工作好多年，见证了身边各种成功和不成功的例子，发现最终最羡慕的还真的不是极有钱有权，而是从很早就知道自己热爱什么并且一直在坚持的那些人。这些人有个共同特点，跟他们聊自己专业的时候，他们似乎身上都发着光。而这些热爱的结果，似乎都也还不错。</p>
+<p>所以结论是，尽早找到你真正享受的棋局，并持续不断的磨炼棋艺，必会有意想不到的惊喜在前方。</p>
 
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Transaction</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/Backend//" class="article-tag-list-link color3">Backend</a>
+        			<a href="/categories/杂文//" class="article-tag-list-link color3">杂文</a>
         		</li>
       		
 		</ul>
@@ -260,16 +236,75 @@ B账户再加上100元</p>
 
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/26/Distributed-transactions-and-eventual-consistency/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/11/07/queens-gambit/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2020/10/24/does-debate-equal-democracy/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">民主等于辩论吗</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -289,720 +324,30 @@ B账户再加上100元</p>
 
 
 
-
-  
-    <article id="post-How-to-troubleshooting-CPU-load-problems" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/26/How-to-troubleshooting-CPU-load-problems/">CPU／Load偏高的排查步骤</a>
-    </h1>
-  
-
-        
-        <a href="/2018/08/26/How-to-troubleshooting-CPU-load-problems/" class="archive-article-date">
-  	<time datetime="2018-08-26T20:34:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-查找-java进程"><a class="markdownIt-Anchor" href="#1-查找-java进程"></a> 1. 查找 java进程</h2>
-<p><code>ps -ef|grep java</code></p>
-<h2 id="2-查找耗时最高线程"><a class="markdownIt-Anchor" href="#2-查找耗时最高线程"></a> 2. 查找耗时最高线程</h2>
-<p><code>top -Hp #进程id#</code></p>
-<h2 id="3-将线程id转换为16进制"><a class="markdownIt-Anchor" href="#3-将线程id转换为16进制"></a> 3. 将线程id转换为16进制</h2>
-<p><code>printf “%x\n” #线程id#</code></p>
-<h2 id="4-使用stack查找相应线程栈信息"><a class="markdownIt-Anchor" href="#4-使用stack查找相应线程栈信息"></a> 4. 使用stack查找相应线程栈信息</h2>
-<p><code>jstack -l #进程id#| grep #16进制线程id#</code></p>
-<h2 id="5-开始分析线程堆栈"><a class="markdownIt-Anchor" href="#5-开始分析线程堆栈"></a> 5. 开始分析线程堆栈</h2>
-<p>先复习一下线程的各种状态， 包括 NEW(新建)， Runnable(可运行)， Running(运行) ，Block(阻塞)， Dead(死亡)   其中阻塞还分为 等待阻塞、同步阻塞。<br />
-转换关系如下图：</p>
-<p><img src="https://user-images.githubusercontent.com/1400357/91354176-366e9d00-e7e4-11ea-83f6-9997243b0ecb.jpg" alt="线程状态转换.jpg" /></p>
-<p>(图片来自 <a target="_blank" rel="noopener" href="https://my.oschina.net/mingdongcheng/blog/139263">https://my.oschina.net/mingdongcheng/blog/139263</a>)</p>
-<p>接下来看一下jstack打出来的线程堆栈，大概是这样的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&quot;Timer-0&quot; #25 daemon prio&#x3D;5 os_prio&#x3D;31 tid&#x3D;0x00007fd051bb1800 nid&#x3D;0xfabb in Object.wait() [0x0000700008e90000]</span><br><span class="line">   java.lang.Thread.State: WAITING (on object monitor)</span><br><span class="line">	at java.lang.Object.wait(Native Method)</span><br><span class="line">	at java.lang.Object.wait(Object.java:502)</span><br><span class="line">	at java.util.TimerThread.mainLoop(Timer.java:526)</span><br><span class="line">	- locked &lt;0x00000007a22af328&gt; (a java.util.TaskQueue)</span><br><span class="line">	at java.util.TimerThread.run(Timer.java:505)</span><br><span class="line"></span><br><span class="line">   Locked ownable synchronizers:</span><br><span class="line">	- None</span><br></pre></td></tr></table></figure>
-<p>需要重点关注有没有以下几个状态：</p>
-<ol>
-<li>DeadLock  死锁</li>
-<li>Waiting on Condition  资源等待</li>
-<li>Blocked  阻塞<br />
-具体的case分析可以参考这篇文章  <a target="_blank" rel="noopener" href="http://www.cnblogs.com/nexiyi/p/java_thread_jstack.html">Java线程Dump分析工具—jstack - 残雪余香 - 博客园</a></li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Profile</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Backend//" class="article-tag-list-link color3">Backend</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/26/How-to-troubleshooting-CPU-load-problems/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Tensorflow101" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/10/Tensorflow101/">Tensorflow101</a>
-    </h1>
-  
-
-        
-        <a href="/2018/07/10/Tensorflow101/" class="archive-article-date">
-  	<time datetime="2018-07-10T21:25:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Tensorflow is a high performance numerical computation software library, it is mostly known for its strong support for machine learning and deep learning.</p>
-<h3 id="how-to-install"><a class="markdownIt-Anchor" href="#how-to-install"></a> How to Install</h3>
-<p>If you have ‘pip’, everything is simple<br />
-<code>pip install tensorflow</code></p>
-<h3 id="basic-concepts"><a class="markdownIt-Anchor" href="#basic-concepts"></a> Basic Concepts</h3>
-<blockquote>
-<p>Graph</p>
-</blockquote>
-<p>Graph is a fundamental concept in Tensorflow. Take ReLU computation as an example, the function of ReLU is</p>
-<p><em>h=ReLU(Wx+b)</em></p>
-<p>In the view of Tensorflow, the function looks like this</p>
-<p><img src="https://user-images.githubusercontent.com/1400357/91706504-64ead000-eb76-11ea-851b-493b206b6543.png" alt="relu_graph" /></p>
-<blockquote>
-<p>Nodes</p>
-</blockquote>
-<p>Variables such as <em>W</em> and <em>b</em> , placeholders such as x, are operations such as <em>MatMul</em>, <em>Add</em> are all nodes in the graph.</p>
-<blockquote>
-<p>Edges</p>
-</blockquote>
-<p>The edges between nodes indicate the data which flow between nodes,  in tensorflow data is represented as “tensor” .</p>
-<p>“tensor” + “flow”  = “tensorflow”</p>
-<h3 id="codes"><a class="markdownIt-Anchor" href="#codes"></a> Codes</h3>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line"></span><br><span class="line">	b &#x3D; tf.Variable(tf.zeros((10,)))</span><br><span class="line">	W &#x3D; tf.Variable(tf.random_uniform((20, 10), -1, 1))</span><br><span class="line"></span><br><span class="line">	x &#x3D; tf.placeholder(tf.float32, (10, 20))</span><br><span class="line"></span><br><span class="line">	h &#x3D; tf.nn.relu(tf.matmul(x, W) + b)</span><br><span class="line"></span><br><span class="line">	writer &#x3D; tf.summary.FileWriter(&#39;.&#x2F;graphs&#39;, tf.get_default_graph())</span><br><span class="line"></span><br><span class="line">	with tf.Session() as sess:</span><br><span class="line">		sess.run(tf.global_variables_initializer())	</span><br><span class="line">		sess.run(h, &#123;x: np.random.random((10, 20))&#125;)</span><br><span class="line"></span><br><span class="line">	writer.close()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>Here are the steps described in the above codes.</p>
-<ol>
-<li>Create a graph using Variables and placeholders.</li>
-<li>Start a tensorflow session and deploy the graph into the session.</li>
-<li>Run the session, let the tensors flow.</li>
-<li>Write processing logs using tools such as tf.summary.</li>
-</ol>
-<p>Session is the so called execution environment. It needs two parameters which are “Fetches” and “Feeds”.</p>
-<p><code>sess.run(fetches, feeds)</code></p>
-<p>Fetches: List of graph nodes</p>
-<p>Feeds: Dictionary mapping from graph nodes to concrete values.</p>
-<p>In the ReLU example, Fetches = h = tf.nn.relu(tf.matmul(x, W) + b) , Feeds = {x: np.random.random((10, 20))}</p>
-<p>It would be interesting to see what happened during the running time. We can try TensorBoard.</p>
-<h2 id="tensorboard-result"><a class="markdownIt-Anchor" href="#tensorboard-result"></a> TensorBoard Result</h2>
-<p><img src="https://user-images.githubusercontent.com/1400357/91706508-661bfd00-eb76-11ea-8939-adc1cf806f8f.png" alt="tensorboard" /></p>
-<p><img src="https://user-images.githubusercontent.com/1400357/91706513-674d2a00-eb76-11ea-9b5f-932600175c6c.png" alt="tensorboard_relu" /></p>
-<p>The Main Graph clearly shows how the tensor flows through the graph. In a complex machine learning program, the printed diagram is a convenient tool to increase the confidence of the result.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Tensorflow</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Data-AI//" class="article-tag-list-link color3">Data&AI</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/10/Tensorflow101/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-A-concurrency-requesting-case" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/26/A-concurrency-requesting-case/">写一个并发请求的Case</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/26/A-concurrency-requesting-case/" class="archive-article-date">
-  	<time datetime="2017-08-26T20:31:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>有些场景下，你可能要检查代码有没有并发问题，验证幂等或者做一下简单的压力测试， 这时候需要写一个并发请求的程序，那么怎么做呢？<br />
-先上代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">final long time_start &#x3D; System.currentTimeMillis();</span><br><span class="line">ExecutorService service &#x3D; Executors.newFixedThreadPool(10);</span><br><span class="line"></span><br><span class="line">int client_num &#x3D; 10;</span><br><span class="line"></span><br><span class="line">final CountDownLatch countDownLatch &#x3D; new CountDownLatch(1);</span><br><span class="line"></span><br><span class="line">for (int i &#x3D; 0; i &lt; client_num; i++) &#123;</span><br><span class="line">    Runnable job &#x3D; new Runnable() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run()  &#123;</span><br><span class="line">            Worker worker &#x3D; new Worker();</span><br><span class="line">            try &#123;</span><br><span class="line">                countDownLatch.await();</span><br><span class="line">                worker.doWork();</span><br><span class="line">            &#125;catch(Exception e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    service.submit(job);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">countDownLatch.countDown();</span><br><span class="line"></span><br><span class="line">service.shutdown();</span><br><span class="line"></span><br><span class="line">while (!service.isTerminated()) &#123;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(&quot;time consuming is &quot; + (System.currentTimeMillis() - time_start));</span><br></pre></td></tr></table></figure>
-<p>我们来拆解下这个Case，看看都做了些什么：</p>
-<h3 id="1-容器准备"><a class="markdownIt-Anchor" href="#1-容器准备"></a> 1. 容器准备</h3>
-<p>首先，你需要一个线程池来调用任务处理，虽然你可以每次new一个线程来做，但是无论是在生产环境还是测试，都不太建议这样做。本示例用的是<br />
-<code>ExecutorService service = Executors.newFixedThreadPool(10)</code>  其效果是构造一个固定线程数的线程池，这个线程池的coreSize和maxSize都是10， 也就是说，最多可以同时处理10个任务，多了的就要排队。<br />
-线程池装载完任务后，执行submit , 但是此时任务并未执行，具体原因看下面。</p>
-<h3 id="2-并发执行"><a class="markdownIt-Anchor" href="#2-并发执行"></a> 2. 并发执行</h3>
-<p>这里是比较tricky的一个点，因为要模拟完全并发的情况，就要保证所有任务同一时间触发，这里我们用了一个java.util.concurrent的工具类 CountDownLatch， 从名字大概可以猜测到，这个是一个像栅栏一样的工具，先把羊圈在里面，等count数到0的时候，打开栅栏，放出群羊。。<br />
-使用步骤： 首先，初始化countDownLatch计数为1。 然后， 在业务代码里在执行业务逻辑之前我们嵌入了一行 <code>countDownLatch.await()</code> 。最后， 当所有任务都装载完毕提交后，执行<code>countDownLatch.countDown()</code>，如同发令枪一般，所有的任务同时触发，并发量达到client_num的数量10。</p>
-<h3 id="3-任务结束"><a class="markdownIt-Anchor" href="#3-任务结束"></a> 3. 任务结束</h3>
-<p>任务结束的时候调用的是线程池的shutdown方法, 看一下这个方法的注释</p>
-<blockquote>
-<p>Attempts to stop all actively executing tasks, halts the processing of waiting tasks, and returns a list of the tasks that were awaiting execution.</p>
-</blockquote>
-<p>意思是这个方法只是尝试去停止所有任务，但是并不保证都能结束，并且没有结束的任务是以list返回的。<br />
-所以后面又跟了一个</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">while (!service.isTerminated()) &#123;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p>循环一直等待所有的任务结束完毕，最后再统计所有任务的执行时间。</p>
-<h2 id="结语"><a class="markdownIt-Anchor" href="#结语"></a> 结语</h2>
-<p>这是一段比较简单的并发测试代码，单元测试足够用，但是如果用做规模化的压力测试，还需要考虑压力机与测试机的连接以及数据热点等一系列问题，这又是个很大的话题了。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Backend//" class="article-tag-list-link color3">Backend</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/26/A-concurrency-requesting-case/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-What-you-need-to-know-for-memory-leaks-troubleshooting" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/25/What-you-need-to-know-for-memory-leaks-troubleshooting/">What you need to know for memory-leaks troubleshooting(排查内存泄漏你需要知道的套路)</a>
-    </h1>
-  
-
-        
-        <a href="/2017/08/25/What-you-need-to-know-for-memory-leaks-troubleshooting/" class="archive-article-date">
-  	<time datetime="2017-08-25T16:12:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>内存泄漏是一个比较棘手的问题，大多数时候没有明显的报错，这给问题排查带来很大困难，好在前人已经遇到很多类似问题，也留下了一些典型的排查套路，大部分时候只需要按图索骥，一步步来即可。</p>
-<h2 id="套路之工具篇"><a class="markdownIt-Anchor" href="#套路之工具篇"></a> 套路之工具篇</h2>
-<ul>
-<li>ps或者jps<br />
-ps:查找活跃的进程<br />
-典型用法：<code>ps -ef|grep java</code><br />
-jps:查找活跃的 java进程*<br />
-典型用法：<code>jps -v</code></li>
-<li>jmap<br />
-jmap 可以将java内存打印出来，作为内存分析工具（如MAT）的输入</li>
-<li>jinfo<br />
-可以用来查看java进程的启动信息，可以看下内存堆大小的设置</li>
-<li>jstat<br />
-可以用来打印JVM的运行时GC统计信息, 典型用法如<br />
-<code>jstat -gcutil 21891 250 2</code><br />
-表示链接到21891这个进程，每250ms用gcutil打印一次，一共取2个实例，通常打印出来的效果是这样的</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ jstat -gcutil 19677 1000 2</span><br><span class="line">  S0     S1     E      O      P     YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line"> 85.04   0.00  15.15   3.61  44.32      4    0.834     1    0.705    1.538</span><br><span class="line"> 85.04   0.00  15.15   3.61  44.32      4    0.834     1    0.705    1.538</span><br></pre></td></tr></table></figure>
-<ul>
-<li>MAT<br />
-可以分析jmaps生成的内存快照，如果你用Eclipse可以直接在eclipse-&gt;help-&gt;install software   输入 <a target="_blank" rel="noopener" href="http://download.eclipse.org/mat/1.6.1/update-site/">http://download.eclipse.org/mat/1.6.1/update-site/</a> 按照提示安装</li>
-</ul>
-<p>PS：如果命令有任何不清楚，男人(man)是你的好朋友：）</p>
-<h2 id="套路之实战篇"><a class="markdownIt-Anchor" href="#套路之实战篇"></a> 套路之实战篇</h2>
-<h3 id="1-获取内存dump"><a class="markdownIt-Anchor" href="#1-获取内存dump"></a> 1. 获取内存dump</h3>
-<blockquote>
-<p>进程还活着：</p>
-</blockquote>
-<ul>
-<li>使用ps查找java进程ID<br />
-<code>ps -ef|grep java 或者 jps</code></li>
-<li>jmap 将内存dump到本地<br />
-<code>jmap -dump:live,format=b,file=dump.bin 19677</code><br />
-会输出dump.bin文件</li>
-</ul>
-<blockquote>
-<p>已经OOM挂了：</p>
-</blockquote>
-<p>提前在java 运行参数添加   <code>-XX:+HeapDumpOnOutOfMemoryError</code> 表示挂了需要dump当时内存，再添加 <code>-XX:HeapDumpPath=/tmp</code>表示dump内存存放的位置, 这样当应用down掉之后，会输出一个.hprof文件</p>
-<h3 id="2-内存分析"><a class="markdownIt-Anchor" href="#2-内存分析"></a> 2. 内存分析</h3>
-<ul>
-<li>使用MAT导入上一步生成的dump文件，分析之后你会看到类似这样一张图</li>
-</ul>
-<p><img src="https://user-images.githubusercontent.com/1400357/91207332-7fe5bc00-e700-11ea-8f32-7959f1bec32b.png" alt="1.png" /></p>
-<p>从这里为入口，可以查看哪些对象占用内存较大，内存泄漏的可疑点在哪里，比如这个case, 点到Leak Suspects这个链接可以看到</p>
-<p><img src="https://user-images.githubusercontent.com/1400357/91207479-b7546880-e700-11ea-826b-17a0844ca778.png" alt="2.png" /></p>
-<p>这是个比较直观的问题，HashMapEntry对象占用了超过99%的内存空间，可以直接看业务代码哪里HashMap使用出了问题。<br />
-这是MAT比较简单的应用，其他高级用法可以看MAT官方文档，或这篇文章 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/AloneSword/p/3821569.html">Java程序内存分析：使用mat工具分析内存占用 - 孤剑 - 博客园</a></p>
-<h2 id="结语"><a class="markdownIt-Anchor" href="#结语"></a> 结语</h2>
-<p>相信了解了这些工具与套路，下次遇到可疑内存泄漏或者OOM这样的严重问题，就不会茫然无措了。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Backend//" class="article-tag-list-link color3">Backend</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/25/What-you-need-to-know-for-memory-leaks-troubleshooting/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Key-points-of-threadpool" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/26/Key-points-of-threadpool/">线程池核心知识点</a>
-    </h1>
-  
-
-        
-        <a href="/2017/06/26/Key-points-of-threadpool/" class="archive-article-date">
-  	<time datetime="2017-06-26T20:44:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>—读《java并发编程》笔记</p>
-<h3 id="为什么需要线程执行框架"><a class="markdownIt-Anchor" href="#为什么需要线程执行框架"></a> 为什么需要线程执行框架</h3>
-<blockquote>
-<p>不用线程池是否也有异步执行任务的方案？</p>
-</blockquote>
-<p>有两种方案，一是单独起一个线程，任务由这个线程顺序执行。二是每个任务创建一个新线程，每个任务都由一个新线程去执行。</p>
-<p>然而两种方案各有缺点：<br />
-第一种方案，因为是顺序执行，在任务的响应效率有较大影响。<br />
-第二种方案，创建线程是有资源消耗的，对于web应用这样的大流量请求，很容易就会达到资源瓶颈。</p>
-<p>另外需要考虑的一些问题：</p>
-<ul>
-<li>可否知道当前任务在被哪个线程运行了。</li>
-<li>任务的执行顺序是怎样的，先入先出？优先队列？</li>
-<li>多少任务正在同时执行</li>
-<li>如果当前已经达到了系统性能瓶颈，怎么决定任务的优先级，哪些任务需要被移出执行队列。</li>
-<li>任务执行前的准备，以及执行后的清理工作（释放资源）如何做。</li>
-</ul>
-<p>为解决上面这些问题，客观上需要有一个管理线程资源的框架。这个框架可以优化线程执行所占资源，定制灵活的执行策略，让异步任务的执行更为健壮。</p>
-<h3 id="线程池及其创建"><a class="markdownIt-Anchor" href="#线程池及其创建"></a> 线程池及其创建</h3>
-<p>在java体系中，管理线程资源的框架便是线程池（thread pool）。线程池，顾名思义就是线程的资源池，是一种容器资源。它的主要作用就是让线程可以重用，并且保持一定数量的活跃线程，从而使任务响应时间缩短，通过对线程池运行参数的调优，可以达到任务吞吐量和相应时间的最优。</p>
-<p>线程池的创建，一般情况下，是通过concurrent包提供的工厂方法Executors<br />
-比如<br />
-<code>Executors.newFixedThreadPool(int nThreads)</code> 会返回一个固定线程数量的实现了ExecutorService接口的线程池服务，如果当前任务的提交数量超过了这个限定数量，会将其排入一个LinkedBlockingQueue中排队。<br />
-除此之外，还有<br />
-Executors.newSingleThreadExecutor， Executors.newCachedThreadPool 等等</p>
-<p>当然，如果看到过Executors 的源代码， 你就知道，还可以自己创建一个线程池，比如上述<code>Executors.newFixedThreadPool(int nThreads)</code> 其源码就是<br />
-<code>return new ThreadPoolExecutor(nThreads, nThreads,0L, TimeUnit.MILLISECONDS,new LinkedBlockingQueue&lt;Runnable&gt;(),threadFactory);</code></p>
-<h3 id="线程池的生命周期"><a class="markdownIt-Anchor" href="#线程池的生命周期"></a> 线程池的生命周期</h3>
-<p>线程池的生命周期有三个阶段，首先是running 然后是 shut down 最终是terminated</p>
-<ul>
-<li>running 顾名思义就是正常运行状态</li>
-<li>shut down 执行shutdownNow()后达到的状态，这个状态下线程池不再接受新任务，等待任务也阻*止。但是此时任务不一定运行完，事实上这个方法会返回一个list包括了还在运行的任务列表。</li>
-<li>terminated 就是在shutdown后所有任务已经完成的状态，此时没有任务在运行了。</li>
-</ul>
-<h2 id="线程池的参数"><a class="markdownIt-Anchor" href="#线程池的参数"></a> 线程池的参数</h2>
-<ol>
-<li>corePoolSize   核心线程数。这个参数的含义是线程池需要保持的最低线程数，不管当前有没有任务在运行，线程池中都会保持这个配置数量的活跃线程。当任务数量超过corePoolSize时，会被丢到工作队列中，<strong>直到队列满之前，线程池中的线程数不会增加</strong>。</li>
-<li>maxPoolSize ：最大线程数。该参数指明了一个线程池中同时可以有多少活跃线程同时运行。</li>
-<li>keepAliveTime   线程最大存活时间。 当池子中的线程数量超过了corePoolSize时，这个数值代表了那些超出的空闲线程可以存活的最大时间。</li>
-<li>workQueue：自定义的线程池队列实例。有三种队列类型可以选择，分别是无界队列，有界队列，以及 同步队列（SynchronousQueue），其中Executors.newFixedThreadPool 使用的LinkedBlockingQueue 属于无界队列， Executors.newCachedThreadPool 使用的是同步队列。其中，使用默认的无界队列，可能会存在在并发量比较高时，队列占用内存过高可能导致其溢出的风险。<br />
-queue的配置可以同前面几个参数配合，以达到不同的效果：<br />
-比如：
-<ul>
-<li>按照优先级处理一组数据，可以传入PriorityQueue 根据指定参数配置优先级， 这个时候队列长队可以设置相对较长，而corePoolSize可以设置相对小，从而达到吞吐量与占用资源的最优配置。</li>
-<li>对于大量短时间访问的请求，考虑用SynchronousQueue。同时设置一个相对较短的keepAliveTime以及极大的maxPoolSize,  SynchronousQueue的特性是如果要把一个元素加入队列，需要有另外一个线程等待接收，如果另外一个线程没有，则创建一个。这个特性很适合处理即时的消息传递，可以支撑较大的容量。</li>
-</ul>
-</li>
-<li>RejectedExecutionHandler: 队列饱和处理器。 当工作队列已经满时，要决定哪些任务保留哪些任务要丢弃，有几种策略可以选择，比如：AbortPolicy， CallerRunsPolicy，DiscardPolicy。 可以根据实际情况灵活选择。</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Backend//" class="article-tag-list-link color3">Backend</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/06/26/Key-points-of-threadpool/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-My-take-on-distributed-system" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/25/My-take-on-distributed-system/">My take on distributed system(我所理解的分布式调度)</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/25/My-take-on-distributed-system/" class="archive-article-date">
-  	<time datetime="2017-03-25T19:37:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="我所理解的分布式调度"><a class="markdownIt-Anchor" href="#我所理解的分布式调度"></a> 我所理解的分布式调度</h1>
-<p>对于规模以上的应用来说，调度系统已经是必不可少的组成部分，尤其在基于数据分析的后台应用大量增长的今天，健壮的调度任务管理已经是非常重要的一环，因此多花些时间来分析研究调度系统的设计对于日常的开发与运维具有比较重要的意义。</p>
-<h2 id="调度问题是怎么来的"><a class="markdownIt-Anchor" href="#调度问题是怎么来的"></a> 调度问题是怎么来的</h2>
-<p>当你的网站是个简单的blog，而且并不需要跟外部交互的时候，你大概不需要调度任务，因为此时网站需要处理的任务仅限于 即时交互 ， 即用户想使用一个功能，你就立即给他就是了，如同你在简书上写一篇文章，一点保存，这篇文章立即就保存到网站的后台服务器中去了，这也是互联网刚出现时候的最早的应用模式。</p>
-<p>之后因为网站发展的不错，用户多了起来，就发现需要大量处理一些非即时的任务，比如要定时将用户访问日志归档清理，这个时候一般情况下会在服务器启动一个定时任务，在每天固定时间发起清理归档，又如你想显示一下网站的访客流量、发表文章数、评论统计，由于并非每次用户或者后台管理员每次需要看的时候都去计算一遍，所以可能又需要启动另一个任务来去处理这些数据，这样的任务多了，就需要思考一个问题，哪些任务要先处理，哪些任务要后处理，每个任务要占用多少资源，从而任务调度问题开始出现。</p>
-<h2 id="调度什么时候变得复杂"><a class="markdownIt-Anchor" href="#调度什么时候变得复杂"></a> 调度什么时候变得复杂</h2>
-<p>在一个单机的系统，任务并不多的情况下，生活还依然是美好的，利用Linux自带的定时器或者系统框架提供的定时任务，实现好任务执行器，配置好任务触发的时间和频率，然后每天等待它自动触发，数据生成，任务搞定，似乎调度也没那么困难。</p>
-<p>然而好景不长，伴随着网站的发展，你发现任务处理的越来越慢，甚至偶尔会有任务超时的情况，原因是每天用户产生的数据量越来越大，每次任务捞起的数量已经超载，依次执行完每个任务，可能已是最初执行时间的几倍。</p>
-<p>这时稍有点经验你便会想到，任务没必要顺序执行啊，所以弄个线程池，起多个线程同时来捞数据然后执行，同时配置动态调整每次数据捞取的数量，增大执行频率，一系列组合拳打出去之后，调度任务又恢复正常，由于增加了并发数，甚至执行的比开始还更快了，就这样业务高峰便又顺利度过了。</p>
-<h2 id="调度什么时候变得更加复杂"><a class="markdownIt-Anchor" href="#调度什么时候变得更加复杂"></a> 调度什么时候变得更加复杂</h2>
-<p>之前所描述的情况基本上都在单机的情况，网站的QPS（每秒处理的任务数量）基本在500以下，通过一系列的参数调优，串行变并行，任务运行的很平稳。然而当任务变的规模更大，比如十倍于当前，一台机器已经不能处理所有的任务，这时候需要增加更多的机器，将任务分配到不同的机器上，于是便有了所谓的分布式调度的问题。</p>
-<p>分布式是目前稍大型的网站不可避免的问题，这种处理方案有很多好处，比如可以利用廉价的机器，可以（理论上）无限水平拓展，同时也带来了一系列棘手的问题，机器之间的网络通信，如何把流量均匀的分布于不同流量，如果有机器宕机了如何处理，每个问题都已经是一个庞大的技术领域。</p>
-<p>对于调度的分布式问题，首先要解决的便是如何把任务分发到不同的机器上，这要求调度系统通常要至少分为两层，第一层决定一共要处理哪些任务并把任务分发到哪些机器上处理，第二层接到任务后具体执行。虽然描述起来很简单，但是这个处理过程实际上需要大量支撑系统的支持，比如在任务分发时如何判断哪些机器还活着可以处理任务，这可能需要一个可以感知整个集群运行状态的配置中心，又比如任务如何分发，是采用消息还是实时服务接口，如果是用消息派发则需要消息系统，如果是实时服务，又需要类似dubbo这样的分布式服务框架。当系统达到这个复杂度，已经不是将任务捞起并处理这么单纯，而是多个关联系统复杂性的叠加。</p>
-<h2 id="分布式调度的难题"><a class="markdownIt-Anchor" href="#分布式调度的难题"></a> 分布式调度的难题</h2>
-<p>虽然分布式调度带来了复杂度的上升，但是它的水平拓展能力完美的适配了网站的规模发展，直到有一天你看到了类似这个错误：</p>
-<blockquote>
-<p>org.springframework.transaction.CannotCreateTransactionException</p>
-</blockquote>
-<p>数据库连接池已经打满，由于单个数据库的连接数是一定的，这意味着数据库变成了资源瓶颈，这时候给任务处理happy的加机器已经不能提高系统的整体处理能力，这就如同你要运走一群人，给你提供的车辆是无限的，但是汽油确是一定的。当然数据库也是可以拓展的，但是考虑到数据迁移的复杂性，这几乎将问题的复杂度提高了一个等级。因此，一个分布式系统的吞吐量，在很大程度上是与数据库处理能力做权衡的结果。</p>
-<h2 id="写在最后"><a class="markdownIt-Anchor" href="#写在最后"></a> 写在最后</h2>
-<p>分布式调度是一个巨大的话题，并且还在随着实际任务复杂度的提高而快速的更新，上面这些思考与总结也只是浮光掠影，还需要在实际工作中再深入体会与仔细研究。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Distributed System</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Backend//" class="article-tag-list-link color3">Backend</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/25/My-take-on-distributed-system/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
-    </nav>
+  
+
+  
+
+  
+    <section id="comments">
+      <div id="disqus_thread"></div>
+        <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'true'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  
+
   
 
 
@@ -1025,8 +370,8 @@ queue的配置可以同前面几个参数配合，以达到不同的效果：<br
     <script>
 	var yiliaConfig = {
 		mathjax: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
