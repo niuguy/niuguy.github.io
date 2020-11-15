@@ -6,7 +6,7 @@
   <link href="http://yoursite.com/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-11-07T20:29:24.911Z</updated>
+  <updated>2020-11-07T11:56:50.098Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,41 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Today is a big day</title>
-    <link href="http://yoursite.com/2020/11/07/Today-is-a-big-day/"/>
-    <id>http://yoursite.com/2020/11/07/Today-is-a-big-day/</id>
-    <published>2020-11-07T20:29:24.000Z</published>
-    <updated>2020-11-07T20:29:24.911Z</updated>
-    
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>配对交易策略</title>
-    <link href="http://yoursite.com/2020/11/07/Pairs-Trading/"/>
-    <id>http://yoursite.com/2020/11/07/Pairs-Trading/</id>
-    <published>2020-11-07T12:09:24.000Z</published>
-    <updated>2020-11-07T12:21:03.446Z</updated>
-    
-    <content type="html"><![CDATA[<p>量化策略里有一大类叫做Pairs Trading-配对交易，是我觉得非常有趣的，其基本思路是寻找市场中表现相近的两个资产标的A和B, 当A涨得比较高的时候，卖出A买入B , 当A 跌的比较多的时候，买入A卖出B。这个思路很容易理解，因为如果两支股票确实相近，那么他们的价格有回归到相似的可能性，这也符合我们古老哲学里面“合久必分，分久必合”的朴素道理。</p><p>最简单的一个配对的例子是百事可乐和可口可乐，你可以猜到这两支股票应该表现是极为相近的，</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;量化策略里有一大类叫做Pairs Trading-配对交易，是我觉得非常有趣的，其基本思路是寻找市场中表现相近的两个资产标的A和B, 当A涨得比较高的时候，卖出A买入B , 当A 跌的比较多的时候，买入A卖出B。这个思路很容易理解，因为如果两支股票确实相近，那么他们的价格有</summary>
-      
-    
-    
-    
-    <category term="Quant" scheme="http://yoursite.com/categories/Quant/"/>
-    
-    
-  </entry>
   
   <entry>
     <title>关于queen‘s gambit（后翼弃兵）</title>
@@ -476,6 +441,57 @@
     
     
     <category term="Algorithm" scheme="http://yoursite.com/tags/Algorithm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Pandas]How to plot counts of each value</title>
+    <link href="http://yoursite.com/2018/10/22/Pandas-How-to-plot-counts-of-each-value/"/>
+    <id>http://yoursite.com/2018/10/22/Pandas-How-to-plot-counts-of-each-value/</id>
+    <published>2018-10-22T19:40:47.000Z</published>
+    <updated>2020-10-04T09:41:54.455Z</updated>
+    
+    <content type="html"><![CDATA[<ol><li>With pandas build in function(actually matplotlib)</li></ol><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">% matplotlib inline</span><br><span class="line">col_values = (<span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;y&#x27;</span>, <span class="string">&#x27;y&#x27;</span> , <span class="string">&#x27;y&#x27;</span>, <span class="string">&#x27;z&#x27;</span>)</span><br><span class="line">df = pd.DataFrame(&#123;<span class="string">&#x27;col&#x27;</span>:col_values&#125;)</span><br><span class="line">df[<span class="string">&#x27;col&#x27;</span>].value_counts().plot.bar()</span><br></pre></td></tr></table></figure><p><img src="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/xyz.png" alt="xyz" /></p><ol start="2"><li>With seaborn</li></ol><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line">sns.countplot(df[<span class="string">&#x27;col&#x27;</span>])</span><br></pre></td></tr></table></figure><p><img src="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/xyz2.png" alt="xyz" /></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;ol&gt;
+&lt;li&gt;With pandas build in function(actually matplotlib)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;</summary>
+      
+    
+    
+    
+    <category term="Data&amp;AI" scheme="http://yoursite.com/categories/Data-AI/"/>
+    
+    
+    <category term="Pandas" scheme="http://yoursite.com/tags/Pandas/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Pandas]How to calculate datetime difference in years</title>
+    <link href="http://yoursite.com/2018/10/22/Pandas-How-to-calculate-datetime-difference-in-years/"/>
+    <id>http://yoursite.com/2018/10/22/Pandas-How-to-calculate-datetime-difference-in-years/</id>
+    <published>2018-10-22T15:43:34.000Z</published>
+    <updated>2020-10-04T09:41:54.454Z</updated>
+    
+    <content type="html"><![CDATA[<p>Suppose you got a person’s regist time in one column and his birth date in another column, now you need to calculate his age when he did the registration. There are two ways to reach this result.</p><ol><li>With the help of relativedelta</li></ol><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> dateutil <span class="keyword">import</span> relativedelta</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> df.index:</span><br><span class="line">    df.loc[i, <span class="string">&#x27;age&#x27;</span>] = relativedelta.relativedelta(df.loc[i, <span class="string">&#x27;regDate&#x27;</span>], df.loc[i, <span class="string">&#x27;DateOfBirth&#x27;</span>]).years</span><br><span class="line">   </span><br></pre></td></tr></table></figure><ol start="2"><li>With the help of np.timedelta64</li></ol><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">df[<span class="string">&#x27;age&#x27;</span>] = (df[<span class="string">&#x27;regDate&#x27;</span>] - df[<span class="string">&#x27;DateOfBirth&#x27;</span>])/np.timedelta64(<span class="number">1</span>, <span class="string">&#x27;Y&#x27;</span>)</span><br><span class="line"><span class="comment"># You may need to convert to integer</span></span><br><span class="line">df[<span class="string">&#x27;age&#x27;</span>].apply(np.int64)</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;Suppose you got a person’s regist time in one column and his birth date in another column, now you need to calculate his age when he did </summary>
+      
+    
+    
+    
+    <category term="Data&amp;AI" scheme="http://yoursite.com/categories/Data-AI/"/>
+    
+    
+    <category term="Pandas" scheme="http://yoursite.com/tags/Pandas/"/>
     
   </entry>
   
