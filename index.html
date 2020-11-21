@@ -159,6 +159,125 @@ ga('send', 'pageview');
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Pairs-trading" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/21/Pairs-trading/">配对交易简介</a>
+    </h1>
+  
+
+        
+        <a href="/2020/11/21/Pairs-trading/" class="archive-article-date">
+  	<time datetime="2020-11-21T08:24:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>量化策略里有一大类叫做Pairs Trading-配对交易，是我觉得非常有趣的，其基本思路是寻找市场中表现相近的两个资产标的A和B, 当A涨得比较高的时候，卖出A买入B , 当A 跌的比较多的时候，买入A卖出B。这个思路很容易理解，因为如果两支股票确实相近，那么他们的价格有回归到相似的可能性，这也符合古老中国哲学里面“合久必分，分久必合”的朴素道理。</p>
+<p>道理我们是都清楚的，甚至很多交易者也是模糊的按照这个思路来做的，比如当看到百事股价跟可口可乐股价偏离太远时，可能会考虑购进一些百事股票，卖出可口股票。问题是如何把这些模糊的想法进行量化分析，进而让算法捕捉到你看不到的机会，这主要需要解决两个问题：1. 如何发现符合要求的配对 2. 何时进场买卖 。 下面我们以<a target="_blank" rel="noopener" href="https://github.com/QUANTAXIS/QUANTAXIS">QUANTAXIS</a>为回测工具，以沪深市场为例来简要介绍下一个基本的配对交易策略是怎么进行的。</p>
+<h2 id="发现配对"><a class="markdownIt-Anchor" href="#发现配对"></a> 发现配对</h2>
+<p>发现配对的过程在量化角度来说是确定两支股票在一段时间的价格走势是否符合统计学的相关性, 即Cointegration test(协整检验)。</p>
+<p>我们用Python代码来说明一下这个过程，这里用到了statsmodels.tsa.stattools 库中的coint方法，该方法是基于增强的Engle-Granger两步检验。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">integration_test</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    result = coint(list(x), list(y))</span><br><span class="line">    score = result[<span class="number">0</span>]</span><br><span class="line">    pvalue = result[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> pvalue &lt; <span class="number">0.05</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<p>其中x 和 y 为两支股票同一个时间区间的价格序列, 其假设结果是非相关，如果pvalue小于我们设置的显著性水平，则拒绝假设，两者相关。</p>
+<p>据此方法，我们可以搜寻预设的股票列表code_list, 这里采用了QUANTAXIS的方法QA_fetch_stock_day_adv获取日线数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_pairs</span>(<span class="params">code_list, start_date, end_date, method_type</span>):</span></span><br><span class="line">    n = len(code_list)</span><br><span class="line">    pairs = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>, n):</span><br><span class="line">            c1 = code_list[i]</span><br><span class="line">            c2 = code_list[j]</span><br><span class="line">            S1 = QA.QA_fetch_stock_day_adv(c1, start_date, end_date).to_qfq().close</span><br><span class="line">            S2 = QA.QA_fetch_stock_day_adv(c2, start_date, end_date).to_qfq().close</span><br><span class="line">            <span class="keyword">if</span> len(S1)!= len(S2):</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">if</span> methods[method_type](S1, S2):</span><br><span class="line">                pairs.append((c1, c2))</span><br><span class="line">    <span class="keyword">return</span> pairs</span><br></pre></td></tr></table></figure>
+<p>假设我们锁定在新能源板块，时间区间设定在2019-10-01到2020-10-01那么可获得股票池代码列表</p>
+<p><code>code_list= QA.QA_fetch_stock_block_adv().get_block('新能源').code</code></p>
+<p>应用find_pairs 方法可以得到如下股票 配对</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[(&#39;002805&#39;, &#39;300484&#39;),</span><br><span class="line"> (&#39;002805&#39;, &#39;600847&#39;),</span><br><span class="line"> (&#39;002805&#39;, &#39;300037&#39;),</span><br><span class="line"> (&#39;002805&#39;, &#39;600884&#39;),</span><br><span class="line"> (&#39;600847&#39;, &#39;300037&#39;),</span><br><span class="line"> (&#39;600847&#39;, &#39;300450&#39;),</span><br><span class="line"> (&#39;600847&#39;, &#39;600884&#39;),</span><br><span class="line"> (&#39;002407&#39;, &#39;600884&#39;)]</span><br></pre></td></tr></table></figure>
+<p>我们把第一个配对的价格走势放在一起看下</p>
+<p><img src="https://user-images.githubusercontent.com/1400357/99885088-6a622e80-2c2a-11eb-969a-4d65b3bc9d95.png" alt="image-20201121115437917" /></p>
+<p>那么还是可以看到有一些相关性</p>
+<p>然后我们可以对这两支股票价格进行标准化，即计算一下这两支股票每日价格的比率ratios</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_ratios</span>(<span class="params">code_x, code_y</span>):</span></span><br><span class="line">    x = QA.QA_fetch_stock_day_adv(code_x, start_date, end_date).to_qfq().close</span><br><span class="line">    y = QA.QA_fetch_stock_day_adv(code_y, start_date, end_date).to_qfq().close</span><br><span class="line">    x.index = y.index</span><br><span class="line">    <span class="keyword">return</span> x.div(y, axis = <span class="string">&#x27;index&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def plot_zscore(series):  </span><br><span class="line">    zscores &#x3D; (series - series.mean()) &#x2F; np.std(series)</span><br><span class="line">    zscores.plot()</span><br><span class="line">    plt.axhline(zscores.mean())</span><br><span class="line">    plt.axhline(1.0, color&#x3D;&#39;red&#39;)</span><br><span class="line">    plt.axhline(-1.0, color&#x3D;&#39;green&#39;)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="https://user-images.githubusercontent.com/1400357/99885090-6afac500-2c2a-11eb-85ae-cfb44d034249.png" alt="image-20201121115704035" /></p>
+<p>这张图可以看到这两支股票价格的比率(ratios)大部分时间是在[-1, 1]区间内。那么接下来我们可以基于这个比率实现我们的交易策略，注意到此时其实相当于我们已经将两支股票的价格拟合为一个价格曲线。</p>
+<h2 id="执行交易"><a class="markdownIt-Anchor" href="#执行交易"></a> 执行交易</h2>
+<p>那么我们先实现一个最简单的策略，比率&gt;1的交易日子，卖出code1买入code2, 比率&lt;-1的交易日子，卖出code2买入code1</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pairs_backtest</span>(<span class="params">code1, code2</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i,items <span class="keyword">in</span> enumerate(DATA.panel_gen):</span><br><span class="line">        item1 = items.select_code(code1)</span><br><span class="line">        item2 = items.select_code(code2)</span><br><span class="line">        order_time = items.date[<span class="number">0</span>]   </span><br><span class="line">        <span class="keyword">if</span> ratios[i] &gt; <span class="number">1</span>:             </span><br><span class="line">            place_order(code2,order_time, <span class="number">1000</span>, QA.ORDER_DIRECTION.BUY,item2)</span><br><span class="line">            <span class="keyword">if</span> AC.sell_available.get(item1.code[<span class="number">0</span>], <span class="number">0</span>)&gt;<span class="number">0</span>:</span><br><span class="line">                place_order(code1,order_time, <span class="number">1000</span>, QA.ORDER_DIRECTION.SELL,item1)   </span><br><span class="line">        <span class="keyword">if</span> ratios[i] &lt; <span class="number">-1</span>:</span><br><span class="line">            <span class="keyword">if</span> AC.sell_available.get(item2.code[<span class="number">0</span>], <span class="number">0</span>)&gt;<span class="number">0</span>:</span><br><span class="line">                place_order(code2,order_time, <span class="number">1000</span>, QA.ORDER_DIRECTION.SELL,item2)</span><br><span class="line">            place_order(code1,order_time, <span class="number">1000</span>, QA.ORDER_DIRECTION.BUY,item1)     </span><br><span class="line">        AC.settle()</span><br><span class="line">    AC.save()</span><br></pre></td></tr></table></figure>
+<p>利用QUANTAXIS提供的风险分析工具QA_Risk， 以长期持有CS300指数基金作为对比，可以得到这个策略的表现为</p>
+<p><img src="https://user-images.githubusercontent.com/1400357/99885091-6b935b80-2c2a-11eb-9a6d-8587dfb186a0.png" alt="image-20201121180655010" /></p>
+<p>肉眼可见的大幅跑输CS300，其中几个关键指标 profit = -11.0%  sharpe = -0.36  max_dropbac = 0.13</p>
+<p>那么这个策略就此宣告失败了么？先别急着下结论，我们这里只是机械的根据ratio的绝对值来判断下单，如果我们参照广泛应用在个股均值回归策略，计算ratio均值的momentum，在短期的ratio变化趋势走强或走弱时再下单，是否结果会好一些？我们来试一下</p>
+<p>这需要我们先要计算ratio的趋势变化指标</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calc_zscore</span>(<span class="params">ratios, window1, window2</span>):</span></span><br><span class="line">    ma1 = ratios.rolling(window=window1,</span><br><span class="line">                       center=<span class="literal">False</span>).mean()</span><br><span class="line">    ma2 = ratios.rolling(window=window2,</span><br><span class="line">                           center=<span class="literal">False</span>).mean()</span><br><span class="line">    std = ratios.rolling(window=window2,</span><br><span class="line">                    center=<span class="literal">False</span>).std()</span><br><span class="line">    zscore = (ma1 - ma2)/std</span><br><span class="line">    <span class="keyword">return</span> zscore</span><br></pre></td></tr></table></figure>
+<p>如果我们设置window1=5 , window2=30 连同之前计算得到的ratios 代入上面方程，可以得到一个zscore序列，代表5日均线与30日均线ratio值的标准差</p>
+<p>然后让我们将交易指标由ratios &gt;1 或 ratios &lt;-1 替换为 zscore &gt; 1 或zscore &lt;-1</p>
+<p>再次进行交易回测，可以得到新策略的表现为</p>
+<p><img src="https://user-images.githubusercontent.com/1400357/99885092-6c2bf200-2c2a-11eb-84d5-63ae3484d822.png" alt="image-20201121181951189" /></p>
+<p>这时的回报率可见就好很多，关键指标profit=15% shape = 0.11 max_dropback = 0.21</p>
+<p>可见虽然相比基准指数年华回报率的18% 还是没有赶上，但这起码是个整体盈利的策略。</p>
+<h2 id="写在最后"><a class="markdownIt-Anchor" href="#写在最后"></a> 写在最后</h2>
+<p>本文介绍了配对交易的基本流程，在实际交易过程中还有很多细节问题需要深入研究与优化，包括但不限于</p>
+<ul>
+<li>除去Engle-Granger方法的其他配对相关性的统计计算指标</li>
+<li>应用Kalman-filter 方法判断配对交易的趋势入场点</li>
+<li>交易下单的资金仓位分配策略（本文简化为每次相同的1000元）</li>
+<li>其他应用最新的机器学习和深度学习方法在处理高频数据发掘配对以及判断交易入场点</li>
+</ul>
+<p>后续我会Post对其中一些方法的研究</p>
+<p>另衷心感谢天神@yutiansut开源的QUANTAXIS框架</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Quant//" class="article-tag-list-link color1">Quant</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/11/21/Pairs-trading/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-queens-gambit" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1022,128 +1141,6 @@ ga('send', 'pageview');
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/09/12/UK-papers/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-tsla-cov-analysis" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/05/tsla-cov-analysis/">持仓风险分析--要不要买特斯拉</a>
-    </h1>
-  
-
-        
-        <a href="/2020/09/05/tsla-cov-analysis/" class="archive-article-date">
-  	<time datetime="2020-09-05T14:35:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>声明</strong>：文中所述股票仅为分析举例之用，请独立作出投资决策。Quantopian 为免费分析平台，与本文无利益关系。</p>
-<p>如果你有买股票，尤其是美股股票，今年不太可能没注意到特斯拉TSLA。特斯拉股票今年从低点涨了将近10倍，近两天股价大幅度回调，那么你应该去买进么？</p>
-<p>如果你是“信仰投资者”， 认定了一龙马教主的神功，那么就不必往下看了，闭着眼买然后把炒股软件删掉。 我长期也是看好特斯拉的，但是凯恩斯大师曾说过：“长期来看，我们都死了。。。”， 所以短期还是要尽可能分析一下。本文试图从持仓风险分析的角度来探讨下要不要买进TSLA， 所用量化分析平台为Quantopian，所用语言为Python</p>
-<p>关于持仓风险，你大概听过最基本的是要多买一些股票，不要把鸡蛋放在一个篮子里，但是随便多买几只就可以降低风险了么？ 也不然，还是要想办法量化这个风险。有一种比较简单的分析方法，就是算一下现有持仓股票的<a href="%5Bhttps://zh.wikipedia.org/wiki/%E5%8D%8F%E6%96%B9%E5%B7%AE%5D(https://zh.wikipedia.org/wiki/%E5%8D%8F%E6%96%B9%E5%B7%AE)">协方差</a>. 这个数值越高，表示你所持仓的股票其实价格走势越是类似， 这在持仓总回报上来讲如果上涨会涨的很高，但是下跌也会跌的很惨，就是所谓的波动率很大。我们显然不希望大的波动率，想象一下，你的持仓今天下跌10%明天上涨10%你是否还能睡好，可能早早就抛掉了，这就可能就会浪费很多机会。</p>
-<h2 id="原始持仓分析"><a class="markdownIt-Anchor" href="#原始持仓分析"></a> 原始持仓分析</h2>
-<p>假设你现在持仓是美股四大神兽[‘FB’, ‘GOOG’, ‘AMZN’, ‘AAPL’]，每只股票持仓比例是均等的</p>
-<p>所以我们有持仓列表以及持股比例如下</p>
-<p>universe = [‘FB’, ‘GOOG’, ‘AMZN’, ‘AAPL’]</p>
-<p>weights = np.array([0.25, 0.25, 0.25, 0.25])</p>
-<p>通过Quantopian获得这些股票过去一年的价格时间序列，并且将其正规化（Normalize）到（0，1）区间</p>
-<p>prices = get_pricing(universe, fields=‘price’, start_date=start, end_date=end)</p>
-<p>normal_prices = (prices-prices.min())/(prices.max()-prices.min())</p>
-<p>接下来利用Pandas 提供的计算covariance_matrix的方法.corr()即可以获得当前持仓的协方差矩阵cov_matrix</p>
-<p><img src="https://user-images.githubusercontent.com/1400357/92307230-ac18fc80-ef8c-11ea-8c65-f1606b8a33c9.png" alt="1.png" /></p>
-<p>这些数值从0到1， 数值越大表明两支股票走势越是相关，可以看到这几支股票相关性还是很高的（大部分&gt;0.8）</p>
-<p>我们也可以绘制这个矩阵的热力图，利用seaborn 的.heatmap()方法</p>
-<p>sns.heatmap(cov,xticklabels=cov.columns,yticklabels=cov.columns)</p>
-<p><img src="https://user-images.githubusercontent.com/1400357/92307231-ae7b5680-ef8c-11ea-863f-8794f120a60f.png" alt="2.png" /></p>
-<p>这样就可以根据颜色深浅直观的看到两支股票的相关性。</p>
-<p>我们也可以计算持仓总体方差</p>
-<p>total_variance = np.dot(np.dot(weights, cov_matrix.values), weights.T)</p>
-<p>计算得到数值为 0.895608093887</p>
-<h2 id="原始持仓tsla"><a class="markdownIt-Anchor" href="#原始持仓tsla"></a> 原始持仓+TSLA</h2>
-<p>下面我们看下如果这个持仓我们加入了TSLA会有什么变化</p>
-<p>现在的持仓列表以及权重分别为</p>
-<p>universe_T = [‘FB’, ‘GOOG’, ‘AMZN’, ‘AAPL’, ‘TSLA’]<br />
-weights_T = np.array([0.2, 0.2, 0.2, 0.2, 0.2])</p>
-<p>同样计算方式可得，协方差矩阵</p>
-<p><img src="https://user-images.githubusercontent.com/1400357/92307245-c7840780-ef8c-11ea-9e26-94fdd855c371.png" alt="3.png" /></p>
-<p>热力图</p>
-<p><img src="https://user-images.githubusercontent.com/1400357/92307237-b804be80-ef8c-11ea-9dae-6e6326581c82.png" alt="4.png" /></p>
-<p>总体方差  0.895463150009</p>
-<p>可以看到TSLA跟其他四支股票，尤其是AMZN，AAPL相关性非常高，总体的方差同之前持仓基本一致，在比较高的水平。那么面临是否要买特斯拉，你可能要问一下自己这个问题，首先，你是否要继续增加已经比较高的持仓风险水平。如果答案是肯定的，你就是非常看好，那么好消息是增加了特斯拉并没有大幅提高整体的风险，当然前提是根据过去一年表现来看。</p>
-<h2 id="原始持仓brkb"><a class="markdownIt-Anchor" href="#原始持仓brkb"></a> 原始持仓+BRK.B</h2>
-<p>作为对比，我们也可以分析一下，如果增加的不是TSLA而是股神的BRK.B 会有什么结果，此时的持仓列表和权重将会是</p>
-<p>universe_B = [‘FB’, ‘GOOG’, ‘AMZN’, ‘AAPL’, ‘BRK.B’]<br />
-weights_B = np.array([0.2, 0.2, 0.2, 0.2, 0.2])</p>
-<p>我们可以得到协方差矩阵</p>
-<p><img src="https://user-images.githubusercontent.com/1400357/92307238-baffaf00-ef8c-11ea-9717-24bbc2a3adcf.png" alt="5.png" /></p>
-<p>热力图</p>
-<p><img src="https://user-images.githubusercontent.com/1400357/92307240-c05cf980-ef8c-11ea-950b-c5550935aadd.png" alt="6.png" /></p>
-<p>可以看到BRK.B与其他四支股票走势有较大区别，这也符合我们的直觉，但是巴菲特也投资了很多苹果股票啊，怎么这里并没有看到很高的相关性呢，是不是可以思考一下。。</p>
-<p>总方差计算为0.601009311705， 相对之前有大幅下降</p>
-<p>可见如果加入了BRK.B 是会大幅降低我们当前的持仓风险，但是是否就是意味着我们要买进BRK.B 而不是特斯拉呢，这又到了投资永恒的话题，风险和收益是正相关的，承担多少风险就会有可能有多大的收益（或亏损）。但是用一些简单的量化方法来分析至少让你心中有数，不会盲目的投奔于风险之中而不自知。</p>
-<p><strong>本文代码</strong><br />
-<a target="_blank" rel="noopener" href="https://github.com/niuguy/blog/blob/master/ofeng/source/codes/cov-analysis.ipynb">https://github.com/niuguy/blog/blob/master/ofeng/source/codes/cov-analysis.ipynb</a></p>
-<p><strong>参考文献</strong></p>
-<p><a target="_blank" rel="noopener" href="https://www.quantopian.com/lectures/linear-correlation-analysis">https://www.quantopian.com/lectures/linear-correlation-analysis</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.quantopian.com/lectures/position-concentration-risk">https://www.quantopian.com/lectures/position-concentration-risk</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Quant//" class="article-tag-list-link color1">Quant</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/09/05/tsla-cov-analysis/">展开全文 >></a>
         </p>
       
 
