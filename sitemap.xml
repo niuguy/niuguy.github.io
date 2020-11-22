@@ -2,70 +2,189 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2020/11/07/Queens-gambit/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2020/11/21/Pairs-trading/</loc>
     
-    <lastmod>2020-11-21</lastmod>
+    <lastmod>2020-11-22</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/11/07/queens-gambit/</loc>
+    <loc>http://yoursite.com/2020/09/05/Tsla-cov-analysis/</loc>
     
-    <lastmod>2020-11-07</lastmod>
+    <lastmod>2020-11-22</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/10/24/does-debate-equal-democracy/</loc>
+    <loc>http://yoursite.com/2017/08/25/What-you-need-to-know-for-memory-leaks-troubleshooting/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/09/26/What-is-tf-data-and-how-to-use/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/09/20/What-is-Attention-and-how-to-use/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/05/30/The-guide-to-predictive-data-analysis-on-MIMIC/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/07/10/Tensorflow101/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/11/08/Stochastic-gradient-descent/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/09/20/Pandas-How-to-select-data/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/09/17/Pandas-How-to-rename-columns/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/10/22/Pandas-How-to-plot-counts-of-each-value/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/10/19/Pandas-How-to-list-all-columns/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/10/18/Pandas-How-to-import-from-Sql-Server/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/09/16/Pandas-How-to-import-csv/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/10/22/Pandas-How-to-calculate-datetime-difference-in-years/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/09/23/Pandas-Handle-missing-data/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2019/11/02/How-to-Kaggle-4/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2019/08/27/How-to-Kaggle-2/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2019/08/26/How-to-kaggle-1/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/11/08/Backward-propagation-of-Neural-Network-explained/</loc>
+    
+    <lastmod>2020-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/10/24/Does-debate-equal-democracy/</loc>
     
     <lastmod>2020-10-24</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/10/17/homesick-nowhere/</loc>
+    <loc>http://yoursite.com/2020/10/17/Homesick-nowhere/</loc>
     
     <lastmod>2020-10-17</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/10/10/pandemic-uk/</loc>
+    <loc>http://yoursite.com/2020/10/10/Pandemic-uk/</loc>
     
     <lastmod>2020-10-10</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/10/03/honor-of-kings/</loc>
+    <loc>http://yoursite.com/2020/10/03/Honor-of-kings/</loc>
     
     <lastmod>2020-10-04</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/09/05/tsla-cov-analysis/</loc>
+    <loc>http://yoursite.com/2020/09/19/Missing-lianyue/</loc>
     
     <lastmod>2020-10-04</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/09/19/missing-lianyue/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/09/26/china-standup-comedy/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/08/25/What-you-need-to-know-for-memory-leaks-troubleshooting/</loc>
+    <loc>http://yoursite.com/2020/09/26/China-standup-comedy/</loc>
     
     <lastmod>2020-10-04</lastmod>
     
@@ -79,83 +198,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/09/20/What-is-Attention-and-how-to-use/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/09/26/What-is-tf-data-and-how-to-use/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/11/08/Stochastic-gradient-descent/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/07/10/Tensorflow101/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/05/30/The-guide-to-predictive-data-analysis-on-MIMIC/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/09/17/Pandas-How-to-rename-columns/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/09/20/Pandas-How-to-select-data/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/10/22/Pandas-How-to-plot-counts-of-each-value/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/10/19/Pandas-How-to-list-all-columns/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/09/16/Pandas-How-to-import-csv/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/10/22/Pandas-How-to-calculate-datetime-difference-in-years/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2018/09/18/Pandas-How-to-drop-columns-rows/</loc>
     
     <lastmod>2020-10-04</lastmod>
@@ -163,21 +205,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/10/18/Pandas-How-to-import-from-Sql-Server/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/03/25/My-take-on-distributed-system/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/09/23/Pandas-Handle-missing-data/</loc>
     
     <lastmod>2020-10-04</lastmod>
     
@@ -205,13 +233,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2019/11/02/How-to-Kaggle-4/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2019/11/28/How-to-Kaggle-5/</loc>
     
     <lastmod>2020-10-04</lastmod>
@@ -219,28 +240,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2019/08/26/How-to-kaggle-1/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2019/08/27/How-to-Kaggle-2/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2019/10/27/How-to-Kaggle-3/</loc>
-    
-    <lastmod>2020-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/11/08/Backward-propagation-of-Neural-Network-explained/</loc>
     
     <lastmod>2020-10-04</lastmod>
     
@@ -374,6 +374,13 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>http://yoursite.com/tags/Quant/</loc>
+    <lastmod>2020-11-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   
   <url>
@@ -391,14 +398,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/categories/Quant/</loc>
+    <loc>http://yoursite.com/categories/%E6%9D%82%E6%96%87/</loc>
     <lastmod>2020-11-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://yoursite.com/categories/%E6%9D%82%E6%96%87/</loc>
+    <loc>http://yoursite.com/categories/ML/</loc>
     <lastmod>2020-11-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
