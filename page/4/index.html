@@ -165,6 +165,205 @@ ga('send', 'pageview');
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Pandas-How-to-rename-columns" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/18/Pandas-How-to-rename-columns/">[Pandas]How to rename columns</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/18/Pandas-How-to-rename-columns/" class="archive-article-date">
+  	<time datetime="2018-09-17T21:11:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(&#123;<span class="string">&#x27;A#&#x27;</span>:[<span class="number">1</span>,<span class="number">2</span>], <span class="string">&#x27;B#&#x27;</span>:[<span class="number">3</span>,<span class="number">4</span>], <span class="string">&#x27;C#&#x27;</span>:[<span class="number">5</span>,<span class="number">6</span>]&#125;)</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>A#</th>
+<th>B#</th>
+<th>C#</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Rename with DataFrame.rename()</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.rename(index= str, columns=&#123;<span class="string">&quot;A#&quot;</span>: <span class="string">&quot;a&quot;</span>, <span class="string">&quot;B#&quot;</span>: <span class="string">&quot;b&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>a</th>
+<th>b</th>
+<th>C#</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<p>Print df again</p>
+<table>
+<thead>
+<tr>
+<th>A#</th>
+<th>B#</th>
+<th>C#</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<p>Column names did’nt change.</p>
+<p><strong>To change names permanently, use  &quot;inplace=True&quot;</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df.rename(index= str, columns=&#123;<span class="string">&quot;A#&quot;</span>: <span class="string">&quot;a&quot;</span>, <span class="string">&quot;B#&quot;</span>: <span class="string">&quot;b&quot;</span>&#125;, inplace = <span class="literal">True</span>)</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>a</th>
+<th>b</th>
+<th>C#</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Rename in batch</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.rename(index= str, columns=<span class="keyword">lambda</span> x:x.replace(<span class="string">&#x27;#&#x27;</span>,<span class="string">&#x27;&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<p>Lambda is amazing</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Pandas</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/ML//" class="article-tag-list-link color3">ML</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/18/Pandas-How-to-rename-columns/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Pandas-How-to-import-csv" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -422,13 +621,13 @@ Relative path:<br />
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/26/Distributed-transactions-and-eventual-consistency/">分布式事务与最终一致性</a>
+      <a class="article-title" href="/2018/08/27/Distributed-transactions-and-eventual-consistency/">分布式事务与最终一致性</a>
     </h1>
   
 
         
-        <a href="/2018/08/26/Distributed-transactions-and-eventual-consistency/" class="archive-article-date">
-  	<time datetime="2018-08-26T20:38:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-26</time>
+        <a href="/2018/08/27/Distributed-transactions-and-eventual-consistency/" class="archive-article-date">
+  	<time datetime="2018-08-26T20:38:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
 </a>
         
       </header>
@@ -517,7 +716,7 @@ B账户再加上100元</p>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/26/Distributed-transactions-and-eventual-consistency/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/08/27/Distributed-transactions-and-eventual-consistency/">展开全文 >></a>
         </p>
       
 
@@ -554,13 +753,13 @@ B账户再加上100元</p>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/26/How-to-troubleshooting-CPU-load-problems/">CPU／Load偏高的排查步骤</a>
+      <a class="article-title" href="/2018/08/27/How-to-troubleshooting-CPU-load-problems/">CPU／Load偏高的排查步骤</a>
     </h1>
   
 
         
-        <a href="/2018/08/26/How-to-troubleshooting-CPU-load-problems/" class="archive-article-date">
-  	<time datetime="2018-08-26T20:34:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-26</time>
+        <a href="/2018/08/27/How-to-troubleshooting-CPU-load-problems/" class="archive-article-date">
+  	<time datetime="2018-08-26T20:34:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-27</time>
 </a>
         
       </header>
@@ -623,7 +822,7 @@ B账户再加上100元</p>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/26/How-to-troubleshooting-CPU-load-problems/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/08/27/How-to-troubleshooting-CPU-load-problems/">展开全文 >></a>
         </p>
       
 
@@ -660,13 +859,13 @@ B账户再加上100元</p>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/10/Tensorflow101/">Tensorflow101</a>
+      <a class="article-title" href="/2018/07/11/Tensorflow101/">Tensorflow101</a>
     </h1>
   
 
         
-        <a href="/2018/07/10/Tensorflow101/" class="archive-article-date">
-  	<time datetime="2018-07-10T21:25:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-10</time>
+        <a href="/2018/07/11/Tensorflow101/" class="archive-article-date">
+  	<time datetime="2018-07-10T21:25:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-11</time>
 </a>
         
       </header>
@@ -747,7 +946,7 @@ B账户再加上100元</p>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/07/10/Tensorflow101/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/07/11/Tensorflow101/">展开全文 >></a>
         </p>
       
 
@@ -784,13 +983,13 @@ B账户再加上100元</p>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/26/A-concurrency-requesting-case/">写一个并发请求的Case</a>
+      <a class="article-title" href="/2017/08/27/A-concurrency-requesting-case/">写一个并发请求的Case</a>
     </h1>
   
 
         
-        <a href="/2017/08/26/A-concurrency-requesting-case/" class="archive-article-date">
-  	<time datetime="2017-08-26T20:31:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-26</time>
+        <a href="/2017/08/27/A-concurrency-requesting-case/" class="archive-article-date">
+  	<time datetime="2017-08-26T20:31:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-27</time>
 </a>
         
       </header>
@@ -853,7 +1052,7 @@ B账户再加上100元</p>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/26/A-concurrency-requesting-case/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/08/27/A-concurrency-requesting-case/">展开全文 >></a>
         </p>
       
 
@@ -890,13 +1089,13 @@ B账户再加上100元</p>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/25/What-you-need-to-know-for-memory-leaks-troubleshooting/">What you need to know for memory-leaks troubleshooting(排查内存泄漏你需要知道的套路)</a>
+      <a class="article-title" href="/2017/08/26/What-you-need-to-know-for-memory-leaks-troubleshooting/">What you need to know for memory-leaks troubleshooting(排查内存泄漏你需要知道的套路)</a>
     </h1>
   
 
         
-        <a href="/2017/08/25/What-you-need-to-know-for-memory-leaks-troubleshooting/" class="archive-article-date">
-  	<time datetime="2017-08-25T16:12:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-25</time>
+        <a href="/2017/08/26/What-you-need-to-know-for-memory-leaks-troubleshooting/" class="archive-article-date">
+  	<time datetime="2017-08-25T16:12:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-26</time>
 </a>
         
       </header>
@@ -987,7 +1186,7 @@ jmap 可以将java内存打印出来，作为内存分析工具（如MAT）的�
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/08/25/What-you-need-to-know-for-memory-leaks-troubleshooting/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/08/26/What-you-need-to-know-for-memory-leaks-troubleshooting/">展开全文 >></a>
         </p>
       
 
@@ -1024,13 +1223,13 @@ jmap 可以将java内存打印出来，作为内存分析工具（如MAT）的�
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/26/Key-points-of-threadpool/">线程池核心知识点</a>
+      <a class="article-title" href="/2017/06/27/Key-points-of-threadpool/">线程池核心知识点</a>
     </h1>
   
 
         
-        <a href="/2017/06/26/Key-points-of-threadpool/" class="archive-article-date">
-  	<time datetime="2017-06-26T20:44:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-26</time>
+        <a href="/2017/06/27/Key-points-of-threadpool/" class="archive-article-date">
+  	<time datetime="2017-06-26T20:44:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-27</time>
 </a>
         
       </header>
@@ -1120,7 +1319,7 @@ queue的配置可以同前面几个参数配合，以达到不同的效果：<br
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/06/26/Key-points-of-threadpool/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/06/27/Key-points-of-threadpool/">展开全文 >></a>
         </p>
       
 
@@ -1157,13 +1356,13 @@ queue的配置可以同前面几个参数配合，以达到不同的效果：<br
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/25/My-take-on-distributed-system/">My take on distributed system(我所理解的分布式调度)</a>
+      <a class="article-title" href="/2017/03/26/My-take-on-distributed-system/">My take on distributed system(我所理解的分布式调度)</a>
     </h1>
   
 
         
-        <a href="/2017/03/25/My-take-on-distributed-system/" class="archive-article-date">
-  	<time datetime="2017-03-25T19:37:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-25</time>
+        <a href="/2017/03/26/My-take-on-distributed-system/" class="archive-article-date">
+  	<time datetime="2017-03-25T19:37:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-26</time>
 </a>
         
       </header>
@@ -1225,7 +1424,7 @@ queue的配置可以同前面几个参数配合，以达到不同的效果：<br
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/25/My-take-on-distributed-system/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/03/26/My-take-on-distributed-system/">展开全文 >></a>
         </p>
       
 

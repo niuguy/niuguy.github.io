@@ -165,6 +165,100 @@ ga('send', 'pageview');
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Pandas-How-to-plot-counts-of-each-value" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/23/Pandas-How-to-plot-counts-of-each-value/">[Pandas]How to plot counts of each value</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/23/Pandas-How-to-plot-counts-of-each-value/" class="archive-article-date">
+  	<time datetime="2018-10-22T19:40:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li>With pandas build in function(actually matplotlib)</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">% matplotlib inline</span><br><span class="line">col_values = (<span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;y&#x27;</span>, <span class="string">&#x27;y&#x27;</span> , <span class="string">&#x27;y&#x27;</span>, <span class="string">&#x27;z&#x27;</span>)</span><br><span class="line">df = pd.DataFrame(&#123;<span class="string">&#x27;col&#x27;</span>:col_values&#125;)</span><br><span class="line">df[<span class="string">&#x27;col&#x27;</span>].value_counts().plot.bar()</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/xyz.png" alt="xyz" /></p>
+<ol start="2">
+<li>With seaborn</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line">sns.countplot(df[<span class="string">&#x27;col&#x27;</span>])</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/niuguy/blog/master/public/pic/xyz2.png" alt="xyz" /></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Pandas</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/ML//" class="article-tag-list-link color3">ML</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/23/Pandas-How-to-plot-counts-of-each-value/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Pandas-How-to-calculate-datetime-difference-in-years" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -265,13 +359,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/19/Pandas-How-to-list-all-columns/">[Pandas]How to list all columns</a>
+      <a class="article-title" href="/2018/10/20/Pandas-How-to-list-all-columns/">[Pandas]How to list all columns</a>
     </h1>
   
 
         
-        <a href="/2018/10/19/Pandas-How-to-list-all-columns/" class="archive-article-date">
-  	<time datetime="2018-10-19T21:31:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-19</time>
+        <a href="/2018/10/20/Pandas-How-to-list-all-columns/" class="archive-article-date">
+  	<time datetime="2018-10-19T21:31:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-20</time>
 </a>
         
       </header>
@@ -313,7 +407,7 @@ ga('send', 'pageview');
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/19/Pandas-How-to-list-all-columns/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/10/20/Pandas-How-to-list-all-columns/">展开全文 >></a>
         </p>
       
 
@@ -350,13 +444,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/18/Pandas-How-to-import-from-Sql-Server/">[Pandas] How to import from Sql Server</a>
+      <a class="article-title" href="/2018/10/19/Pandas-How-to-import-from-Sql-Server/">[Pandas] How to import from Sql Server</a>
     </h1>
   
 
         
-        <a href="/2018/10/18/Pandas-How-to-import-from-Sql-Server/" class="archive-article-date">
-  	<time datetime="2018-10-18T19:08:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-18</time>
+        <a href="/2018/10/19/Pandas-How-to-import-from-Sql-Server/" class="archive-article-date">
+  	<time datetime="2018-10-18T19:08:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-19</time>
 </a>
         
       </header>
@@ -401,7 +495,7 @@ ga('send', 'pageview');
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/18/Pandas-How-to-import-from-Sql-Server/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/10/19/Pandas-How-to-import-from-Sql-Server/">展开全文 >></a>
         </p>
       
 
@@ -508,7 +602,7 @@ ga('send', 'pageview');
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/Data-AI//" class="article-tag-list-link color3">Data&AI</a>
+        			<a href="/categories/ML//" class="article-tag-list-link color3">ML</a>
         		</li>
       		
 		</ul>
@@ -554,13 +648,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/26/What-is-tf-data-and-how-to-use/">What is tf.data and how to use</a>
+      <a class="article-title" href="/2018/09/27/What-is-tf-data-and-how-to-use/">What is tf.data and how to use</a>
     </h1>
   
 
         
-        <a href="/2018/09/26/What-is-tf-data-and-how-to-use/" class="archive-article-date">
-  	<time datetime="2018-09-26T19:30:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-26</time>
+        <a href="/2018/09/27/What-is-tf-data-and-how-to-use/" class="archive-article-date">
+  	<time datetime="2018-09-26T19:30:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-27</time>
 </a>
         
       </header>
@@ -649,7 +743,7 @@ ga('send', 'pageview');
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/26/What-is-tf-data-and-how-to-use/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/09/27/What-is-tf-data-and-how-to-use/">展开全文 >></a>
         </p>
       
 
@@ -686,13 +780,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/23/Pandas-Handle-missing-data/">[Pandas]Handle missing data</a>
+      <a class="article-title" href="/2018/09/24/Pandas-Handle-missing-data/">[Pandas]Handle missing data</a>
     </h1>
   
 
         
-        <a href="/2018/09/23/Pandas-Handle-missing-data/" class="archive-article-date">
-  	<time datetime="2018-09-23T19:40:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-23</time>
+        <a href="/2018/09/24/Pandas-Handle-missing-data/" class="archive-article-date">
+  	<time datetime="2018-09-23T19:40:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-24</time>
 </a>
         
       </header>
@@ -1282,7 +1376,7 @@ ga('send', 'pageview');
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/23/Pandas-Handle-missing-data/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/09/24/Pandas-Handle-missing-data/">展开全文 >></a>
         </p>
       
 
@@ -1319,13 +1413,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/20/Pandas-How-to-select-data/">[Pandas]How to select data</a>
+      <a class="article-title" href="/2018/09/21/Pandas-How-to-select-data/">[Pandas]How to select data</a>
     </h1>
   
 
         
-        <a href="/2018/09/20/Pandas-How-to-select-data/" class="archive-article-date">
-  	<time datetime="2018-09-20T20:49:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-20</time>
+        <a href="/2018/09/21/Pandas-How-to-select-data/" class="archive-article-date">
+  	<time datetime="2018-09-20T20:49:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-21</time>
 </a>
         
       </header>
@@ -1620,7 +1714,7 @@ ga('send', 'pageview');
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/20/Pandas-How-to-select-data/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/09/21/Pandas-How-to-select-data/">展开全文 >></a>
         </p>
       
 
@@ -1773,13 +1867,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/18/Pandas-How-to-drop-columns-rows/">[Pandas]How to drop columns/rows</a>
+      <a class="article-title" href="/2018/09/19/Pandas-How-to-drop-columns-rows/">[Pandas]How to drop columns/rows</a>
     </h1>
   
 
         
-        <a href="/2018/09/18/Pandas-How-to-drop-columns-rows/" class="archive-article-date">
-  	<time datetime="2018-09-18T20:39:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-18</time>
+        <a href="/2018/09/19/Pandas-How-to-drop-columns-rows/" class="archive-article-date">
+  	<time datetime="2018-09-18T20:39:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-19</time>
 </a>
         
       </header>
@@ -1876,205 +1970,6 @@ ga('send', 'pageview');
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/Data-AI//" class="article-tag-list-link color3">Data&AI</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/18/Pandas-How-to-drop-columns-rows/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Pandas-How-to-rename-columns" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/17/Pandas-How-to-rename-columns/">[Pandas]How to rename columns</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/17/Pandas-How-to-rename-columns/" class="archive-article-date">
-  	<time datetime="2018-09-17T21:11:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(&#123;<span class="string">&#x27;A#&#x27;</span>:[<span class="number">1</span>,<span class="number">2</span>], <span class="string">&#x27;B#&#x27;</span>:[<span class="number">3</span>,<span class="number">4</span>], <span class="string">&#x27;C#&#x27;</span>:[<span class="number">5</span>,<span class="number">6</span>]&#125;)</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>A#</th>
-<th>B#</th>
-<th>C#</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>3</td>
-<td>5</td>
-</tr>
-<tr>
-<td>2</td>
-<td>4</td>
-<td>6</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Rename with DataFrame.rename()</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.rename(index= str, columns=&#123;<span class="string">&quot;A#&quot;</span>: <span class="string">&quot;a&quot;</span>, <span class="string">&quot;B#&quot;</span>: <span class="string">&quot;b&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>a</th>
-<th>b</th>
-<th>C#</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>3</td>
-<td>5</td>
-</tr>
-<tr>
-<td>2</td>
-<td>4</td>
-<td>6</td>
-</tr>
-</tbody>
-</table>
-<p>Print df again</p>
-<table>
-<thead>
-<tr>
-<th>A#</th>
-<th>B#</th>
-<th>C#</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>3</td>
-<td>5</td>
-</tr>
-<tr>
-<td>2</td>
-<td>4</td>
-<td>6</td>
-</tr>
-</tbody>
-</table>
-<p>Column names did’nt change.</p>
-<p><strong>To change names permanently, use  &quot;inplace=True&quot;</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df.rename(index= str, columns=&#123;<span class="string">&quot;A#&quot;</span>: <span class="string">&quot;a&quot;</span>, <span class="string">&quot;B#&quot;</span>: <span class="string">&quot;b&quot;</span>&#125;, inplace = <span class="literal">True</span>)</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>a</th>
-<th>b</th>
-<th>C#</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>3</td>
-<td>5</td>
-</tr>
-<tr>
-<td>2</td>
-<td>4</td>
-<td>6</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Rename in batch</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.rename(index= str, columns=<span class="keyword">lambda</span> x:x.replace(<span class="string">&#x27;#&#x27;</span>,<span class="string">&#x27;&#x27;</span>))</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>A</th>
-<th>B</th>
-<th>C</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>3</td>
-<td>5</td>
-</tr>
-<tr>
-<td>2</td>
-<td>4</td>
-<td>6</td>
-</tr>
-</tbody>
-</table>
-<p>Lambda is amazing</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Pandas</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
         			<a href="/categories/ML//" class="article-tag-list-link color3">ML</a>
         		</li>
       		
@@ -2084,7 +1979,7 @@ ga('send', 'pageview');
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/17/Pandas-How-to-rename-columns/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/09/19/Pandas-How-to-drop-columns-rows/">展开全文 >></a>
         </p>
       
 
