@@ -178,7 +178,7 @@ ga('send', 'pageview');
 
         
         <a href="/2018/11/08/Stochastic-gradient-descent/" class="archive-article-date">
-  	<time datetime="2018-11-08T11:14:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-08</time>
+  	<time datetime="2018-11-08T03:14:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-08</time>
 </a>
         
       </header>
@@ -187,25 +187,9 @@ ga('send', 'pageview');
       
         <p>Stochastic Gradient decent is one of the fundamental algorithm in deep learning. It is used when we perform optimization of the cost function.Suppose the function is  $ f(x) $</p>
 <p><img src="https://user-images.githubusercontent.com/1400357/91705911-8b5c3b80-eb75-11ea-9e79-b9146e0d1a02.png" alt="sgd" /></p>
-<p>As what illustrated above, we want to approach the minimum value of f(x) which is the point C. If we are now at point A, the derivation of A is f’(x)&gt;0, so we need to go right down which is the opposite direction of f’(x). If we stand at B,the derivation of A is f’(x)&gt;0, we should go left down which is also the opposite direction of f’(x).</p>
-<p>According to the optimization strategy , we should update the parameter like this:</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mi>x</mi><mo>−</mo><mi>η</mi><msup><mi>f</mi><mo mathvariant="normal">′</mo></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">x = x - \eta f&#x27;(x)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">η</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span></span></span></span></span></p>
-<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>η</mi></mrow><annotation encoding="application/x-tex">\eta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">η</span></span></span></span> is so-called the learning rate, it determines the size of steps we take to reach a minimum value of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span></span></span></span></p>
-<h2 id="batch-gradient"><a class="markdownIt-Anchor" href="#batch-gradient"></a> Batch Gradient</h2>
-<p>Follow the rules of gradient descent, when we perform one update of parameters the intuitive strategy is to calculate the gradients for all the examples in the dataset and sum them up, this computation process is also called batch gradient.</p>
-<p>The pseudocode described above looks like this.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(epoches):</span><br><span class="line">    param_grad = calculate_gradient(loss_function, [examples]) </span><br><span class="line">    param = param - learning_rate * params_grad</span><br></pre></td></tr></table></figure>
-<p>For each update we need to walk through all these examples,  if there are millions of them,  the computation cost would be a problem, let alone there usually are several epochs of updates.</p>
-<h2 id="stochastic-gradient"><a class="markdownIt-Anchor" href="#stochastic-gradient"></a> Stochastic Gradient</h2>
-<p>The inefficiency of the batch gradient leads to another strategy that is widely used in deep learning, which is stochastic gradient descent(SGD).</p>
-<p>Instead of updating the params based on the gradients of all examples, SGD  updates the param after computing the gradient of one example,  what particular is the dataset should be shuffled in each epoch.</p>
-<p>The poseudocode of SGC looks like this:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(epochs): </span><br><span class="line">    np.random.shuffle(data) </span><br><span class="line">    <span class="keyword">for</span> example <span class="keyword">in</span> data:</span><br><span class="line">        param_grad = calculate_gradient(loss_function , example) </span><br><span class="line">        param = param - learning_rate * param_grad</span><br></pre></td></tr></table></figure>
-<p>The algorithm is not as complicated as its name implies. Actually, it’s too simple that we may doubt about its effectiveness in convergence. However, it has been shown that when we slowly decrease the learning rate, SGD shows the same convergence behavior as batch gradient descent, the convergence of stochastic gradient descent has been analyzed using the theories of convex minimization and of stochastic approximation.</p>
-<p>A simple improvement of SGD is to perform an update for every mini-batch examples, which is called mini-batch gradient. It is a compromise between batch gradient and SGD and is proved effective in practices. The code looks like this:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(epochs): </span><br><span class="line">    np.random.shuffle(data) </span><br><span class="line">    <span class="keyword">for</span> batch <span class="keyword">in</span> batches(data, batch_size = <span class="number">50</span>):</span><br><span class="line">        param_grad = calculate_gradient(loss_function , batch) </span><br><span class="line">        param = param - learning_rate * param_grad</span><br></pre></td></tr></table></figure>
-
+        
+          <a class="article-more-a" href="/2018/11/08/Stochastic-gradient-descent/#more">more >></a>
+        
       
 
       
@@ -237,10 +221,6 @@ ga('send', 'pageview');
 	</div>
 
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/08/Stochastic-gradient-descent/">展开全文 >></a>
-        </p>
       
 
       
@@ -276,20 +256,21 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/23/Pandas-How-to-plot-counts-of-each-value/">[Pandas]How to plot counts of each value</a>
+      <a class="article-title" href="/2018/10/22/Pandas-How-to-plot-counts-of-each-value/">[Pandas]How to plot counts of each value</a>
     </h1>
   
 
         
-        <a href="/2018/10/23/Pandas-How-to-plot-counts-of-each-value/" class="archive-article-date">
-  	<time datetime="2018-10-22T19:40:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-23</time>
+        <a href="/2018/10/22/Pandas-How-to-plot-counts-of-each-value/" class="archive-article-date">
+  	<time datetime="2018-10-22T12:40:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-22</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ol>
+        <a id="more"></a>
+<ol>
 <li>With pandas build in function(actually matplotlib)</li>
 </ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">% matplotlib inline</span><br><span class="line">col_values = (<span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;y&#x27;</span>, <span class="string">&#x27;y&#x27;</span> , <span class="string">&#x27;y&#x27;</span>, <span class="string">&#x27;z&#x27;</span>)</span><br><span class="line">df = pd.DataFrame(&#123;<span class="string">&#x27;col&#x27;</span>:col_values&#125;)</span><br><span class="line">df[<span class="string">&#x27;col&#x27;</span>].value_counts().plot.bar()</span><br></pre></td></tr></table></figure>
@@ -332,10 +313,6 @@ ga('send', 'pageview');
 
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/23/Pandas-How-to-plot-counts-of-each-value/">展开全文 >></a>
-        </p>
-      
 
       
       <div class="clearfix"></div>
@@ -376,7 +353,7 @@ ga('send', 'pageview');
 
         
         <a href="/2018/10/22/Pandas-How-to-calculate-datetime-difference-in-years/" class="archive-article-date">
-  	<time datetime="2018-10-22T15:43:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-22</time>
+  	<time datetime="2018-10-22T08:43:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-22</time>
 </a>
         
       </header>
@@ -384,15 +361,9 @@ ga('send', 'pageview');
     <div class="article-entry" itemprop="articleBody">
       
         <p>Suppose you got a person’s regist time in one column and his birth date in another column, now you need to calculate his age when he did the registration. There are two ways to reach this result.</p>
-<ol>
-<li>With the help of relativedelta</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> dateutil <span class="keyword">import</span> relativedelta</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> df.index:</span><br><span class="line">    df.loc[i, <span class="string">&#x27;age&#x27;</span>] = relativedelta.relativedelta(df.loc[i, <span class="string">&#x27;regDate&#x27;</span>], df.loc[i, <span class="string">&#x27;DateOfBirth&#x27;</span>]).years</span><br><span class="line">   </span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>With the help of np.timedelta64</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">df[<span class="string">&#x27;age&#x27;</span>] = (df[<span class="string">&#x27;regDate&#x27;</span>] - df[<span class="string">&#x27;DateOfBirth&#x27;</span>])/np.timedelta64(<span class="number">1</span>, <span class="string">&#x27;Y&#x27;</span>)</span><br><span class="line"><span class="comment"># You may need to convert to integer</span></span><br><span class="line">df[<span class="string">&#x27;age&#x27;</span>].apply(np.int64)</span><br></pre></td></tr></table></figure>
-
+        
+          <a class="article-more-a" href="/2018/10/22/Pandas-How-to-calculate-datetime-difference-in-years/#more">more >></a>
+        
       
 
       
@@ -424,10 +395,6 @@ ga('send', 'pageview');
 	</div>
 
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/22/Pandas-How-to-calculate-datetime-difference-in-years/">展开全文 >></a>
-        </p>
       
 
       
@@ -463,20 +430,21 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/20/Pandas-How-to-list-all-columns/">[Pandas]How to list all columns</a>
+      <a class="article-title" href="/2018/10/19/Pandas-How-to-list-all-columns/">[Pandas]How to list all columns</a>
     </h1>
   
 
         
-        <a href="/2018/10/20/Pandas-How-to-list-all-columns/" class="archive-article-date">
-  	<time datetime="2018-10-19T21:31:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-20</time>
+        <a href="/2018/10/19/Pandas-How-to-list-all-columns/" class="archive-article-date">
+  	<time datetime="2018-10-19T14:31:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-19</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list(dataframe.columns.values)</span><br></pre></td></tr></table></figure>
+        <a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list(dataframe.columns.values)</span><br></pre></td></tr></table></figure>
 
       
 
@@ -509,10 +477,6 @@ ga('send', 'pageview');
 	</div>
 
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/20/Pandas-How-to-list-all-columns/">展开全文 >></a>
-        </p>
       
 
       
@@ -548,13 +512,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/19/Pandas-How-to-import-from-Sql-Server/">[Pandas] How to import from Sql Server</a>
+      <a class="article-title" href="/2018/10/18/Pandas-How-to-import-from-Sql-Server/">[Pandas] How to import from Sql Server</a>
     </h1>
   
 
         
-        <a href="/2018/10/19/Pandas-How-to-import-from-Sql-Server/" class="archive-article-date">
-  	<time datetime="2018-10-18T19:08:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-19</time>
+        <a href="/2018/10/18/Pandas-How-to-import-from-Sql-Server/" class="archive-article-date">
+  	<time datetime="2018-10-18T12:08:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-18</time>
 </a>
         
       </header>
@@ -562,10 +526,9 @@ ga('send', 'pageview');
     <div class="article-entry" itemprop="articleBody">
       
         <p>We need to rely on pyodbc, the sample code is as belows.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyodbc</span><br><span class="line">cnxn = pyodbc.connect(<span class="string">&#x27;DRIVER=&#123;ODBC Driver 13 for SQL Server&#125;;SERVER=SQLSERVER2017;DATABASE=Adventureworks;Trusted_Connection=yes&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>Write SQL and execute with pandas.read_sql</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas</span><br><span class="line">query = <span class="string">&quot;SELECT * from a&quot;</span></span><br><span class="line">df = pd.read_sql(query, sql_conn)</span><br></pre></td></tr></table></figure>
-
+        
+          <a class="article-more-a" href="/2018/10/18/Pandas-How-to-import-from-Sql-Server/#more">more >></a>
+        
       
 
       
@@ -597,10 +560,6 @@ ga('send', 'pageview');
 	</div>
 
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/19/Pandas-How-to-import-from-Sql-Server/">展开全文 >></a>
-        </p>
       
 
       
@@ -642,7 +601,7 @@ ga('send', 'pageview');
 
         
         <a href="/2018/10/01/Basics-of-words-embedding/" class="archive-article-date">
-  	<time datetime="2018-10-01T10:14:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-01</time>
+  	<time datetime="2018-10-01T03:14:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-01</time>
 </a>
         
       </header>
@@ -651,37 +610,9 @@ ga('send', 'pageview');
       
         <h3 id="why-embedding"><a class="markdownIt-Anchor" href="#why-embedding"></a> Why embedding</h3>
 <p>Natural language processing systems traditionally treat words as discrete atomic symbols, and this may lead to some obstacles in word preprocessing:</p>
-<ol>
-<li>These encodings provide no useful information regarding the <strong>relationships</strong> that may exist between the individual symbols.</li>
-<li>Discrete ids furthermore lead to <strong>data sparsity</strong>. We may need more data to train statistical models successfully.</li>
-</ol>
-<p>To address these two problems, word embeddings provide a solution to  represent words and their relative meanings densely.</p>
-<h3 id="overview"><a class="markdownIt-Anchor" href="#overview"></a> Overview</h3>
-<p>Embedding derives from <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Vector_space_model">Vector Space Models(VSMs)</a>,  one of its well-known schemes is <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">Tf-Idf</a> weights. VSMs can transfer text documents into vectors of identifies, the fundamental theory they rely on is Distribution hypothesis which states that <strong>words that appear in the same contexts share semantic meaning</strong>.</p>
-<p>VSMs have two main approaches: Count-based methods and predictive methods.  Count-based methods compute the statistics of how often some word co-occurs with its neighbor words in a large text corpus and then map these count-statistics down to a small, dense vector for each word. Predictive models directly try to predict a word from its neighbors regarding learned small, dense <em>embedding vectors</em> (considered parameters of the model).</p>
-<p>Among all the embedding methods, Glove(Count-based) and Word2vec(Predictive) are the most popular.</p>
-<h3 id="count-based-embedding"><a class="markdownIt-Anchor" href="#count-based-embedding"></a> Count-based Embedding</h3>
-<p>GloVe is an <strong>unsupervised learning algorithm</strong> for obtaining vector representations for words.  The main intuition underlying the model is the simple observation that ratios of word-word co-occurrence probabilities have the potential for encoding some form of meaning. It is designed to enable the vector differences between words  to capture as much as possible the meaning specified by the juxtaposition of two words.</p>
-<p>The <a target="_blank" rel="noopener" href="https://nlp.stanford.edu/projects/glove/">project page of glove</a>  gives detailed information of how glove vectors are computed and provides several pretrained glove word vectors. As the article highlighted , glove was developed with the following consideration:</p>
-<blockquote>
-<p>The Euclidean distance (or cosine similarity) between two word vectors provides an effective method for measuring the linguistic or semantic similarity of the corresponding words.</p>
-<p>Similarity metrics used for nearest neighbor may be problematic when two given words almost always exhibit more intricate relationships than can be captured by a single number.</p>
-<p>It is necessary for a model to associate more than a single number to the word pair.</p>
-</blockquote>
-<p>Training GloVe model on a large corpus can be extremely time consuming, but it is a one-time cost.  <a target="_blank" rel="noopener" href="https://nlp.stanford.edu/projects/glove/">project page of glove</a> also provides some pre-trained word vectors, e.g. glove.6B.zip is word vectors trained from words on Wikipedia, take the first line of this file for example</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">the -0.038194 -0.24487 0.72812 -0.39961 0.083172 0.043953 -0.39141 0.3344 -0.57545 0.087459 0.28787 -0.06731 0.30906 -0.26384 -0.13231 -0.20757 0.33395 -0.33848 -0.31743 ...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>‘‘the’’ is followed by 100 floats which are the vector values of this word</p>
-<p>We can build a dict whose key is words and value is their glove vector</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">embeddings_index = dict()</span><br><span class="line">f = open(<span class="string">&#x27;./glove.6B.100d.txt&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">    values = line.split()</span><br><span class="line">    word = values[<span class="number">0</span>]</span><br><span class="line">    coefs = asarray(values[<span class="number">1</span>:], dtype = <span class="string">&#x27;float32&#x27;</span>)</span><br><span class="line">    embeddings_index[word] = coefs</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
-<p>When we need to build a embedding layer , we just look up the vectors  for input words in the dict.</p>
-<h3 id="word2vec"><a class="markdownIt-Anchor" href="#word2vec"></a> Word2vec</h3>
-<p>Word2vec, as illustrated in the first part,  is a predictive model for word embedding. There are two main branches of Word2vec, the Continuous Bag-of-Words model (CBOW) and the Skip-Gram model. The two models predict words in a different direction, CBOW predicts target words (e.g. ‘mat’) from source context words (‘the cat sits on the’), while the skip-gram does the inverse and predicts source context-words from the target words. Therefore,  CBOW treats an entire context as one observation and is compatible with smaller datasets, while skip-gram treats each context-target pair as a new observation and play better with larger datasets.</p>
-<p>We will focus on skip-gram as we need to deal with large datasets in most time. Here is the structure of this model.</p>
-<p><img src="https://raw.githubusercontent.com/niuguy/niuguy.github.io/master/pic/skip_gram.npg.png" alt="Skip-gram Neural Network Architecture" /></p>
-<p>The Skip-gram model is trained like this,  Given a specific word in the middle of a sentence (the input word), look at the words nearby and pick one at random. The network is going to tell us the probability for every word in our vocabulary of being the “nearby word” that we chose. The output probabilities are going to relate to how likely it is find each vocabulary word nearby our input word.</p>
-<p>The coding example of how to build and train the Skip-gram model can be found <a target="_blank" rel="noopener" href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/word2vec/word2vec_basic.py">here</a></p>
-<p>Next post I will try to use embedding to solve an interesting real world problem.</p>
-
+        
+          <a class="article-more-a" href="/2018/10/01/Basics-of-words-embedding/#more">more >></a>
+        
       
 
       
@@ -713,10 +644,6 @@ ga('send', 'pageview');
 	</div>
 
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/01/Basics-of-words-embedding/">展开全文 >></a>
-        </p>
       
 
       
@@ -752,13 +679,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/27/What-is-tf-data-and-how-to-use/">What is tf.data and how to use</a>
+      <a class="article-title" href="/2018/09/26/What-is-tf-data-and-how-to-use/">What is tf.data and how to use</a>
     </h1>
   
 
         
-        <a href="/2018/09/27/What-is-tf-data-and-how-to-use/" class="archive-article-date">
-  	<time datetime="2018-09-26T19:30:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-27</time>
+        <a href="/2018/09/26/What-is-tf-data-and-how-to-use/" class="archive-article-date">
+  	<time datetime="2018-09-26T12:30:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-26</time>
 </a>
         
       </header>
@@ -766,54 +693,9 @@ ga('send', 'pageview');
     <div class="article-entry" itemprop="articleBody">
       
         <p>Tf.data is a high level API provided by tensorflow, it performs as a pipeline for complex input and output. The core data structure of tf.data is Dataset which represents a potentially large set of elements.</p>
-<p>Here is the defination of Dataset given by <a target="_blank" rel="noopener" href="http://tensorflow.org">tensorflow.org</a></p>
-<blockquote>
-<p>A <code>Dataset</code> can be used to represent an input pipeline as a collection of elements (nested structures of tensors) and a “logical plan” of transformations that act on those elements.</p>
-</blockquote>
-<p>To summarize, the dataset is a data pipeline, and we can do some preprocessing on it. The core problem of a pipeline is how the data be imported and consumed,  the following part will explain that as well as some useful APIs in preprocessing data.</p>
-<h3 id="1-data-input"><a class="markdownIt-Anchor" href="#1-data-input"></a> 1. Data input</h3>
-<p>Dataset can be built from several sources including csv file, numpy array and tensors.</p>
-<h4 id="from-csv"><a class="markdownIt-Anchor" href="#from-csv"></a> From CSV</h4>
-<p>Tf.data provides a convenient API  make_csv_dataset to read records from one or more csv files.</p>
-<p>Suppose the csv file is</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a,b,c,d</span><br><span class="line">how,are,you,mate</span><br><span class="line">I,am,fine,thanks</span><br></pre></td></tr></table></figure>
-<p>We can build a dataset from the above csv in the following way</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset = tf.contrib.data.make_csv_dataset(CSV_PATH, batch_size=<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<p>Here batch_size represents how many records would be aquired in a batch</p>
-<p>We can use Iterator to see what contains in this dataset</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">batch = dataset.make_one_shot_iterator().get_next()</span><br><span class="line">print(batch[<span class="string">&#x27;a&#x27;</span>])</span><br></pre></td></tr></table></figure>
-<p>The result is</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.Tensor([&#39;how&#39; &#39;I&#39;], shape&#x3D;(2,), dtype&#x3D;string)</span><br></pre></td></tr></table></figure>
-<p>make_csv_dataset defaultly takes the first row as header, if there are no header in the csv file like this</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">how,are,you,mate</span><br><span class="line">I,am,fine,thanks</span><br></pre></td></tr></table></figure>
-<p>We can set <code>header=False</code>and <code>column_names=['a','b','c''d']</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset2 &#x3D; tf.contrib.data.make_csv_dataset(CSV_PATH, batch_size&#x3D;2, header&#x3D;False,column_names&#x3D;[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;&#39;d&#39;])</span><br></pre></td></tr></table></figure>
-<p>Dataset2 should have the same value with dataset1</p>
-<h4 id="from-tensor-slices"><a class="markdownIt-Anchor" href="#from-tensor-slices"></a> From Tensor slices</h4>
-<p>We can also create a dataset from tensors, the related API is  tf.data.Dataset.from_tensor_slices()</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset2 = tf.data.Dataset.from_tensor_slices(tf.random_uniform([<span class="number">10</span>, <span class="number">5</span>]))</span><br></pre></td></tr></table></figure>
-<p>Actually the input of this API is not necessarily tensors,  numpy arrays are also adaptable .</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset3 &#x3D; tf.data.Dataset.from_tensor_slices(np.random.sample((10, 5)))</span><br></pre></td></tr></table></figure>
-<h3 id="2-data-consuming"><a class="markdownIt-Anchor" href="#2-data-consuming"></a> 2. Data consuming</h3>
-<p>The only way to retrieve the data is Iterator(),  Iterator enables us to loop over all the dataset and get back the data we want. There are basically two kinds of Iterator which are <a target="_blank" rel="noopener" href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset#make_one_shot_iterator"><code>make_one_shot_iterator</code></a> and <a target="_blank" rel="noopener" href="https://www.tensorflow.org/api_docs/python/tf/data/Dataset#make_initializable_iterator"><code>make_initializable_iterator</code></a>.</p>
-<h4 id="make_one_shot_iterator"><a class="markdownIt-Anchor" href="#make_one_shot_iterator"></a> make_one_shot_iterator</h4>
-<p>The examples can be find in the first part when we show how to import csv files</p>
-<h4 id="make_initializable_iterator"><a class="markdownIt-Anchor" href="#make_initializable_iterator"></a> make_initializable_iterator</h4>
-<p>Compared to one shot iterator, initializable iterator allows data to be changed after dataset has already been built.Note that this cannot work in eager_execution model. Here is the example</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># using a placeholder</span></span><br><span class="line">x = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>,<span class="number">2</span>])</span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices(x)</span><br><span class="line">data = np.random.sample((<span class="number">100</span>,<span class="number">2</span>))</span><br><span class="line">iter = dataset.make_initializable_iterator() <span class="comment"># create the iterator</span></span><br><span class="line">el = iter.get_next()</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="comment"># feed the placeholder with data</span></span><br><span class="line">    sess.run(iter.initializer, feed_dict=&#123; x: data &#125;) </span><br><span class="line">    print(sess.run(el)) <span class="comment"># output [ 0.11342909, 0.81430183]</span></span><br></pre></td></tr></table></figure>
-<h3 id="3-data-proprocessing"><a class="markdownIt-Anchor" href="#3-data-proprocessing"></a> 3. Data proprocessing</h3>
-<p>Tf.data provides several tools for data preprocessing such as batch and shuffle</p>
-<h4 id="batch"><a class="markdownIt-Anchor" href="#batch"></a> Batch</h4>
-<p>dataset.batch(BATCH_SIZE)  given the BATCH_SIZE, this API will make the output in a batch way, and output BATCH_SIZE size of data at one time.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># BATCHING</span></span><br><span class="line">tf.enable_eager_execution()</span><br><span class="line">BATCH_SIZE = <span class="number">2</span></span><br><span class="line">x = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="comment"># make a dataset from a numpy array</span></span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices(x).batch(BATCH_SIZE)</span><br><span class="line">iter = dataset.make_one_shot_iterator()</span><br><span class="line">iter.get_next()</span><br></pre></td></tr></table></figure>
-<p>Output</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;tf.Tensor: id=<span class="number">102</span>, shape=(<span class="number">2</span>,), dtype=int64, numpy=array([<span class="number">1</span>, <span class="number">2</span>])&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="shuffle"><a class="markdownIt-Anchor" href="#shuffle"></a> Shuffle</h4>
-<p>When preparing the training data, one important step is shuffling the data to mitigate overfitting, tf.data offers convenient API to do that.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">BATCH_SIZE = <span class="number">2</span></span><br><span class="line">x = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="comment"># make a dataset from a numpy array</span></span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices(x).shuffle(buffer_size = <span class="number">10</span>).batch(BATCH_SIZE)</span><br><span class="line">iter = dataset.make_one_shot_iterator()</span><br><span class="line">iter.get_next()</span><br></pre></td></tr></table></figure>
-<p>Output</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;tf.Tensor: id=<span class="number">115</span>, shape=(<span class="number">2</span>,), dtype=int64, numpy=array([<span class="number">2</span>, <span class="number">3</span>])&gt;</span><br></pre></td></tr></table></figure>
-
+        
+          <a class="article-more-a" href="/2018/09/26/What-is-tf-data-and-how-to-use/#more">more >></a>
+        
       
 
       
@@ -845,10 +727,6 @@ ga('send', 'pageview');
 	</div>
 
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/27/What-is-tf-data-and-how-to-use/">展开全文 >></a>
-        </p>
       
 
       
@@ -884,13 +762,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/24/Pandas-Handle-missing-data/">[Pandas]Handle missing data</a>
+      <a class="article-title" href="/2018/09/23/Pandas-Handle-missing-data/">[Pandas]Handle missing data</a>
     </h1>
   
 
         
-        <a href="/2018/09/24/Pandas-Handle-missing-data/" class="archive-article-date">
-  	<time datetime="2018-09-23T19:40:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-24</time>
+        <a href="/2018/09/23/Pandas-Handle-missing-data/" class="archive-article-date">
+  	<time datetime="2018-09-23T12:40:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-23</time>
 </a>
         
       </header>
@@ -898,555 +776,9 @@ ga('send', 'pageview');
     <div class="article-entry" itemprop="articleBody">
       
         <p>Missing data is a common problem in real data preprocessing, luckily pandas has done a lot to help us handle it. This article will show the codes on how to do it.</p>
-<p>###Produce some data with missing values.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(np.random.randn(<span class="number">5</span>, <span class="number">3</span>), index=[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;h&#x27;</span>],</span><br><span class="line">                 columns=[<span class="string">&#x27;one&#x27;</span>, <span class="string">&#x27;two&#x27;</span>, <span class="string">&#x27;three&#x27;</span>])</span><br><span class="line">df[<span class="string">&#x27;four&#x27;</span>]=<span class="string">&#x27;bar&#x27;</span></span><br><span class="line">df[<span class="string">&#x27;five&#x27;</span>]= df[<span class="string">&#x27;one&#x27;</span>] &gt; <span class="number">0</span></span><br><span class="line">df[<span class="string">&#x27;date&#x27;</span>]= pd.Timestamp(<span class="string">&#x27;2018-01-01&#x27;</span>)</span><br><span class="line">df2 = df.reindex([<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>,<span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span>,<span class="string">&#x27;g&#x27;</span>, <span class="string">&#x27;h&#x27;</span>])</span><br><span class="line">df2</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>one</th>
-<th>two</th>
-<th>three</th>
-<th>four</th>
-<th>five</th>
-<th>date</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>-0.614301</td>
-<td>0.628725</td>
-<td>-0.903163</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>b</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaT</td>
-</tr>
-<tr>
-<td>c</td>
-<td>-0.297019</td>
-<td>1.357266</td>
-<td>-0.665749</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>d</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaT</td>
-</tr>
-<tr>
-<td>e</td>
-<td>0.311524</td>
-<td>-0.328388</td>
-<td>0.777467</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>f</td>
-<td>0.572373</td>
-<td>-0.309563</td>
-<td>-0.296276</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>g</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaT</td>
-</tr>
-<tr>
-<td>h</td>
-<td>-1.303842</td>
-<td>1.239911</td>
-<td>-0.909255</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-</tbody>
-</table>
-<p>Notice that NaN is the default marker of missing number, text or boolean, NaT is for missing datetime</p>
-<h3 id="detect-missing-value"><a class="markdownIt-Anchor" href="#detect-missing-value"></a> Detect missing value</h3>
-<p>pandas provides two methods, isna() and notna()</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.isna()</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>one</th>
-<th>two</th>
-<th>three</th>
-<th>four</th>
-<th>five</th>
-<th>date</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>b</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>c</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>d</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>e</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>f</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>g</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>h</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.notna()</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>one</th>
-<th>two</th>
-<th>three</th>
-<th>four</th>
-<th>five</th>
-<th>date</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>b</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>c</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>d</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>e</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>f</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-<tr>
-<td>g</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-</tr>
-<tr>
-<td>h</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
-</tr>
-</tbody>
-</table>
-<h3 id="cleaning"><a class="markdownIt-Anchor" href="#cleaning"></a> Cleaning</h3>
-<p>drop na value, dropna() has a parameter axis which indicates either colums(axis = 1) or rows(axis = 0) will be dropped, the default value of axis is 0</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.dropna()</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>one</th>
-<th>two</th>
-<th>three</th>
-<th>four</th>
-<th>five</th>
-<th>date</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>-0.614301</td>
-<td>0.628725</td>
-<td>-0.903163</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>c</td>
-<td>-0.297019</td>
-<td>1.357266</td>
-<td>-0.665749</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>e</td>
-<td>0.311524</td>
-<td>-0.328388</td>
-<td>0.777467</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>f</td>
-<td>0.572373</td>
-<td>-0.309563</td>
-<td>-0.296276</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>h</td>
-<td>-1.303842</td>
-<td>1.239911</td>
-<td>-0.909255</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-</tbody>
-</table>
-<p>Drop columns with missing data</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.dropna(axis = <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-</tr>
-<tr>
-<td>b</td>
-</tr>
-<tr>
-<td>c</td>
-</tr>
-<tr>
-<td>d</td>
-</tr>
-<tr>
-<td>e</td>
-</tr>
-<tr>
-<td>f</td>
-</tr>
-<tr>
-<td>g</td>
-</tr>
-<tr>
-<td>h</td>
-</tr>
-</tbody>
-</table>
-<p>All columns are removed…</p>
-<h3 id="fill-na"><a class="markdownIt-Anchor" href="#fill-na"></a> Fill na</h3>
-<p>Na value can be easily filled by fillna()</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.fillna(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>one</th>
-<th>two</th>
-<th>three</th>
-<th>four</th>
-<th>five</th>
-<th>date</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>-0.614301</td>
-<td>0.628725</td>
-<td>-0.903163</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01 00:00:00</td>
-</tr>
-<tr>
-<td>b</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>c</td>
-<td>-0.297019</td>
-<td>1.357266</td>
-<td>-0.665749</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01 00:00:00</td>
-</tr>
-<tr>
-<td>d</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>e</td>
-<td>0.311524</td>
-<td>-0.328388</td>
-<td>0.777467</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01 00:00:00</td>
-</tr>
-<tr>
-<td>f</td>
-<td>0.572373</td>
-<td>-0.309563</td>
-<td>-0.296276</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01 00:00:00</td>
-</tr>
-<tr>
-<td>g</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>h</td>
-<td>-1.303842</td>
-<td>1.239911</td>
-<td>-0.909255</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01 00:00:00</td>
-</tr>
-</tbody>
-</table>
-<p>We can also fill data with respect to their column property</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.fillna(value = &#123;<span class="string">&#x27;one&#x27;</span>: <span class="number">0</span>, <span class="string">&#x27;four&#x27;</span>: <span class="string">&#x27;missing&#x27;</span>, <span class="string">&#x27;five&#x27;</span>: <span class="literal">False</span>, <span class="string">&#x27;date&#x27;</span>: pd.Timestamp(<span class="string">&#x27;2000-01-01&#x27;</span>)&#125;)</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>one</th>
-<th>two</th>
-<th>three</th>
-<th>four</th>
-<th>five</th>
-<th>date</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>-0.614301</td>
-<td>0.628725</td>
-<td>-0.903163</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>b</td>
-<td>0.000000</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>missing</td>
-<td>False</td>
-<td>2000-01-01</td>
-</tr>
-<tr>
-<td>c</td>
-<td>-0.297019</td>
-<td>1.357266</td>
-<td>-0.665749</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>d</td>
-<td>0.000000</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>missing</td>
-<td>False</td>
-<td>2000-01-01</td>
-</tr>
-<tr>
-<td>e</td>
-<td>0.311524</td>
-<td>-0.328388</td>
-<td>0.777467</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>f</td>
-<td>0.572373</td>
-<td>-0.309563</td>
-<td>-0.296276</td>
-<td>bar</td>
-<td>True</td>
-<td>2018-01-01</td>
-</tr>
-<tr>
-<td>g</td>
-<td>0.000000</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>missing</td>
-<td>False</td>
-<td>2000-01-01</td>
-</tr>
-<tr>
-<td>h</td>
-<td>-1.303842</td>
-<td>1.239911</td>
-<td>-0.909255</td>
-<td>bar</td>
-<td>False</td>
-<td>2018-01-01</td>
-</tr>
-</tbody>
-</table>
-<p>Remind that fillna() will not replace na in orignial dataframe, in other words, the df2 remains the same after all the above operation, If you want it to be permanantely changed, add parameter inplace = True like this.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.fillna(value = <span class="number">0</span>, inplace = <span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
-
+        
+          <a class="article-more-a" href="/2018/09/23/Pandas-Handle-missing-data/#more">more >></a>
+        
       
 
       
@@ -1478,10 +810,6 @@ ga('send', 'pageview');
 	</div>
 
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/24/Pandas-Handle-missing-data/">展开全文 >></a>
-        </p>
       
 
       
@@ -1517,13 +845,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/21/Pandas-How-to-select-data/">[Pandas]How to select data</a>
+      <a class="article-title" href="/2018/09/20/Pandas-How-to-select-data/">[Pandas]How to select data</a>
     </h1>
   
 
         
-        <a href="/2018/09/21/Pandas-How-to-select-data/" class="archive-article-date">
-  	<time datetime="2018-09-20T20:49:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-21</time>
+        <a href="/2018/09/20/Pandas-How-to-select-data/" class="archive-article-date">
+  	<time datetime="2018-09-20T13:49:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-20</time>
 </a>
         
       </header>
@@ -1531,260 +859,9 @@ ga('send', 'pageview');
     <div class="article-entry" itemprop="articleBody">
       
         <p>This article shows the most common methods regarding data selection</p>
-<p>First, let’s create a dataframe.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(np.random.rand(<span class="number">5</span>,<span class="number">4</span>), index = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;e&#x27;</span>], columns= [<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>, <span class="string">&#x27;D&#x27;</span>])</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>A</th>
-<th>B</th>
-<th>C</th>
-<th>D</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>0.122248</td>
-<td>0.581777</td>
-<td>0.972888</td>
-<td>0.869366</td>
-</tr>
-<tr>
-<td>b</td>
-<td>0.476451</td>
-<td>0.453979</td>
-<td>0.004705</td>
-<td>0.644530</td>
-</tr>
-<tr>
-<td>c</td>
-<td>0.954790</td>
-<td>0.747131</td>
-<td>0.652936</td>
-<td>0.758767</td>
-</tr>
-<tr>
-<td>d</td>
-<td>0.077122</td>
-<td>0.407514</td>
-<td>0.019102</td>
-<td>0.553546</td>
-</tr>
-<tr>
-<td>e</td>
-<td>0.921520</td>
-<td>0.157199</td>
-<td>0.371028</td>
-<td>0.825792</td>
-</tr>
-</tbody>
-</table>
-<h3 id="use-for-columns-selection"><a class="markdownIt-Anchor" href="#use-for-columns-selection"></a> Use [] for columns selection</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>]]</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>A</th>
-<th>B</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>0.122248</td>
-<td>0.581777</td>
-</tr>
-<tr>
-<td>b</td>
-<td>0.476451</td>
-<td>0.453979</td>
-</tr>
-<tr>
-<td>c</td>
-<td>0.954790</td>
-<td>0.747131</td>
-</tr>
-<tr>
-<td>d</td>
-<td>0.077122</td>
-<td>0.407514</td>
-</tr>
-<tr>
-<td>e</td>
-<td>0.921520</td>
-<td>0.157199</td>
-</tr>
-</tbody>
-</table>
-<h3 id="select-a-range"><a class="markdownIt-Anchor" href="#select-a-range"></a> Select a range</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="number">1</span>:<span class="number">3</span>] <span class="comment"># or df[&#x27;b&#x27;:&#x27;c&#x27;]</span></span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>A</th>
-<th>B</th>
-<th>C</th>
-<th>D</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>b</td>
-<td>0.476451</td>
-<td>0.453979</td>
-<td>0.004705</td>
-<td>0.644530</td>
-</tr>
-<tr>
-<td>c</td>
-<td>0.954790</td>
-<td>0.747131</td>
-<td>0.652936</td>
-<td>0.758767</td>
-</tr>
-</tbody>
-</table>
-<h3 id="use-loc"><a class="markdownIt-Anchor" href="#use-loc"></a> Use .loc</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[<span class="string">&#x27;a&#x27;</span>:<span class="string">&#x27;c&#x27;</span>, [<span class="string">&#x27;A&#x27;</span>,<span class="string">&#x27;B&#x27;</span>]]</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>A</th>
-<th>B</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>0.122248</td>
-<td>0.581777</td>
-</tr>
-<tr>
-<td>b</td>
-<td>0.476451</td>
-<td>0.453979</td>
-</tr>
-<tr>
-<td>c</td>
-<td>0.954790</td>
-<td>0.747131</td>
-</tr>
-</tbody>
-</table>
-<h3 id="select-all-columns"><a class="markdownIt-Anchor" href="#select-all-columns"></a> Select all columns</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[<span class="string">&#x27;a&#x27;</span>:<span class="string">&#x27;c&#x27;</span>, :]</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>A</th>
-<th>B</th>
-<th>C</th>
-<th>D</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>0.122248</td>
-<td>0.581777</td>
-<td>0.972888</td>
-<td>0.869366</td>
-</tr>
-<tr>
-<td>b</td>
-<td>0.476451</td>
-<td>0.453979</td>
-<td>0.004705</td>
-<td>0.644530</td>
-</tr>
-<tr>
-<td>c</td>
-<td>0.954790</td>
-<td>0.747131</td>
-<td>0.652936</td>
-<td>0.758767</td>
-</tr>
-</tbody>
-</table>
-<h3 id="select-with-boolean"><a class="markdownIt-Anchor" href="#select-with-boolean"></a> Select with boolean</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[df[<span class="string">&#x27;A&#x27;</span>]&gt;<span class="number">0.2</span>]</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>A</th>
-<th>B</th>
-<th>C</th>
-<th>D</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>b</td>
-<td>0.476451</td>
-<td>0.453979</td>
-<td>0.004705</td>
-<td>0.644530</td>
-</tr>
-<tr>
-<td>c</td>
-<td>0.954790</td>
-<td>0.747131</td>
-<td>0.652936</td>
-<td>0.758767</td>
-</tr>
-<tr>
-<td>e</td>
-<td>0.921520</td>
-<td>0.157199</td>
-<td>0.371028</td>
-<td>0.825792</td>
-</tr>
-</tbody>
-</table>
-<h3 id="select-with-callablelambda"><a class="markdownIt-Anchor" href="#select-with-callablelambda"></a> Select with callable(lambda)</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="keyword">lambda</span> df: df[<span class="string">&#x27;A&#x27;</span>]&gt;<span class="number">0.2</span>]</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>A</th>
-<th>B</th>
-<th>C</th>
-<th>D</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>b</td>
-<td>0.476451</td>
-<td>0.453979</td>
-<td>0.004705</td>
-<td>0.644530</td>
-</tr>
-<tr>
-<td>c</td>
-<td>0.954790</td>
-<td>0.747131</td>
-<td>0.652936</td>
-<td>0.758767</td>
-</tr>
-<tr>
-<td>e</td>
-<td>0.921520</td>
-<td>0.157199</td>
-<td>0.371028</td>
-<td>0.825792</td>
-</tr>
-</tbody>
-</table>
-
+        
+          <a class="article-more-a" href="/2018/09/20/Pandas-How-to-select-data/#more">more >></a>
+        
       
 
       
@@ -1816,10 +893,6 @@ ga('send', 'pageview');
 	</div>
 
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/21/Pandas-How-to-select-data/">展开全文 >></a>
-        </p>
       
 
       
@@ -1861,7 +934,7 @@ ga('send', 'pageview');
 
         
         <a href="/2018/09/20/What-is-Attention-and-how-to-use/" class="archive-article-date">
-  	<time datetime="2018-09-20T09:06:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-20</time>
+  	<time datetime="2018-09-20T02:06:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-20</time>
 </a>
         
       </header>
@@ -1870,37 +943,9 @@ ga('send', 'pageview');
       
         <h3 id="introduction"><a class="markdownIt-Anchor" href="#introduction"></a> Introduction</h3>
 <p>Attention or Bahdanau Attention is getting more and more interest in Neural Machine Translation(NMT)  and other sequence prediction research, in this article I will briefly introduce what is Attention mechanism, why important it is and how do we use it(in Tensorflow)</p>
-<h3 id="why-attention"><a class="markdownIt-Anchor" href="#why-attention"></a> Why Attention</h3>
-<p>Attention is a mechanism derived from the seq-seq model which started the era of NMT,  in this <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1409.3215.pdf">paper</a> Sutskever proposed a novel RNN network called encode-decode network to tackle seq-seq prediction problems such as translation.</p>
-<p><img src="https://3qeqpr26caki16dnhd19sv6by6v-wpengine.netdna-ssl.com/wp-content/uploads/2017/10/Example-of-an-Encoder-Decode-Network.png" alt="Example of an Encoder-Decode Network, from &quot;Sequence to Sequence Learning with Neural Network&quot; 2014" /></p>
-<p>The model performed well in many translation tasks, but it turned out to be limited to very long sequences. The reason lies in this network needs to be able to capture all information about the source sentence, that is easy to long sentences, especially those that are longer than sentences in the training corpus.</p>
-<p>Attention provides a solution to this problem, and its core idea is to focus on a relevant part of the source sequence on each step of the decoder.</p>
-<p>Maybe unexpectedly, Attention also benefits seq2seq model in other ways, the first one is that it helps with vanishing gradient problem by providing a shortcut to faraway states; the second one is that it gives some interpretability which I will illustrate in the following sector.</p>
-<h3 id="what-is-attention"><a class="markdownIt-Anchor" href="#what-is-attention"></a> What is Attention</h3>
-<p>Attention is merely a context vector that provides a richer encoding of the source sequence. <strong>The vector is computed at every decoder time step.</strong></p>
-<p><img src="https://github.com/tensorflow/nmt/raw/master/nmt/g3doc/img/attention_mechanism.jpg" alt="img" /></p>
-<p>As illustrated in the figure above, the attention computation can be summarized into the following three steps:</p>
-<ol>
-<li>
-<p>Compute attention weights based on the current target hidden state and all source state(Figure 1)</p>
-</li>
-<li>
-<p>The weighted average of the source states based on the attention weights are then computed, and the result is a context vector(Figure 2)</p>
-</li>
-<li>
-<p>Context vector combined with the current target hidden state yields the attention vector(Figure 3)</p>
-<p>The attention vector is then fed to the next decoding step.</p>
-<p><img src="https://github.com/tensorflow/nmt/raw/master/nmt/g3doc/img/attention_equation_0.jpg" alt="img" /></p>
-<p>the score in Figure 1 is computed as follows:</p>
-<p><img src="https://github.com/tensorflow/nmt/raw/master/nmt/g3doc/img/attention_equation_1.jpg" alt="img" /></p>
-</li>
-</ol>
-<p>Regarding the score,  the methods by which it is calculated lead to different performance.</p>
-<h3 id="coding-attention-with-tensorflow"><a class="markdownIt-Anchor" href="#coding-attention-with-tensorflow"></a> Coding Attention with Tensorflow</h3>
-<p>Suppose we have already got an encoder-decoder implementation, what we need to do is trivial because Tensorflow has realized in advance the most of the attention building process(Figure 1-3).</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Transfer encoder_outputs to attention_states </span></span><br><span class="line">attention_states = tf.transpose(encoder_outputs, [<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Apply existing attention mechanism </span></span><br><span class="line">attention_mechanism = tf.contrib.seq2seq.BahdanauAttention(</span><br><span class="line">    num_units, attention_states,</span><br><span class="line">    memory_sequence_length=source_sequence_length)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Feed to the decoder</span></span><br><span class="line">decoder_cell = tf.contrib.seq2seq.AttentionWrapper(</span><br><span class="line">    decoder_cell, attention_mechanism,</span><br><span class="line">    attention_layer_size=num_units)</span><br></pre></td></tr></table></figure>
-<p>The rest codes are mostly the same as standard encoder-decoder.</p>
-
+        
+          <a class="article-more-a" href="/2018/09/20/What-is-Attention-and-how-to-use/#more">more >></a>
+        
       
 
       
@@ -1932,10 +977,6 @@ ga('send', 'pageview');
 	</div>
 
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/20/What-is-Attention-and-how-to-use/">展开全文 >></a>
-        </p>
       
 
       
@@ -1978,7 +1019,7 @@ ga('send', 'pageview');
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2020 Feng
+    		&copy; 2021 Feng
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
