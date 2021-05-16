@@ -178,7 +178,7 @@ ga('send', 'pageview');
 
         
         <a href="/2018/09/18/Pandas-How-to-drop-columns-rows/" class="archive-article-date">
-  	<time datetime="2018-09-18T13:39:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-18</time>
+  	<time datetime="2018-09-18T20:39:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-18</time>
 </a>
         
       </header>
@@ -520,7 +520,7 @@ ga('send', 'pageview');
 
         
         <a href="/2018/09/16/Pandas-How-to-import-csv/" class="archive-article-date">
-  	<time datetime="2018-09-16T08:30:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-16</time>
+  	<time datetime="2018-09-16T15:30:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-16</time>
 </a>
         
       </header>
@@ -754,35 +754,34 @@ Relative path:<br />
 
 
   
-    <article id="post-Distributed-transactions-and-eventual-consistency" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-How-to-troubleshooting-CPU-load-problems" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/26/Distributed-transactions-and-eventual-consistency/">分布式事务与最终一致性</a>
+      <a class="article-title" href="/2018/08/26/How-to-troubleshooting-CPU-load-problems/">CPU／Load偏高的排查步骤</a>
     </h1>
   
 
         
-        <a href="/2018/08/26/Distributed-transactions-and-eventual-consistency/" class="archive-article-date">
-  	<time datetime="2018-08-26T13:38:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-26</time>
+        <a href="/2018/08/26/How-to-troubleshooting-CPU-load-problems/" class="archive-article-date">
+  	<time datetime="2018-08-26T20:34:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-26</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="为什么需要分布式事务"><a class="markdownIt-Anchor" href="#为什么需要分布式事务"></a> 为什么需要分布式事务</h2>
-<p>先摆一个例子：<br />
-A账户要向B账户转账，100元， 操作的步骤是</p>
-<blockquote>
-<p>A账户先减掉100元<br />
-B账户再加上100元</p>
-</blockquote>
+        <h2 id="1-查找-java进程"><a class="markdownIt-Anchor" href="#1-查找-java进程"></a> 1. 查找 java进程</h2>
+<p><code>ps -ef|grep java</code></p>
+<h2 id="2-查找耗时最高线程"><a class="markdownIt-Anchor" href="#2-查找耗时最高线程"></a> 2. 查找耗时最高线程</h2>
+<p><code>top -Hp #进程id#</code></p>
+<h2 id="3-将线程id转换为16进制"><a class="markdownIt-Anchor" href="#3-将线程id转换为16进制"></a> 3. 将线程id转换为16进制</h2>
+<p><code>printf “%x\n” #线程id#</code></p>
         
-          <a class="article-more-a" href="/2018/08/26/Distributed-transactions-and-eventual-consistency/#more">more >></a>
+          <a class="article-more-a" href="/2018/08/26/How-to-troubleshooting-CPU-load-problems/#more">more >></a>
         
       
 
@@ -796,7 +795,7 @@ B账户再加上100元</p>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Transaction</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Profile</a>
         		</li>
       		
 		</ul>
@@ -843,34 +842,35 @@ B账户再加上100元</p>
 
 
   
-    <article id="post-How-to-troubleshooting-CPU-load-problems" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Distributed-transactions-and-eventual-consistency" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/26/How-to-troubleshooting-CPU-load-problems/">CPU／Load偏高的排查步骤</a>
+      <a class="article-title" href="/2018/08/26/Distributed-transactions-and-eventual-consistency/">分布式事务与最终一致性</a>
     </h1>
   
 
         
-        <a href="/2018/08/26/How-to-troubleshooting-CPU-load-problems/" class="archive-article-date">
-  	<time datetime="2018-08-26T13:34:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-26</time>
+        <a href="/2018/08/26/Distributed-transactions-and-eventual-consistency/" class="archive-article-date">
+  	<time datetime="2018-08-26T13:38:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-26</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="1-查找-java进程"><a class="markdownIt-Anchor" href="#1-查找-java进程"></a> 1. 查找 java进程</h2>
-<p><code>ps -ef|grep java</code></p>
-<h2 id="2-查找耗时最高线程"><a class="markdownIt-Anchor" href="#2-查找耗时最高线程"></a> 2. 查找耗时最高线程</h2>
-<p><code>top -Hp #进程id#</code></p>
-<h2 id="3-将线程id转换为16进制"><a class="markdownIt-Anchor" href="#3-将线程id转换为16进制"></a> 3. 将线程id转换为16进制</h2>
-<p><code>printf “%x\n” #线程id#</code></p>
+        <h2 id="为什么需要分布式事务"><a class="markdownIt-Anchor" href="#为什么需要分布式事务"></a> 为什么需要分布式事务</h2>
+<p>先摆一个例子：<br />
+A账户要向B账户转账，100元， 操作的步骤是</p>
+<blockquote>
+<p>A账户先减掉100元<br />
+B账户再加上100元</p>
+</blockquote>
         
-          <a class="article-more-a" href="/2018/08/26/How-to-troubleshooting-CPU-load-problems/#more">more >></a>
+          <a class="article-more-a" href="/2018/08/26/Distributed-transactions-and-eventual-consistency/#more">more >></a>
         
       
 
@@ -884,7 +884,7 @@ B账户再加上100元</p>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Profile</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Transaction</a>
         		</li>
       		
 		</ul>
@@ -1027,7 +1027,7 @@ B账户再加上100元</p>
 
         
         <a href="/2017/08/26/A-concurrency-requesting-case/" class="archive-article-date">
-  	<time datetime="2017-08-26T13:31:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-26</time>
+  	<time datetime="2017-08-26T20:31:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-26</time>
 </a>
         
       </header>
@@ -1193,7 +1193,7 @@ B账户再加上100元</p>
 
         
         <a href="/2017/06/26/Key-points-of-threadpool/" class="archive-article-date">
-  	<time datetime="2017-06-26T13:44:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-26</time>
+  	<time datetime="2017-06-26T20:44:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-26</time>
 </a>
         
       </header>
@@ -1280,7 +1280,7 @@ B账户再加上100元</p>
 
         
         <a href="/2017/03/25/My-take-on-distributed-system/" class="archive-article-date">
-  	<time datetime="2017-03-25T11:37:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-25</time>
+  	<time datetime="2017-03-25T19:37:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-25</time>
 </a>
         
       </header>
@@ -1289,6 +1289,8 @@ B账户再加上100元</p>
       
         <h1 id="我所理解的分布式调度"><a class="markdownIt-Anchor" href="#我所理解的分布式调度"></a> 我所理解的分布式调度</h1>
 <p>对于规模以上的应用来说，调度系统已经是必不可少的组成部分，尤其在基于数据分析的后台应用大量增长的今天，健壮的调度任务管理已经是非常重要的一环，因此多花些时间来分析研究调度系统的设计对于日常的开发与运维具有比较重要的意义。</p>
+<h2 id="调度问题是怎么来的"><a class="markdownIt-Anchor" href="#调度问题是怎么来的"></a> 调度问题是怎么来的</h2>
+<p>当你的网站是个简单的blog，而且并不需要跟外部交互的时候，你大概不需要调度任务，因为此时网站需要处理的任务仅限于 即时交互 ， 即用户想使用一个功能，你就立即给他就是了，如同你在简书上写一篇文章，一点保存，这篇文章立即就保存到网站的后台服务器中去了，这也是互联网刚出现时候的最早的应用模式。</p>
         
           <a class="article-more-a" href="/2017/03/25/My-take-on-distributed-system/#more">more >></a>
         

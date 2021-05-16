@@ -2,6 +2,90 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2020/10/17/Homesick-nowhere/</loc>
+    
+    <lastmod>2021-05-16</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/10/10/Pandemic-uk/</loc>
+    
+    <lastmod>2021-05-16</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/11/21/Pairs-trading/</loc>
+    
+    <lastmod>2021-05-16</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/03/25/My-take-on-distributed-system/</loc>
+    
+    <lastmod>2021-05-16</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/09/19/Missing-lianyue/</loc>
+    
+    <lastmod>2021-05-16</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/12/06/Shanghai-quarantine/</loc>
+    
+    <lastmod>2021-05-16</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/11/07/Queens-gambit/</loc>
+    
+    <lastmod>2021-05-16</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/09/05/Tsla-cov-analysis/</loc>
+    
+    <lastmod>2021-05-16</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/12/27/Hackers-and-painters-re-review/</loc>
+    
+    <lastmod>2021-05-16</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/09/26/China-standup-comedy/</loc>
+    
+    <lastmod>2021-05-16</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/10/03/Honor-of-kings/</loc>
+    
+    <lastmod>2021-05-16</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/11/08/Backward-propagation-of-Neural-Network-explained/</loc>
+    
+    <lastmod>2021-05-16</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/08/25/What-you-need-to-know-for-memory-leaks-troubleshooting/</loc>
     
     <lastmod>2021-02-07</lastmod>
@@ -30,13 +114,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/09/05/Tsla-cov-analysis/</loc>
-    
-    <lastmod>2021-02-07</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2020/05/30/The-guide-to-predictive-data-analysis-on-MIMIC/</loc>
     
     <lastmod>2021-02-07</lastmod>
@@ -52,27 +129,6 @@
   
   <url>
     <loc>http://yoursite.com/2018/11/08/Stochastic-gradient-descent/</loc>
-    
-    <lastmod>2021-02-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/12/06/Shanghai-quarantine/</loc>
-    
-    <lastmod>2021-02-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/11/07/Queens-gambit/</loc>
-    
-    <lastmod>2021-02-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/10/10/Pandemic-uk/</loc>
     
     <lastmod>2021-02-07</lastmod>
     
@@ -142,27 +198,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/11/21/Pairs-trading/</loc>
-    
-    <lastmod>2021-02-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/03/25/My-take-on-distributed-system/</loc>
-    
-    <lastmod>2021-02-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/09/19/Missing-lianyue/</loc>
-    
-    <lastmod>2021-02-07</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2020/09/19/Kong-VS-Goku/</loc>
     
     <lastmod>2021-02-07</lastmod>
@@ -177,13 +212,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/12/27/Hackers-and-painters-re-review/</loc>
-    
-    <lastmod>2021-02-07</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2018/08/26/How-to-troubleshooting-CPU-load-problems/</loc>
     
     <lastmod>2021-02-07</lastmod>
@@ -191,14 +219,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2019/11/28/How-to-Kaggle-5/</loc>
+    <loc>http://yoursite.com/2019/11/27/How-to-Kaggle-5/</loc>
     
     <lastmod>2021-02-07</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2019/11/02/How-to-Kaggle-4/</loc>
+    <loc>http://yoursite.com/2019/11/01/How-to-Kaggle-4/</loc>
     
     <lastmod>2021-02-07</lastmod>
     
@@ -226,20 +254,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/10/03/Honor-of-kings/</loc>
-    
-    <lastmod>2021-02-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/10/17/Homesick-nowhere/</loc>
-    
-    <lastmod>2021-02-07</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2020/10/24/Does-debate-equal-democracy/</loc>
     
     <lastmod>2021-02-07</lastmod>
@@ -254,21 +268,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/09/26/China-standup-comedy/</loc>
-    
-    <lastmod>2021-02-07</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2018/10/01/Basics-of-words-embedding/</loc>
-    
-    <lastmod>2021-02-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/11/08/Backward-propagation-of-Neural-Network-explained/</loc>
     
     <lastmod>2021-02-07</lastmod>
     
@@ -312,7 +312,7 @@
 
   <url>
     <loc>http://yoursite.com/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -320,77 +320,77 @@
   
   <url>
     <loc>http://yoursite.com/tags/Distributed-System/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Algorithm/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Java/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Pandas/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Tensorflow/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Profile/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Transaction/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Kaggle/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Health/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Gateway/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/tags/Quant/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
@@ -399,21 +399,21 @@
   
   <url>
     <loc>http://yoursite.com/categories/Backend/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/categories/%E6%9D%82%E6%96%87/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://yoursite.com/categories/ML/</loc>
-    <lastmod>2021-02-07</lastmod>
+    <lastmod>2021-05-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
