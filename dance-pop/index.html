@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Dance &amp; Pop!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root { --pink:#ff5fa2; --blue:#3db7ff; --yellow:#ffd23f; --green:#4ee08a; --purple:#9b6bff; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin:0; height:100%; overflow:hidden; background:#1b1035; font-family:'Baloo 2', system-ui, sans-serif; color:#fff; touch-action:none; user-select:none; -webkit-user-select:none; }
+  video { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+  canvas { position:fixed; inset:0; display:block; }
+  .hidden { display:none !important; }
+  button { font-family:inherit; cursor:pointer; border:none; }
+
+  .screen { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px; z-index:10; }
+  #menu { background: radial-gradient(circle at 20% 20%, #ff8cc6 0, transparent 40%), radial-gradient(circle at 80% 30%, #6fd3ff 0, transparent 40%), radial-gradient(circle at 50% 90%, #ffe066 0, transparent 45%), linear-gradient(160deg,#7b4dff,#ff5fa2); overflow:hidden; }
+  #menu h1 { font-size:clamp(48px, 11vw, 110px); line-height:.95; margin:0 0 4px; font-weight:800; text-shadow:0 6px 0 rgba(0,0,0,.18); letter-spacing:1px; }
+  #menu h1 span { color:var(--yellow); }
+  .sub { font-size:clamp(20px,4vw,30px); margin:0 0 26px; font-weight:600; opacity:.95; }
+  .choices { display:flex; gap:22px; flex-wrap:wrap; justify-content:center; }
+  .big { display:flex; flex-direction:column; align-items:center; gap:2px; width:min(320px, 84vw); padding:22px 18px 18px; border-radius:36px; color:#2b1650; font-size:clamp(28px,5vw,38px); font-weight:800; box-shadow:0 10px 0 rgba(0,0,0,.2); transition:transform .12s; }
+  .big:active { transform:translateY(6px) scale(.98); box-shadow:0 4px 0 rgba(0,0,0,.2); }
+  .big .em { font-size:70px; line-height:1; animation:bob 1.6s ease-in-out infinite; }
+  .big small { font-size:17px; font-weight:600; opacity:.75; line-height:1.2; }
+  .b1 { background:#bff0ff; } .b2 { background:#fff1a8; }
+  .b2 .em { animation-delay:.4s; }
+  .note { margin-top:26px; font-size:15px; opacity:.9; max-width:520px; line-height:1.35; }
+  .floaty { position:absolute; font-size:44px; opacity:.55; animation:floatUp linear infinite; pointer-events:none; }
+  @keyframes floatUp { from { transform:translateY(110vh) rotate(0deg); } to { transform:translateY(-20vh) rotate(360deg); } }
+  @keyframes bob { 0%,100% { transform:translateY(0) rotate(-6deg); } 50% { transform:translateY(-10px) rotate(6deg); } }
+
+  #loading { background:linear-gradient(160deg,#7b4dff,#ff5fa2); }
+  .bouncer { font-size:110px; animation:dance .5s ease-in-out infinite alternate; }
+  @keyframes dance { from { transform:rotate(-14deg) translateY(0); } to { transform:rotate(14deg) translateY(-18px); } }
+  #loading p, #error p { font-size:26px; font-weight:700; max-width:560px; }
+  #error { background:linear-gradient(160deg,#5b3bbf,#c2447f); }
+  #error .em { font-size:90px; }
+  .big.small { width:auto; padding:12px 40px; font-size:28px; background:#fff; }
+
+  #hud { position:fixed; top:0; left:0; right:0; display:flex; align-items:center; justify-content:space-between; padding:14px 16px; z-index:5; pointer-events:none; }
+  #hud > * { pointer-events:auto; }
+  .round { width:62px; height:62px; border-radius:50%; font-size:30px; background:rgba(255,255,255,.88); box-shadow:0 5px 0 rgba(0,0,0,.2); }
+  .round:active { transform:translateY(3px); }
+  #score { background:rgba(255,255,255,.9); color:#2b1650; font-size:38px; font-weight:800; padding:2px 26px; border-radius:40px; box-shadow:0 5px 0 rgba(0,0,0,.2); min-width:140px; text-align:center; }
+  #score.bump { animation:bump .35s; }
+  @keyframes bump { 40% { transform:scale(1.25); } }
+
+  #banner { position:fixed; left:50%; top:42%; transform:translate(-50%,-50%) scale(0); z-index:6; pointer-events:none; font-size:clamp(46px, 11vw, 120px); font-weight:800; white-space:nowrap; text-shadow:0 6px 0 rgba(0,0,0,.25), 0 0 30px rgba(0,0,0,.25); }
+  #banner.show { animation:pop .45s cubic-bezier(.2,1.6,.4,1) forwards; }
+  #banner.ice { color:#dff4ff; text-shadow:0 6px 0 #2a7fd4, 0 0 40px #8fd6ff; }
+  #banner.gold { color:var(--yellow); }
+  @keyframes pop { to { transform:translate(-50%,-50%) scale(1); } }
+
+  #hint { position:fixed; bottom:96px; left:50%; transform:translateX(-50%); z-index:6; background:rgba(255,255,255,.92); color:#2b1650; font-size:26px; font-weight:800; padding:8px 26px; border-radius:30px; box-shadow:0 5px 0 rgba(0,0,0,.2); white-space:nowrap; display:none; }
+  #hint.on { display:block; animation:bob 1.4s ease-in-out infinite; }
+
+  #meter { position:fixed; bottom:22px; left:50%; transform:translateX(-50%); width:min(520px, 80vw); height:44px; border-radius:30px; background:rgba(255,255,255,.85); box-shadow:0 5px 0 rgba(0,0,0,.2); z-index:5; overflow:hidden; }
+  #meterFill { height:100%; width:0%; border-radius:30px; background:linear-gradient(90deg,var(--green),var(--yellow),var(--pink)); transition:width .1s; }
+  #meter span { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#2b1650; font-weight:800; font-size:22px; }
+</style>
+</head>
+<body>
+<video id="video" playsinline muted></video>
+<canvas id="c"></canvas>
+
+<div id="hud" class="hidden">
+  <button id="homeBtn" class="round" aria-label="Home">🏠</button>
+  <div id="score">⭐ <span id="scoreNum">0</span></div>
+  <button id="soundBtn" class="round" aria-label="Sound">🔊</button>
+</div>
+<div id="banner"></div>
+<div id="hint"></div>
+<div id="meter" class="hidden"><div id="meterFill"></div><span>Dance power!</span></div>
+
+<div id="menu" class="screen">
+  <h1>Dance <span>&amp;</span> Pop!</h1>
+  <p class="sub">Move your body to play!</p>
+  <div class="choices">
+    <button class="big b1" data-mode="bubbles"><span class="em">🫧</span>Bubble Pop<small>Touch the bubbles with your hands &amp; feet</small></button>
+    <button class="big b2" data-mode="freeze"><span class="em">🧊</span>Freeze Dance<small>Dance to the music, freeze when it stops!</small></button>
+  </div>
+  <p class="note">Uses the camera. Everything happens on this device: nothing is recorded or uploaded.<br>Tip: prop the screen up and stand back so your whole body fits.</p>
+</div>
+
+<div id="loading" class="screen hidden"><div class="bouncer">🕺</div><p id="loadingText">Getting ready…</p></div>
+<div id="error" class="screen hidden"><div class="em">📷</div><p id="errorText"></p><button class="big small" id="backBtn">Back</button></div>
+
+<script type="module">
+const $ = s => document.querySelector(s);
+const video = $('#video'), canvas = $('#c'), ctx = canvas.getContext('2d');
+const rand = (a, b) => a + Math.random() * (b - a);
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+let W = 0, H = 0, DPR = 1;
+function resize() {
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  canvas.width = W * DPR; canvas.height = H * DPR;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+addEventListener('resize', resize); resize();
+
+// floating emoji on the menu
+const MENU_EMO = ['🫧','⭐','🎵','🦋','🎈','🌈','🐥','🎶'];
+for (let i = 0; i < 12; i++) {
+  const s = document.createElement('div');
+  s.className = 'floaty'; s.textContent = MENU_EMO[i % MENU_EMO.length];
+  s.style.left = rand(0, 95) + '%';
+  s.style.animationDuration = rand(9, 18) + 's';
+  s.style.animationDelay = -rand(0, 18) + 's';
+  $('#menu').appendChild(s);
+}
+
+// ------------------------------------------------------------------ audio
+let actx = null, master = null, noiseBuf = null, muted = false;
+function initAudio() {
+  if (actx) { actx.resume(); return; }
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return;
+  actx = new AC();
+  master = actx.createGain(); master.gain.value = 0.7; master.connect(actx.destination);
+  noiseBuf = actx.createBuffer(1, actx.sampleRate, actx.sampleRate);
+  const d = noiseBuf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+}
+function env(g, t, peak, dec) {
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(peak, t + 0.006);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dec);
+}
+function tone(type, freq, t, dec, peak, freqEnd) {
+  if (!actx) return;
+  const o = actx.createOscillator(), g = actx.createGain();
+  o.type = type; o.frequency.setValueAtTime(freq, t);
+  if (freqEnd) o.frequency.exponentialRampToValueAtTime(freqEnd, t + dec);
+  env(g, t, peak, dec); o.connect(g).connect(master); o.start(t); o.stop(t + dec + 0.05);
+}
+function noise(t, dec, peak, hp) {
+  if (!actx) return;
+  const s = actx.createBufferSource(); s.buffer = noiseBuf;
+  const f = actx.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = hp;
+  const g = actx.createGain(); env(g, t, peak, dec);
+  s.connect(f).connect(g).connect(master); s.start(t); s.stop(t + dec + 0.05);
+}
+const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
+
+// a bouncy little loop: C – Am – F – G, with a repeating pentatonic tune
+const BPM = 118, STEP = 60 / BPM / 2;
+const PROG = [[48, 52, 55], [45, 48, 52], [41, 45, 48], [43, 47, 50]];
+const PENTA = [0, 2, 4, 7, 9, 12];
+let melody = [];
+function newMelody() {
+  melody = [];
+  for (let i = 0; i < 32; i++) melody.push(Math.random() < (i % 2 ? 0.3 : 0.75) ? 72 + pick(PENTA) : null);
+}
+newMelody();
+let musicOn = false, nextT = 0, stepI = 0, schedTimer = null;
+function startMusic() {
+  if (!actx || musicOn) return;
+  musicOn = true; nextT = actx.currentTime + 0.06; stepI = 0;
+  schedTimer = setInterval(schedule, 25);
+}
+function stopMusic() { musicOn = false; clearInterval(schedTimer); }
+function schedule() {
+  while (nextT < actx.currentTime + 0.12) { playStep(stepI, nextT); nextT += STEP; stepI++; }
+}
+function playStep(i, t) {
+  const s = i % 8, ch = PROG[Math.floor(i / 8) % 4];
+  if (s === 0 || s === 4) tone('sine', 150, t, 0.18, 0.9, 40);         // kick
+  if (s === 2 || s === 6) noise(t, 0.12, 0.3, 1200);                    // clap
+  noise(t, 0.035, s % 2 ? 0.05 : 0.09, 7000);                           // hat
+  if (s % 2 === 0) tone('triangle', mtof(ch[0] - 12), t, 0.28, 0.35);   // bass
+  if (s === 1 || s === 5) ch.forEach(n => tone('square', mtof(n + 12), t, 0.12, 0.035));
+  const m = melody[i % 32];
+  if (m) tone('triangle', mtof(m), t, 0.28, 0.16);
+}
+function popSfx() { if (!actx) return; const t = actx.currentTime; tone('sine', rand(450, 650), t, 0.13, 0.5, 1500); noise(t, 0.05, 0.15, 3000); }
+function chime() { if (!actx) return; const t = actx.currentTime; [72, 76, 79, 84].forEach((n, k) => tone('triangle', mtof(n), t + k * 0.09, 0.4, 0.25)); }
+function boing() { if (!actx) return; tone('sine', 420, actx.currentTime, 0.45, 0.35, 140); }
+
+function say(txt) {
+  if (muted || !('speechSynthesis' in window)) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(txt);
+    u.rate = 1; u.pitch = 1.4; u.volume = 1;
+    speechSynthesis.speak(u);
+  } catch (e) {}
+}
+
+// ------------------------------------------------------------------ camera + pose
+let landmarker = null, poseTried = false;
+const MP = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
+async function loadPose() {
+  poseTried = true;
+  try {
+    const vision = await import(MP + '/vision_bundle.mjs');
+    const fileset = await vision.FilesetResolver.forVisionTasks(MP + '/wasm');
+    const opts = delegate => ({
+      baseOptions: {
+        modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task',
+        delegate
+      },
+      runningMode: 'VIDEO', numPoses: 2,
+      minPoseDetectionConfidence: 0.5, minPosePresenceConfidence: 0.5, minTrackingConfidence: 0.5
+    });
+    try { landmarker = await vision.PoseLandmarker.createFromOptions(fileset, opts('GPU')); }
+    catch (e) { landmarker = await vision.PoseLandmarker.createFromOptions(fileset, opts('CPU')); }
+  } catch (e) {
+    console.warn('Body tracking unavailable, using simple motion mode instead.', e);
+  }
+}
+
+let stream = null;
+async function startCamera() {
+  if (stream) return;
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    const err = new Error('insecure'); err.name = 'Insecure'; throw err;
+  }
+  stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
+  video.srcObject = stream;
+  await video.play();
+  if (!video.videoWidth) await new Promise(r => video.addEventListener('loadedmetadata', r, { once: true }));
+}
+function stopCamera() {
+  if (stream) stream.getTracks().forEach(t => t.stop());
+  stream = null; video.srcObject = null;
+}
+
+// cover-fit, mirrored layout of the video on the canvas
+let dx = 0, dy = 0, dw = 1, dh = 1;
+function layout() {
+  const vw = video.videoWidth, vh = video.videoHeight;
+  const s = Math.max(W / vw, H / vh);
+  dw = vw * s; dh = vh * s; dx = (W - dw) / 2; dy = (H - dh) / 2;
+}
+function drawVideo() {
+  ctx.save();
+  ctx.translate(W, 0); ctx.scale(-1, 1);
+  ctx.filter = 'brightness(1.08) saturate(1.15)';
+  ctx.drawImage(video, dx, dy, dw, dh);
+  ctx.restore();
+}
+
+// ---- simple motion detection (fallback when body tracking can't load)
+const MW = 64, MH = 48;
+const mc = document.createElement('canvas'); mc.width = MW; mc.height = MH;
+const mctx = mc.getContext('2d', { willReadFrequently: true });
+let prevGray = null, motionMap = new Uint8Array(MW * MH), motionFrac = 0;
+function updateMotion() {
+  mctx.drawImage(video, 0, 0, MW, MH);
+  const d = mctx.getImageData(0, 0, MW, MH).data;
+  const gray = new Uint8Array(MW * MH);
+  let cnt = 0;
+  for (let i = 0; i < MW * MH; i++) {
+    gray[i] = (d[i * 4] * 3 + d[i * 4 + 1] * 6 + d[i * 4 + 2]) / 10;
+    const m = prevGray && Math.abs(gray[i] - prevGray[i]) > 28 ? 1 : 0;
+    motionMap[i] = m; cnt += m;
+  }
+  motionFrac = prevGray ? cnt / (MW * MH) : 0;
+  prevGray = gray;
+}
+function motionIn(x, y, r) {
+  // screen → un-mirrored normalized video coords
+  const nx = ((W - x) - dx) / dw, ny = (y - dy) / dh, rx = r / dw, ry = r / dh;
+  let tot = 0, hit = 0;
+  for (let gy = Math.floor((ny - ry) * MH); gy <= Math.ceil((ny + ry) * MH); gy++) {
+    for (let gx = Math.floor((nx - rx) * MW); gx <= Math.ceil((nx + rx) * MW); gx++) {
+      if (gx < 0 || gy < 0 || gx >= MW || gy >= MH) continue;
+      const ex = (gx / MW - nx) / rx, ey = (gy / MH - ny) / ry;
+      if (ex * ex + ey * ey > 1) continue;
+      tot++; hit += motionMap[gy * MW + gx];
+    }
+  }
+  return tot ? hit / tot : 0;
+}
+
+// ---- bodies from pose landmarks
+let bodies = [], prevBodies = [], lastSeen = 0, lastVideoTime = -1;
+function toBody(lms) {
+  const p = lms.map(l => ({ x: W - (dx + l.x * dw), y: dy + l.y * dh, v: l.visibility ?? 1 }));
+  const ls = p[11], rs = p[12];
+  const sw = Math.max(40, Math.hypot(ls.x - rs.x, ls.y - rs.y));
+  return { p, sw, cx: (ls.x + rs.x) / 2, sy: (ls.y + rs.y) / 2, nose: p[0], hipY: (p[23].y + p[24].y) / 2 };
+}
+function detect(now) {
+  try {
+    const res = landmarker.detectForVideo(video, now);
+    prevBodies = bodies;
+    bodies = (res.landmarks || []).map(toBody);
+    if (bodies.length) lastSeen = now;
+  } catch (e) { console.warn(e); }
+}
+function effectors(b) {
+  const P = b.p, out = [];
+  const add = (ids, kind, hue) => {
+    const pts = ids.map(i => P[i]);
+    if (pts.some(q => q.v < 0.35)) return;
+    out.push({ x: pts.reduce((s, q) => s + q.x, 0) / pts.length, y: pts.reduce((s, q) => s + q.y, 0) / pts.length, kind, hue });
+  };
+  add([15, 17, 19], 'hand', 320); add([16, 18, 20], 'hand', 190);
+  add([27, 29, 31], 'foot', 50); add([28, 30, 32], 'foot', 130);
+  return out;
+}
+// how much are people moving right now? (0 = statue)
+function movement() {
+  if (landmarker) {
+    if (!bodies.length || bodies.length !== prevBodies.length) return null;
+    const ids = [0, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26];
+    let maxM = 0;
+    bodies.forEach((b, i) => {
+      const pb = prevBodies[i]; let s = 0, n = 0;
+      ids.forEach(k => { if (b.p[k].v > 0.5 && pb.p[k].v > 0.5) { s += Math.hypot(b.p[k].x - pb.p[k].x, b.p[k].y - pb.p[k].y); n++; } });
+      if (n) maxM = Math.max(maxM, s / n / b.sw);
+    });
+    return maxM;
+  }
+  return motionFrac;
+}
+
+// ------------------------------------------------------------------ particles
+let parts = [];
+function burst(x, y, hue, n = 16, emo) {
+  for (let i = 0; i < n; i++) {
+    const a = rand(0, Math.PI * 2), sp = rand(120, 420);
+    parts.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 120, life: 1, size: rand(5, 13), hue: hue + rand(-30, 30) });
+  }
+  if (emo) for (let i = 0; i < 3; i++) parts.push({ x, y, vx: rand(-200, 200), vy: rand(-420, -200), life: 1.2, size: 34, emo });
+}
+function confetti(n = 70) {
+  for (let i = 0; i < n; i++) parts.push({ x: rand(0, W), y: rand(-60, -10), vx: rand(-60, 60), vy: rand(80, 260), life: 1.6, size: rand(7, 13), hue: rand(0, 360), rect: true, rot: rand(0, 6) });
+}
+function sparkle(x, y, hue) { parts.push({ x, y, vx: rand(-40, 40), vy: rand(-80, 0), life: 0.6, size: rand(4, 9), hue }); }
+function drawParticles(dt) {
+  for (const p of parts) {
+    p.vy += 600 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt * (p.rect ? 0.45 : 1.25);
+    if (p.life <= 0) continue;
+    ctx.globalAlpha = clamp(p.life, 0, 1);
+    if (p.emo) { ctx.font = `${p.size}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(p.emo, p.x, p.y); }
+    else if (p.rect) { p.rot += dt * 6; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.fillStyle = `hsl(${p.hue},95%,60%)`; ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2); ctx.restore(); }
+    else { ctx.fillStyle = `hsl(${p.hue},100%,65%)`; ctx.beginPath(); ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2); ctx.fill(); }
+  }
+  ctx.globalAlpha = 1;
+  parts = parts.filter(p => p.life > 0);
+}
+
+// ------------------------------------------------------------------ drawing bodies
+function drawBodies(now) {
+  for (let bi = 0; bi < bodies.length; bi++) {
+    const b = bodies[bi], pb = prevBodies[bi];
+    // crown 👑 that follows the head
+    const P = b.p;
+    if (P[0].v > 0.5 && P[2].v > 0.5 && P[5].v > 0.5) {
+      const a = clamp(Math.atan2(P[5].y - P[2].y, P[5].x - P[2].x), -0.7, 0.7);
+      ctx.save(); ctx.translate(P[0].x, P[0].y); ctx.rotate(a);
+      ctx.font = `${b.sw * 0.75}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(bi === 0 ? '👑' : '🎩', 0, -b.sw * 0.95);
+      ctx.restore();
+    }
+    // glowing hands & feet
+    const effs = effectors(b), peffs = pb ? effectors(pb) : [];
+    effs.forEach((e, k) => {
+      const r = b.sw * (e.kind === 'hand' ? 0.2 : 0.16) * (1 + 0.08 * Math.sin(now / 120 + k));
+      const g = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, r * 1.6);
+      g.addColorStop(0, `hsla(${e.hue},100%,85%,.95)`); g.addColorStop(0.5, `hsla(${e.hue},100%,60%,.55)`); g.addColorStop(1, `hsla(${e.hue},100%,60%,0)`);
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(e.x, e.y, r * 1.6, 0, Math.PI * 2); ctx.fill();
+      const pe = peffs.find(q => q.kind === e.kind && q.hue === e.hue);
+      if (pe && Math.hypot(e.x - pe.x, e.y - pe.y) > b.sw * 0.12) for (let i = 0; i < 2; i++) sparkle(e.x, e.y, e.hue);
+    });
+  }
+}
+
+// ------------------------------------------------------------------ game state
+let mode = 'menu', stars = 0, lastNow = performance.now();
+const banner = $('#banner'), hint = $('#hint');
+let bannerTimer = null;
+function showBanner(text, ms = 1600, cls = '') {
+  banner.className = ''; banner.textContent = text;
+  void banner.offsetWidth;
+  banner.className = 'show ' + cls;
+  clearTimeout(bannerTimer);
+  bannerTimer = setTimeout(() => { banner.className = ''; }, ms);
+}
+function addStar(n = 1) {
+  stars += n; $('#scoreNum').textContent = stars;
+  const s = $('#score'); s.classList.remove('bump'); void s.offsetWidth; s.classList.add('bump');
+}
+const PRAISE = ['Amazing!', 'Super star!', 'You did it!', 'Wow!', 'Brilliant!', 'Hooray!'];
+
+// ---- Bubble Pop
+const EMO = ['⭐', '🍓', '🐟', '🦋', '🍎', '🌸', '🐥', '🍌', '🚗', '🎈', '🐸', '🍩'];
+let bubbles = [], nextSpawn = 0;
+function spawnBubble(now) {
+  const r = Math.max(46, Math.min(W, H) * 0.095);
+  let x, y;
+  const b = bodies.length ? pick(bodies) : null;
+  if (b) {
+    const top = b.nose.y - b.sw * 0.9, bottom = Math.max(b.hipY + b.sw * 0.2, top + b.sw);
+    x = b.cx + rand(-1, 1) * b.sw * 2.2;
+    y = rand(top, bottom);
+    if (Math.abs(x - b.cx) < b.sw * 0.8) x = b.cx + Math.sign(x - b.cx || 1) * b.sw * rand(0.8, 1.5);
+  } else { x = W * rand(0.12, 0.88); y = H * rand(0.18, 0.75); }
+  x = clamp(x, r + 10, W - r - 10); y = clamp(y, r + 90, H - r - 10);
+  for (const o of bubbles) if (Math.hypot(o.x - x, o.y - y) < o.r + r) return; // try again next frame
+  bubbles.push({ x, y, r, emo: pick(EMO), hue: rand(0, 360), born: now, life: rand(6500, 9000), ph: rand(0, 6.28), dying: 0 });
+}
+function updateBubbles(now, dt) {
+  if (bubbles.length < 3 && now > nextSpawn) { spawnBubble(now); nextSpawn = now + 900; }
+  const usePose = !!landmarker;
+  const effs = usePose ? bodies.flatMap(b => effectors(b).map(e => ({ ...e, rr: b.sw * 0.22 }))) : [];
+  for (const bub of bubbles) {
+    const age = now - bub.born;
+    if (bub.dying) continue;
+    let hit = false;
+    if (age > 450) {
+      if (usePose) hit = effs.some(e => Math.hypot(e.x - bub.x, e.y - bub.y) < bub.r + e.rr);
+      else hit = motionIn(bub.x, bub.y, bub.r) > 0.22;
+    }
+    if (hit) {
+      bub.dying = -1; popSfx(); burst(bub.x, bub.y, bub.hue, 18, bub.emo); addStar();
+      if (stars % 10 === 0) { chime(); confetti(); const p = pick(PRAISE); say(p); showBanner(p + ' 🎉', 1700, 'gold'); }
+    } else if (age > bub.life) bub.dying = now;
+  }
+  bubbles = bubbles.filter(b => b.dying !== -1 && !(b.dying && now - b.dying > 400));
+}
+function drawBubbles(now) {
+  for (const b of bubbles) {
+    const age = now - b.born;
+    let s = Math.min(1, age / 300); s = 1 - Math.pow(1 - s, 3);
+    if (b.dying) s *= Math.max(0, 1 - (now - b.dying) / 400);
+    const wob = 1 + 0.05 * Math.sin(now / 260 + b.ph);
+    const r = b.r * s * wob, y = b.y + Math.sin(now / 700 + b.ph) * 6;
+    if (r < 1) continue;
+    const g = ctx.createRadialGradient(b.x - r * 0.3, y - r * 0.3, r * 0.1, b.x, y, r);
+    g.addColorStop(0, `hsla(${b.hue},100%,95%,.55)`); g.addColorStop(0.7, `hsla(${b.hue},100%,70%,.3)`); g.addColorStop(1, `hsla(${b.hue},100%,60%,.75)`);
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(b.x, y, r, 0, Math.PI * 2); ctx.fill();
+    ctx.lineWidth = 4; ctx.strokeStyle = `hsla(${b.hue},100%,85%,.95)`; ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.beginPath(); ctx.ellipse(b.x - r * 0.4, y - r * 0.45, r * 0.18, r * 0.1, -0.6, 0, Math.PI * 2); ctx.fill();
+    ctx.font = `${r * 0.95}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(b.emo, b.x, y + r * 0.05);
+  }
+}
+
+// ---- Freeze Dance
+const fz = { phase: 'dance', t0: 0, dur: 0, still: 0, total: 0, energy: 0 };
+const STILL_POSE = 0.06, STILL_MOTION = 0.035;
+function freezeDance(now) {
+  fz.phase = 'dance'; fz.t0 = now; fz.dur = rand(6000, 12000);
+  if (Math.random() < 0.35) newMelody();
+  startMusic(); showBanner('Dance! 💃', 1300); say(pick(['Dance!', 'Wiggle wiggle!', 'Let\'s dance!']));
+}
+function updateFreeze(now) {
+  const m = movement();
+  const stillT = landmarker ? STILL_POSE : STILL_MOTION;
+  if (fz.phase === 'dance') {
+    const target = m == null ? 0 : clamp(m / (stillT * 4), 0, 1);
+    fz.energy += (target - fz.energy) * 0.08;
+    $('#meterFill').style.width = (fz.energy * 100).toFixed(0) + '%';
+    if (now - fz.t0 > fz.dur) {
+      fz.phase = 'freeze'; fz.t0 = now; fz.still = 0; fz.total = 0;
+      stopMusic(); say('Freeze!'); showBanner('FREEZE! 🧊', 3300, 'ice');
+    }
+  } else if (fz.phase === 'freeze') {
+    if (now - fz.t0 > 700 && m != null) { fz.total++; if (m < stillT) fz.still++; }
+    fz.energy *= 0.9; $('#meterFill').style.width = (fz.energy * 100).toFixed(0) + '%';
+    if (now - fz.t0 > 3300) {
+      fz.phase = 'result'; fz.t0 = now;
+      if (fz.total < 5) { showBanner('Where are you? 🙈', 2000); say('Where are you?'); }
+      else if (fz.still / fz.total > 0.65) {
+        addStar(); chime(); confetti(); const p = pick(['Super freeze!', 'Like a statue!', 'Frozen solid!']);
+        say(p); showBanner(p + ' ⭐', 2000, 'gold');
+      } else { boing(); say('Wiggly worm! Try again!'); showBanner('Wiggly worm! 🐛', 2000); }
+    }
+  } else if (fz.phase === 'result' && now - fz.t0 > 2300) freezeDance(now);
+}
+function drawFreezeFx(now) {
+  if (fz.phase !== 'freeze') return;
+  const a = Math.min(1, (now - fz.t0) / 250);
+  ctx.fillStyle = `rgba(150,215,255,${0.28 * a})`; ctx.fillRect(0, 0, W, H);
+  ctx.font = '54px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.globalAlpha = a;
+  for (let i = 0; i < 10; i++) {
+    const x = (i * 137 + now / 30) % W, y = (i * 89 + now / 18) % H;
+    ctx.fillText('❄️', x, y);
+  }
+  ctx.globalAlpha = 1;
+}
+
+// ------------------------------------------------------------------ main loop
+function loop(now) {
+  requestAnimationFrame(loop);
+  const dt = Math.min(0.05, (now - lastNow) / 1000); lastNow = now;
+  ctx.clearRect(0, 0, W, H);
+  if (mode === 'menu' || !video.videoWidth) return;
+  layout(); drawVideo();
+  if (video.currentTime !== lastVideoTime) {
+    lastVideoTime = video.currentTime;
+    updateMotion();
+    if (landmarker) detect(now);
+  }
+  if (mode === 'bubbles') { updateBubbles(now, dt); drawBubbles(now); }
+  else if (mode === 'freeze') { updateFreeze(now); drawFreezeFx(now); }
+  drawBodies(now);
+  drawParticles(dt);
+  const lost = landmarker && now - lastSeen > 2500;
+  hint.textContent = 'Step back so I can see you! 👀';
+  hint.classList.toggle('on', !!lost);
+}
+requestAnimationFrame(loop);
+
+// ------------------------------------------------------------------ screens
+function showScreen(id) {
+  ['#menu', '#loading', '#error'].forEach(s => $(s).classList.toggle('hidden', s !== id));
+}
+async function startGame(m) {
+  initAudio();
+  showScreen('#loading'); $('#loadingText').textContent = 'Turning on the camera…';
+  try { await startCamera(); }
+  catch (e) {
+    const msg = e.name === 'NotAllowedError' ? 'The camera was blocked. Allow camera access for this page in your browser settings, then try again.'
+      : e.name === 'NotFoundError' ? 'I couldn\'t find a camera on this device.'
+      : e.name === 'Insecure' ? 'The camera only works when this page is opened from a secure (https) address, or as a file in Chrome, Edge or Safari on a computer.'
+      : 'The camera couldn\'t start (' + e.name + '). Close other apps using the camera and try again.';
+    $('#errorText').textContent = msg; showScreen('#error'); return;
+  }
+  if (!landmarker && !poseTried) {
+    $('#loadingText').textContent = 'Waking up the dance robot…';
+    await Promise.race([loadPose(), sleep(25000)]);
+  }
+  showScreen(null);
+  $('#hud').classList.remove('hidden');
+  stars = 0; $('#scoreNum').textContent = 0; bubbles = []; parts = []; lastSeen = performance.now();
+  mode = m;
+  const now = performance.now();
+  if (m === 'bubbles') {
+    $('#meter').classList.add('hidden');
+    startMusic(); showBanner('Pop the bubbles! 🫧', 1800); say('Pop the bubbles!'); nextSpawn = now + 1200;
+  } else {
+    $('#meter').classList.remove('hidden'); fz.energy = 0;
+    freezeDance(now);
+  }
+}
+function goHome() {
+  mode = 'menu'; stopMusic(); stopCamera(); bubbles = []; parts = []; bodies = []; prevBodies = []; prevGray = null;
+  try { speechSynthesis.cancel(); } catch (e) {}
+  $('#hud').classList.add('hidden'); $('#meter').classList.add('hidden'); hint.classList.remove('on'); banner.className = '';
+  showScreen('#menu');
+}
+document.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => startGame(b.dataset.mode)));
+$('#homeBtn').addEventListener('click', goHome);
+$('#backBtn').addEventListener('click', goHome);
+$('#soundBtn').addEventListener('click', () => {
+  muted = !muted; initAudio();
+  if (master) master.gain.value = muted ? 0 : 0.7;
+  $('#soundBtn').textContent = muted ? '🔇' : '🔊';
+  if (muted) try { speechSynthesis.cancel(); } catch (e) {}
+});
+document.addEventListener('visibilitychange', () => { if (document.hidden && mode !== 'menu') goHome(); });
+</script>
+</body>
+</html>
